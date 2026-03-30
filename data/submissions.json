@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1774599850465,
+    "name": "王小明",
+    "phone": "0912-345-678",
+    "lineId": "@wang123",
+    "website": "https://example.com",
+    "challenges": [
+      "廣告費太貴",
+      "Google 地圖搜不到"
+    ],
+    "notes": "想了解 Local SEO 方案",
+    "submittedAt": "2026-03-27T08:24:10.465Z",
+    "status": "new"
+  }
+]
