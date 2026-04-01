@@ -25,6 +25,10 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'adlo — 區域精準行銷，讓客戶主動找上門',
   description: '透過 Local SEO 與 GEO 區域精準廣告，為你的實體店面打造自動導流系統。台灣在地 SEO 行銷專家。',
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -32,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="zh-TW" className="scroll-smooth">
       <body className={`${inter.variable} ${manrope.variable} ${playfair.variable} font-body antialiased`}>
         <SiteNav />
-        <main className="pt-16">{children}</main>
+        <main className="pt-24">{children}</main>
         <SiteFooter />
       </body>
     </html>

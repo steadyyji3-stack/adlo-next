@@ -11,8 +11,9 @@ const config: Config = {
     extend: {
       colors: {
         accent: {
-          DEFAULT: "#92400e",
-          light: "#b45309",
+          DEFAULT: "#1D9E75",
+          light: "#0F6E56",
+          subtle: "#E1F5EE",
           foreground: "#ffffff",
         },
         border: "hsl(var(--border))",

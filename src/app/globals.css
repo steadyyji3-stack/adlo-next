@@ -51,21 +51,21 @@
   --card-foreground: #1e293b;
   --popover: #ffffff;
   --popover-foreground: #1e293b;
-  --primary: #92400e;
+  --primary: #1D9E75;
   --primary-foreground: #ffffff;
   --secondary: #f1f5f9;
   --secondary-foreground: #1e293b;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
-  --accent: #f8fafc;
-  --accent-foreground: #1e293b;
+  --accent: #E1F5EE;
+  --accent-foreground: #0F6E56;
   --destructive: #ef4444;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #92400e;
-  --chart-1: #92400e;
-  --chart-2: #b45309;
-  --chart-3: #d97706;
+  --ring: #1D9E75;
+  --chart-1: #1D9E75;
+  --chart-2: #0F6E56;
+  --chart-3: #34d399;
   --chart-4: #334155;
   --chart-5: #64748b;
 }
@@ -83,7 +83,7 @@
 }
 
 .cta-gradient {
-  background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+  background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%);
 }
 
 .card-hover {

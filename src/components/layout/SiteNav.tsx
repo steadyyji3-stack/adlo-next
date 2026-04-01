@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -22,15 +23,11 @@ export default function SiteNav() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200/60 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 h-24 bg-white/95 backdrop-blur-md border-b border-slate-200/60 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
         {/* Logo */}
-        <Link
-          href="/"
-          className="text-2xl font-bold tracking-tight text-slate-900"
-          style={{ fontFamily: 'var(--font-playfair)' }}
-        >
-          adlo
+        <Link href="/" className="flex items-center">
+          <Image src="/logo-final.png" alt="adlo" width={248} height={80} style={{ height: '72px', width: 'auto' }} className="object-contain" priority />
         </Link>
 
         {/* Desktop nav */}
@@ -41,7 +38,7 @@ export default function SiteNav() {
               href={l.href}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive(l.href)
-                  ? 'text-slate-900 bg-slate-100'
+                  ? 'text-[#1D9E75] bg-[#E1F5EE] font-semibold'
                   : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
@@ -69,7 +66,7 @@ export default function SiteNav() {
                   href={l.href}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                     isActive(l.href)
-                      ? 'text-[#92400e] bg-amber-50 font-semibold'
+                      ? 'text-[#1D9E75] bg-[#E1F5EE] font-semibold'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >

@@ -1,19 +1,23 @@
 import 'server-only';
-import fs from 'fs/promises';
-import path from 'path';
+import { Redis } from '@upstash/redis';
 import { Submission } from './types';
 
-const DATA_FILE = path.join(process.cwd(), 'data', 'submissions.json');
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
+
+const KEY = 'adlo:submissions';
 
 export async function readSubmissions(): Promise<Submission[]> {
   try {
-    const raw = await fs.readFile(DATA_FILE, 'utf-8');
-    return JSON.parse(raw) as Submission[];
+    const data = await redis.get<Submission[]>(KEY);
+    return data ?? [];
   } catch {
     return [];
   }
 }
 
 export async function writeSubmissions(submissions: Submission[]): Promise<void> {
-  await fs.writeFile(DATA_FILE, JSON.stringify(submissions, null, 2), 'utf-8');
+  await redis.set(KEY, submissions);
 }
