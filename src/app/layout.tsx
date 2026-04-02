@@ -31,9 +31,42 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MarketingAgency',
+  name: 'adlo 在地行銷',
+  alternateName: 'adlo',
+  url: 'https://adlo.tw',
+  logo: 'https://adlo.tw/logo-final.png',
+  description: '台灣在地 SEO 行銷專家，專注 Google 商家優化、在地 SEO 佈局、精準廣告投放，讓實體店面客戶主動找上門。',
+  telephone: '',
+  email: 'hello@adlo.tw',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'TW',
+    addressRegion: '台灣',
+  },
+  areaServed: [
+    { '@type': 'City', name: '台北市' },
+    { '@type': 'City', name: '新北市' },
+    { '@type': 'City', name: '台中市' },
+    { '@type': 'City', name: '高雄市' },
+    { '@type': 'Country', name: '台灣' },
+  ],
+  serviceType: ['Local SEO', 'Google Business Profile Optimization', 'Google Ads', 'Meta Ads', 'Content Marketing'],
+  priceRange: 'NT$8,800 - NT$32,800/月',
+  sameAs: [],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-TW" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${inter.variable} ${manrope.variable} ${playfair.variable} font-body antialiased`}>
         <SiteNav />
         <main className="pt-24">{children}</main>
