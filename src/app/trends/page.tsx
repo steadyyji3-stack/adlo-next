@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import PageHeader from '@/components/layout/PageHeader';
 import TrendsWidget from '@/components/trends/TrendsWidget';
+import KeywordSearchWidget from '@/components/trends/KeywordSearchWidget';
 
 const insightCards = [
   { value: '+34%', label: '「附近」搜尋年增率' },
@@ -33,8 +34,23 @@ export default function TrendsPage() {
     <>
       <PageHeader eyebrow="MARKET INTELLIGENCE" title="趨勢分析" description="即時 Google Trends 數據，掌握台灣在地搜尋行為" />
 
+      {/* Interactive Keyword Search */}
+      <section className="py-12 px-6 md:px-8 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-6">
+            <Badge className="mb-2 text-[#0F6E56] border-[#1D9E75]/30 bg-[#E1F5EE] tracking-widest text-xs font-bold uppercase" variant="outline">
+              即時查詢
+            </Badge>
+            <h2 className="text-2xl font-bold text-slate-800" style={{ fontFamily: 'var(--font-manrope)' }}>
+              你的關鍵字，台灣在地搜尋熱度如何？
+            </h2>
+          </div>
+          <KeywordSearchWidget />
+        </div>
+      </section>
+
       {/* Insight Cards */}
-      <section className="py-16 px-6 md:px-8 bg-white">
+      <section className="py-16 px-6 md:px-8 bg-slate-50">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {insightCards.map(({ value, label }) => (
