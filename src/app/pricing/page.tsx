@@ -98,9 +98,41 @@ const faqs = [
   { q: '你們服務哪些地區？', a: '全台灣都服務，以台北、新北、台中、高雄為主要服務重心，其他縣市也歡迎諮詢。' },
 ];
 
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a },
+  })),
+};
+
+const offerJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'adlo 在地行銷定價方案',
+  itemListElement: plans.map((plan, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Offer',
+      name: plan.name,
+      description: plan.desc,
+      price: plan.monthlyPrice,
+      priceCurrency: 'TWD',
+      priceSpecification: { '@type': 'UnitPriceSpecification', unitText: '月' },
+      url: `https://adlo.tw/pricing`,
+      seller: { '@id': 'https://adlo.tw/#organization' },
+    },
+  })),
+};
+
 export default function PricingPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd) }} />
       <PageHeader
         eyebrow="PRICING"
         title="透明定價，沒有隱藏費用"

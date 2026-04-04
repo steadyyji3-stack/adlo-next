@@ -58,9 +58,28 @@ const industries = [
   { icon: 'lucide:plus-circle',     label: '其他行業' },
 ];
 
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'adlo 在地行銷服務模組',
+  itemListElement: modules.map((m, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: m.title,
+      description: m.desc,
+      provider: { '@id': 'https://adlo.tw/#organization' },
+      areaServed: { '@type': 'Country', name: '台灣' },
+      serviceType: 'Local SEO Marketing',
+    },
+  })),
+};
+
 export default function ServicesPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
       <PageHeader
         eyebrow="SERVICE MODULES"
         title="服務方案"
