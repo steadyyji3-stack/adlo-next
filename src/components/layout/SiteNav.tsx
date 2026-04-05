@@ -11,6 +11,7 @@ const links = [
   { href: '/', label: '首頁' },
   { href: '/services', label: '服務方案' },
   { href: '/pricing', label: '定價方案' },
+  { href: '/blog', label: 'SEO 專欄' },
   { href: '/trends', label: '趨勢分析' },
   { href: '/process', label: '接單流程' },
 ];
