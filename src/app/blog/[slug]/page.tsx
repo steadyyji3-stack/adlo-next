@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getPostBySlug, getAllPosts } from '@/lib/posts';
-import { Clock, ArrowLeft, Share2 } from 'lucide-react';
+import { Clock, ArrowLeft } from 'lucide-react';
 import ShareButtons from '@/components/blog/ShareButtons';
 
 interface Props { params: Promise<{ slug: string }> }
@@ -30,11 +31,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       publishedTime: post.publishedAt,
       authors: [post.author],
       tags: post.tags,
+      images: [{ url: post.coverImage.url, alt: post.coverImage.alt }],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.description,
+      images: [post.coverImage.url],
     },
   };
 }
@@ -51,6 +54,7 @@ export default async function BlogPostPage({ params }: Props) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.description,
+    image: post.coverImage.url,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     author: {
@@ -69,12 +73,34 @@ export default async function BlogPostPage({ params }: Props) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
 
-      <article className="pt-12 pb-24 px-6 md:px-8">
-        <div className="max-w-3xl mx-auto">
+      <article>
+        {/* Hero Image */}
+        <div className="relative w-full h-72 md:h-96 overflow-hidden bg-slate-900">
+          <Image
+            src={post.coverImage.url}
+            alt={post.coverImage.alt}
+            fill
+            className="object-cover opacity-80"
+            priority
+            sizes="100vw"
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
+          {/* Photo credit */}
+          <p className="absolute bottom-3 right-4 text-xs text-white/50">
+            Photo by{' '}
+            <a href={post.coverImage.creditUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white/80 underline">
+              {post.coverImage.credit}
+            </a>
+            {' '}on Unsplash
+          </p>
+        </div>
+
+        <div className="max-w-3xl mx-auto px-6 md:px-8 pt-10 pb-24">
 
           {/* Back */}
           <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-[#1D9E75] transition-colors mb-8">
-            <ArrowLeft className="w-4 h-4" /> 返回專欄
+            <ArrowLeft className="w-4 h-4" /> 返回實戰筆記
           </Link>
 
           {/* Header */}
@@ -88,10 +114,7 @@ export default async function BlogPostPage({ params }: Props) {
               </span>
               <span className="text-xs text-slate-400">{post.publishedAt}</span>
             </div>
-            <h1
-              className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-4"
-              style={{ fontFamily: 'var(--font-manrope)' }}
-            >
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-4" style={{ fontFamily: 'var(--font-manrope)' }}>
               {post.title}
             </h1>
             <p className="text-slate-500 text-lg leading-relaxed">{post.description}</p>
@@ -112,30 +135,29 @@ export default async function BlogPostPage({ params }: Props) {
               prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
               prose-p:text-slate-600 prose-p:leading-relaxed prose-p:mb-5
               prose-strong:text-slate-800
-              prose-blockquote:border-l-[#1D9E75] prose-blockquote:bg-[#E1F5EE] prose-blockquote:rounded-r-lg prose-blockquote:py-1
-              prose-code:text-[#0F6E56] prose-code:bg-[#E1F5EE] prose-code:px-1 prose-code:rounded
-              [&_.lead]:text-xl [&_.lead]:text-slate-600 [&_.lead]:font-medium [&_.lead]:leading-relaxed
-              [&_.cta-box]:bg-[#E1F5EE] [&_.cta-box]:border [&_.cta-box]:border-[#1D9E75]/30 [&_.cta-box]:rounded-xl [&_.cta-box]:p-6 [&_.cta-box]:mt-10"
+              prose-blockquote:border-l-[#1D9E75] prose-blockquote:bg-[#E1F5EE]/60 prose-blockquote:rounded-r-lg prose-blockquote:py-1
+              prose-code:text-[#0F6E56] prose-code:bg-[#E1F5EE] prose-code:px-1.5 prose-code:rounded prose-code:font-medium
+              [&_.lead]:text-xl [&_.lead]:text-slate-600 [&_.lead]:font-medium [&_.lead]:leading-relaxed [&_.lead]:mb-6
+              [&_.cta-box]:bg-[#E1F5EE] [&_.cta-box]:border [&_.cta-box]:border-[#1D9E75]/30 [&_.cta-box]:rounded-xl [&_.cta-box]:p-6 [&_.cta-box]:mt-10 [&_.cta-box]:text-slate-700"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           <Separator className="my-12" />
 
-          {/* Share + CTA */}
-          <div className="space-y-8">
-            <ShareButtons title={post.title} url={postUrl} />
+          {/* Share */}
+          <ShareButtons title={post.title} url={postUrl} />
 
-            <div className="bg-[#E1F5EE] rounded-2xl p-8 text-center">
-              <h3 className="text-xl font-bold text-slate-800 mb-2" style={{ fontFamily: 'var(--font-manrope)' }}>
-                想了解你的網站 GEO 能見度？
-              </h3>
-              <p className="text-slate-600 text-sm mb-5 leading-relaxed">
-                adlo 提供免費在地 SEO + GEO 初步評估，找出你的競爭缺口，不推銷、無壓力。
-              </p>
-              <Button asChild className="cta-gradient text-white font-bold hover:opacity-90 px-10">
-                <Link href="/contact">免費索取評估報告 →</Link>
-              </Button>
-            </div>
+          {/* CTA */}
+          <div className="mt-10 bg-[#E1F5EE] rounded-2xl p-8 text-center">
+            <h3 className="text-xl font-bold text-slate-800 mb-2" style={{ fontFamily: 'var(--font-manrope)' }}>
+              想了解你的網站 GEO 能見度？
+            </h3>
+            <p className="text-slate-600 text-sm mb-5 leading-relaxed">
+              adlo 提供免費在地 SEO + GEO 初步評估，找出你的競爭缺口，不推銷、無壓力。
+            </p>
+            <Button asChild className="cta-gradient text-white font-bold hover:opacity-90 px-10">
+              <Link href="/contact">免費索取評估報告 →</Link>
+            </Button>
           </div>
 
         </div>

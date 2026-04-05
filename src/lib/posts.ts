@@ -1,3 +1,10 @@
+export interface PostImage {
+  url: string;
+  alt: string;
+  credit: string;       // 攝影師姓名
+  creditUrl: string;    // Unsplash 攝影師頁面
+}
+
 export interface Post {
   slug: string;
   title: string;
@@ -7,20 +14,27 @@ export interface Post {
   category: string;
   tags: string[];
   author: string;
-  readingTime: number; // minutes
+  readingTime: number;
+  coverImage: PostImage;
   content: string; // HTML
 }
 
 export const posts: Post[] = [
   {
     slug: 'geo-impact-on-small-business-2026',
-    title: 'GEO 如何對中小型網站帶來毀滅性打擊？2026 年你該怎麼做',
+    title: 'GEO 如何對中小型網站帶來毀滅性打擊？2026 年你又該怎麼做',
     description: 'AI 搜尋引擎（ChatGPT、Gemini、Perplexity）正在吃掉你的自然流量。數據顯示部分網站流量暴跌 60%。這篇文章告訴你 GEO 是什麼，以及台灣中小企業該如何反制。',
     publishedAt: '2026-04-05',
     category: 'SEO 趨勢',
     tags: ['GEO', '生成式引擎優化', 'AI搜尋', 'Local SEO', '台灣SEO', '中小企業'],
     author: 'adlo 編輯部',
     readingTime: 8,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&auto=format&fit=crop&q=80',
+      alt: 'AI 生成式搜尋引擎視覺化概念圖',
+      credit: 'Google DeepMind',
+      creditUrl: 'https://unsplash.com/@googledeepmind',
+    },
     content: `
 <p class="lead">你上個月的 Google Search Console 流量是不是開始悄悄下滑？你以為是演算法更新，但這次不一樣——這次是 <strong>結構性的</strong>。</p>
 
