@@ -12,6 +12,7 @@ const links = [
   { href: '/services', label: '服務方案' },
   { href: '/pricing', label: '定價方案' },
   { href: '/blog', label: 'SEO 專欄' },
+  { href: '/blog/dan-koe', label: 'Dan Koe 週報', badge: 'NEW' },
   { href: '/trends', label: '趨勢分析' },
   { href: '/process', label: '接單流程' },
 ];
@@ -38,13 +39,18 @@ export default function SiteNav() {
             <Link
               key={l.href}
               href={l.href}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`relative px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive(l.href)
                   ? 'text-[#1D9E75] bg-[#E1F5EE] font-semibold'
                   : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               {l.label}
+              {l.badge && (
+                <span className="absolute -top-1 -right-1 bg-[#1D9E75] text-white text-[9px] font-extrabold px-1 py-0.5 rounded leading-none">
+                  {l.badge}
+                </span>
+              )}
             </Link>
           ))}
           <Button asChild className="ml-3 cta-gradient text-white hover:opacity-90 shadow-md">
@@ -66,13 +72,20 @@ export default function SiteNav() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`relative px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                     isActive(l.href)
                       ? 'text-[#1D9E75] bg-[#E1F5EE] font-semibold'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                   }`}
                 >
-                  {l.label}
+                  <span className="flex items-center gap-2">
+                    {l.label}
+                    {l.badge && (
+                      <span className="bg-[#1D9E75] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded leading-none">
+                        {l.badge}
+                      </span>
+                    )}
+                  </span>
                 </Link>
               ))}
               <Button asChild className="mt-4 cta-gradient text-white hover:opacity-90">

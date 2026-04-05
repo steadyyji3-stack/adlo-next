@@ -3,7 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getAllPosts } from '@/lib/posts';
-import { Clock, ArrowRight } from 'lucide-react';
+import { getAllIssues } from '@/lib/dankoe';
+import { Clock, ArrowRight, Rss } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '在地行銷實戰筆記 | adlo',
@@ -28,6 +29,8 @@ const blogJsonLd = {
 
 export default function BlogPage() {
   const posts = getAllPosts();
+  const dkIssues = getAllIssues();
+  const latestDk = dkIssues[0];
 
   return (
     <>
@@ -50,9 +53,65 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* Dan Koe Column Feature Card */}
+      {latestDk && (
+        <section className="px-6 md:px-8 py-10 bg-slate-900">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-2 mb-5">
+              <Rss className="w-4 h-4 text-[#34d399]" />
+              <span className="text-xs font-bold text-[#34d399] uppercase tracking-widest">專欄</span>
+            </div>
+            <div className="flex flex-col md:flex-row gap-6 items-start">
+              {/* Column branding */}
+              <div className="md:w-56 shrink-0">
+                <div className="bg-[#1D9E75]/10 border border-[#1D9E75]/20 rounded-2xl p-6 text-center">
+                  <div className="text-5xl font-black text-white/10 leading-none mb-1">DK</div>
+                  <p className="text-white font-extrabold text-lg leading-tight" style={{ fontFamily: 'var(--font-manrope)' }}>
+                    Dan Koe<br />週報
+                  </p>
+                  <p className="text-slate-400 text-xs mt-2">每週精選翻譯</p>
+                  <div className="mt-3 text-xs text-[#34d399] font-bold">
+                    已發布 {dkIssues.length} 期
+                  </div>
+                </div>
+              </div>
+
+              {/* Latest issue preview */}
+              <div className="flex-1">
+                <Badge className="bg-[#1D9E75]/20 text-[#34d399] border-[#1D9E75]/30 text-xs font-bold mb-3">
+                  最新 · 第 {latestDk.issueNumber} 期
+                </Badge>
+                <h2 className="text-xl md:text-2xl font-extrabold text-white leading-snug mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>
+                  {latestDk.theme}
+                </h2>
+                <p className="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-2">
+                  {latestDk.summary}
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    href={`/blog/dan-koe/${latestDk.week}`}
+                    className="inline-flex items-center gap-2 bg-[#1D9E75] hover:bg-[#0F6E56] text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors"
+                  >
+                    閱讀本期 <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href="/blog/dan-koe"
+                    className="inline-flex items-center gap-2 border border-slate-600 hover:border-slate-400 text-slate-400 hover:text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-colors"
+                  >
+                    查看所有期數
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Article List */}
       <section className="py-14 px-6 md:px-8 bg-slate-50">
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-lg font-bold text-slate-700 mb-6">深度文章</h2>
+          <div className="space-y-8">
           {posts.map(post => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
               <article className="bg-white rounded-2xl border border-slate-100 overflow-hidden hover:border-[#1D9E75]/40 hover:shadow-lg transition-all duration-200">
@@ -102,6 +161,7 @@ export default function BlogPage() {
               </article>
             </Link>
           ))}
+          </div>
         </div>
       </section>
     </>
