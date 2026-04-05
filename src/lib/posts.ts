@@ -36,134 +36,148 @@ export const posts: Post[] = [
       creditUrl: 'https://unsplash.com/@andrewneel',
     },
     content: `
-<p class="lead">如果你花 5 分鐘滑過他的 X（Twitter）主頁，你會發現一件事：Dan Koe 從不廢話。</p>
+<p class="lead">2026 年 1 月 12 日，Dan Koe 在 X 上發了一篇文章。7 天後，閱讀次數突破 <strong>1.5 億</strong>。</p>
 
-<p>260 萬追蹤者、年收入超過 400 萬美元、每天只工作 2–4 小時——這些數字讓很多人好奇：他到底說了什麼？</p>
+<p>他只有一個人、沒有團隊、不靠廣告。X 創作者分潤計畫 14 天內進帳 4,495 美元——但他說，這不是重點，後端的課程和工具才是。</p>
 
-<p>這篇文章精選他 8 篇最有代表性的發文，逐一翻譯並加上我們針對<strong>台灣中小企業主與在地行銷</strong>的深度解析。</p>
+<p>這篇文章精選他 2025–2026 年 8 篇最受討論的發文原文，附中文翻譯與<strong>台灣在地行銷視角的深度解析</strong>。不是雞湯，是可以直接用的思考框架。</p>
 
 <figure>
   <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&auto=format&fit=crop&q=80" alt="筆記本上的手寫文字，創作思考" loading="lazy" />
   <figcaption>寫作是思考的外殼。Dan Koe 的商業模式建立在「先想清楚，再寫出來」的基礎上。Photo by <a href="https://unsplash.com/@glenncarstenspeters" target="_blank" rel="noopener">Glenn Carstens-Peters</a> on Unsplash</figcaption>
 </figure>
 
-<h2>① 最低風險、最高回報的商業模式</h2>
+<h2>① 你不在你想去的地方，因為你還不是那個人</h2>
+
+<p><em>來源：〈How to Fix Your Entire Life in 1 Day〉— 2026 年 1 月 12 日，1.5 億次觀看</em></p>
 
 <blockquote>
-  <p>"Post ideas on social media → Analyze which do the best → Turn them into free downloads → Turn one into a digital product → Improve until irresistible. Free idea validation, cash flow to do it full time. When combined with AI, it's the lowest risk highest reward option."</p>
-  <footer>— Dan Koe, 2025</footer>
+  <p>"You aren't where you want to be because you aren't the person who would be there. You often pursue 'unconscious goals' — like the goal of safety or the protection of a familiar identity — which keep us watching the construction rather than building our own."</p>
+  <footer>— Dan Koe, January 2026</footer>
 </blockquote>
 
-<p><strong>中文翻譯：</strong>在社群媒體上發想法 → 分析哪個最受歡迎 → 做成免費下載 → 選一個做成付費產品 → 不斷優化到無法拒絕。免費驗證想法、用現金流轉職全職。結合 AI，這是風險最低、回報最高的選項。</p>
+<p><strong>中文翻譯：</strong>你不在你想去的地方，是因為你還不是那個會在那裡的人。你常常在追逐「無意識目標」——比如安全感、或者保護熟悉的自我認同——這讓我們只是旁觀別人蓋房子，而不是建造自己的。</p>
 
-<p><strong>adlo 解析：</strong>這個框架對台灣在地服務業同樣適用。你的 Google 商家貼文就是「在社群發想法」——哪篇貼文獲得最多互動？那就是你最強的行銷切入點。你不需要先投廣告費，先用有機內容測試，再決定要加速哪個方向。</p>
+<p><strong>adlo 解析：</strong>很多台灣老闆想要「更多客人」，但行動上還是老樣子——沒有 Google 商家貼文、沒有評論回覆策略、沒有在地 SEO。問題不是資源，是身份認同：你有沒有把自己當成一個「認真在數位行銷的商家」？這個認同轉換，才是一切改變的起點。</p>
 
-<h2>② 寫作就是思考的外殼</h2>
+<h2>② 你有多種興趣？這是你的優勢，不是弱點</h2>
+
+<p><em>來源：X 發文 — 2026 年 1 月</em></p>
 
 <blockquote>
-  <p>"Writing helps you think. Thinking helps you get what you want."</p>
-  <footer>— Dan Koe</footer>
+  <p>"If you have multiple interests, do not waste the next 2-3 years. Every person you admire is not a specialist. Specialists are tools, and tools get replaced."</p>
+  <footer>— Dan Koe, January 2026</footer>
 </blockquote>
 
-<p><strong>中文翻譯：</strong>寫作幫助你思考。思考幫助你得到你想要的。</p>
+<p><strong>中文翻譯：</strong>如果你有多種興趣，不要浪費接下來的 2–3 年。你欣賞的每個人都不是專家型的人。專家是工具，而工具會被取代。</p>
 
 <figure>
-  <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=900&auto=format&fit=crop&q=80" alt="人在電腦前思考寫作" loading="lazy" />
-  <figcaption>把你解決過的問題寫下來，就是你最好的行銷素材。Photo by <a href="https://unsplash.com/@austindistel" target="_blank" rel="noopener">Austin Distel</a> on Unsplash</figcaption>
+  <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=900&auto=format&fit=crop&q=80" alt="多工作業，桌上有筆電、筆記本、咖啡" loading="lazy" />
+  <figcaption>在 AI 時代，能跨領域整合的人比單一專才更有價值。Photo by <a href="https://unsplash.com/@austindistel" target="_blank" rel="noopener">Austin Distel</a> on Unsplash</figcaption>
 </figure>
 
-<p><strong>adlo 解析：</strong>很多台灣老闆覺得自己不會寫文章，但其實你每天都在解決問題。把你如何解決客戶問題的過程寫下來——那就是你最強的 SEO 內容，也是最真實的社群素材。你不需要文采，你需要的是誠實。</p>
+<p><strong>adlo 解析：</strong>台灣的中小企業老闆本來就是全才——你同時是產品專家、銷售、財務、客服。這在 AI 時代不是缺點，是護城河。你對自己產業的深度理解 + 對在地市場的感知，是任何 AI 工具都無法複製的。把這些「複合知識」轉化成內容，就是你最獨特的行銷資產。</p>
 
-<h2>③ 痛苦才是改變的燃料</h2>
+<h2>③ 你最好的作品，是在你不工作的時候完成的</h2>
 
-<blockquote>
-  <p>"Most people don't change until the pain is so great that they only have two choices: drown or launch."</p>
-  <footer>— Dan Koe, Nov 2024</footer>
-</blockquote>
-
-<p><strong>中文翻譯：</strong>大多數人在痛苦大到只剩兩個選擇之前不會改變：沉下去，或者起飛。</p>
-
-<p><strong>adlo 解析：</strong>這句話可以直接用在你的行銷文案上。你的客戶為什麼找你？因為現狀已經痛苦到無法忍受。在你的聯絡頁面、廣告文案中，先說出他的痛點，再說你的解法——這是轉換率最高的結構。</p>
-
-<h2>④ 你解決過的問題就是你的事業</h2>
+<p><em>來源：X 發文 — 2026 年 3 月</em></p>
 
 <blockquote>
-  <p>"If you've solved a problem in your life, you're qualified to start a business. An education business. As one person. With close-to-zero startup costs."</p>
-  <footer>— Dan Koe</footer>
+  <p>"It seems like everyone is obsessed with productivity and efficiency yet rarely get anything meaningful done. I'm convinced your best work is done when you're not working. When you have space for creative ideas to emerge that drastically change the trajectory of your life/work."</p>
+  <footer>— Dan Koe, March 2026</footer>
 </blockquote>
 
-<p><strong>中文翻譯：</strong>如果你解決過生命中的某個問題，你就有資格開始一門生意。一個教育型事業。一個人。幾乎零啟動成本。</p>
+<p><strong>中文翻譯：</strong>感覺每個人都痴迷於生產力和效率，卻很少真正完成有意義的事。我深信你最好的作品是在你不工作的時候完成的——當你有空間讓創意想法浮現，那些能大幅改變你生命和工作軌跡的想法。</p>
+
+<p><strong>adlo 解析：</strong>很多老闆忙到沒時間「想清楚行銷策略」。但不停地發廣告、追爆量技巧，反而是最低效的投入。花 30 分鐘想清楚：你的客人最常問什麼問題？這個答案，比花一整天設計廣告更有價值——因為它能指引接下來三個月的內容方向。</p>
+
+<h2>④ AI 是讀者，不是作者</h2>
+
+<p><em>來源：X 發文 — 2025 年 4 月</em></p>
+
+<blockquote>
+  <p>"As a writer, I've noticed that AI doesn't shorten my writing process (because I don't want it to), it makes it longer. I don't treat AI as the writer, I treat it as the reader. I have it raise objections to my points. I have it rate my hook and introduction for various metrics."</p>
+  <footer>— Dan Koe, April 2025</footer>
+</blockquote>
+
+<p><strong>中文翻譯：</strong>身為一個寫作者，我發現 AI 沒有縮短我的寫作過程（因為我不希望它這樣），反而讓它變得更長。我不把 AI 當作者，我把它當讀者。我讓它對我的論點提出反對意見，讓它對我的開頭和引文進行各種指標的評分。</p>
 
 <figure>
-  <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&auto=format&fit=crop&q=80" alt="小型團隊開會討論策略" loading="lazy" />
-  <figcaption>你不需要等到「準備好」才開始。你已經解決的問題，就是最好的起點。Photo by <a href="https://unsplash.com/@jasongoodman_youxventures" target="_blank" rel="noopener">Jason Goodman</a> on Unsplash</figcaption>
+  <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&auto=format&fit=crop&q=80" alt="與 AI 工具協作工作的場景" loading="lazy" />
+  <figcaption>用 AI 質疑你的想法，比用 AI 產生想法更有價值。Photo by <a href="https://unsplash.com/@jasongoodman_youxventures" target="_blank" rel="noopener">Jason Goodman</a> on Unsplash</figcaption>
 </figure>
 
-<p><strong>adlo 解析：</strong>這對 adlo 的客戶很直接——你開了一家店，你每天都在解決「如何讓更多客人找到我」的問題。你的 10 年經驗就是別人無法複製的護城河。把這個過程說出來，就是你最好的差異化定位。</p>
+<p><strong>adlo 解析：</strong>你下次用 AI 寫 Google 商家貼文或廣告文案時，試試這個：先自己寫，再請 AI 扮演「最挑剔的客人」——挑出你文案的邏輯漏洞、不清楚的地方、無法說服人的論點。這個流程產出的內容，比直接叫 AI 幫你寫好上 3 倍。</p>
 
-<h2>⑤ 無聊的基本功才是護城河</h2>
+<h2>⑤ AI 對寫作的衝擊被嚴重誇大</h2>
 
-<blockquote>
-  <p>"How to outperform 99% of people: 1) Repeat the boring fundamentals. 2) Let everyone else drown in tactics."</p>
-  <footer>— Dan Koe</footer>
-</blockquote>
-
-<p><strong>中文翻譯：</strong>如何超越 99% 的人：1）重複枯燥的基本功。2）讓其他人淹死在戰術裡。</p>
-
-<p><strong>adlo 解析：</strong>在地 SEO 就是這句話的完美體現。每週發 Google 商家貼文、持續回覆評論、每月更新商家資訊——這些「無聊」的動作，6 個月後就是你的競爭對手看不到的排名優勢。他們在追最新的廣告格式，你在鞏固地基。</p>
-
-<h2>⑥ 先創作，再消費</h2>
+<p><em>來源：X 發文 + Newsletter — 2025 年 3 月</em></p>
 
 <blockquote>
-  <p>"When you create before you consume, you stay grounded."</p>
-  <footer>— Dan Koe</footer>
+  <p>"I still feel like we're in a big experimentation phase with AI. I still can't let it touch my writing. Editing is okay and sparks some ideas. The best use case I've found (for me at least) is having it take information and spit out structured ideas for use in my writing."</p>
+  <footer>— Dan Koe, March 2025</footer>
 </blockquote>
 
-<p><strong>中文翻譯：</strong>當你在消費之前先創作，你就能保持清醒。</p>
+<p><strong>中文翻譯：</strong>我還是覺得我們正處於 AI 的大型實驗階段。我還是無法讓它碰我的寫作。編輯還可以，能激發一些想法。我找到最好的用法（至少對我來說）是讓它吸收資訊、輸出結構化想法，供我在寫作中使用。</p>
 
-<p><strong>adlo 解析：</strong>每天早上第一件事不是滑社群，而是寫一則貼文、回覆一條評論、更新一筆商家資訊。這個順序決定你是主動塑造品牌，還是被動跟著別人跑。對在地行銷而言，創作優先意味著持續產出本地化內容，而不是等靈感來了才發。</p>
+<p><strong>adlo 解析：</strong>對台灣老闆來說，這是一個重要的解放：你不需要讓 AI 完全代替你寫行銷文案。你的生意故事、客戶案例、在地知識——這些 AI 不知道。用 AI 整理你的想法、生成文章大綱，再用你自己的語言寫出來，才是真正有效的 AI 輔助內容策略。</p>
 
-<h2>⑦ 沒有人會來救你</h2>
+<h2>⑥ 把你的人生變成電玩遊戲</h2>
+
+<p><em>來源：X 發文 — 2025 年 5 月</em></p>
 
 <blockquote>
-  <p>"Nobody is coming to save you. Not your parents. Not your best friend. Not the government. Not your favorite book. They can offer a helping hand, but the choice to improve is yours and yours alone."</p>
-  <footer>— Dan Koe</footer>
+  <p>"Your mind runs on a storyline. Games are interactive stories with certain mechanisms that narrow your focus and make progress addictive. If you want to get unstuck, use this AI prompt to turn your life into a video game."</p>
+  <footer>— Dan Koe, May 2025</footer>
 </blockquote>
 
-<p><strong>中文翻譯：</strong>沒有人會來救你。不是你的父母、最好的朋友、政府，也不是你最喜歡的書。他們可以伸出援手，但選擇進步是你一個人的事。</p>
+<p><strong>中文翻譯：</strong>你的大腦靠故事線運作。遊戲是帶有特定機制的互動故事——能縮小你的注意力焦點，讓進步變得讓人上癮。如果你想打破僵局，用這個 AI 提示把你的人生變成電玩遊戲。</p>
+
+<p><strong>adlo 解析：</strong>這個框架可以直接套用在你的在地行銷計畫上。設定清晰的「任務」——例如「本月取得 10 則新評論」「這週更新商家三張照片」——把它當成遊戲關卡來完成。進度可見、目標清晰，你的行銷執行力就會提高三倍。</p>
 
 <figure>
-  <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900&auto=format&fit=crop&q=80" alt="獨自在書桌前學習工作的人" loading="lazy" />
-  <figcaption>改變永遠從自己開始。等待時機不如創造時機。Photo by <a href="https://unsplash.com/@craftedbygc" target="_blank" rel="noopener">Green Chameleon</a> on Unsplash</figcaption>
+  <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900&auto=format&fit=crop&q=80" alt="一個人專注工作，筆記本與電腦" loading="lazy" />
+  <figcaption>把行銷任務拆成可完成的關卡，比一個模糊的「要做 SEO」目標有效十倍。Photo by <a href="https://unsplash.com/@craftedbygc" target="_blank" rel="noopener">Green Chameleon</a> on Unsplash</figcaption>
 </figure>
 
-<p><strong>adlo 解析：</strong>這句話對台灣老闆很有共鳴——你的競爭對手不會等你準備好。平台不會優先推薦你，客人不會主動找你說明。唯一能讓你脫穎而出的，是你現在就開始優化你的在地存在感，而不是等到生意不好才動。</p>
+<h2>⑦ 每個 CEO 都說 AI 要搶你的工作——我的看法</h2>
 
-<h2>⑧ 150 億次觀看背後的核心策略</h2>
-
-<p>2026 年 1 月，Dan Koe 一篇文章在 X 上創下<strong>單週 1.5 億次觀看</strong>的紀錄，14 天靠 X 分潤獲得 4,495 美元——但他說這不是重點，後端產品才是。</p>
+<p><em>來源：X 發文 — 2025 年 5 月 25 日</em></p>
 
 <blockquote>
-  <p>"Information is labor. AI is only effective when it has sufficient context."</p>
-  <footer>— Dan Koe, 2026 Newsletter</footer>
+  <p>"It seems like every tech CEO and their mother won't stop talking about how AI is coming for your job. So I did the same thing. Here's my thoughts on the future of work and how to become AI first."</p>
+  <footer>— Dan Koe, May 2025</footer>
 </blockquote>
 
-<p><strong>中文翻譯：</strong>資訊是勞動力。AI 只有在擁有足夠背景資訊時才有效。</p>
+<p><strong>中文翻譯：</strong>感覺每個科技 CEO 都停不下來地說 AI 要搶你的工作。所以我也做了一樣的事。這是我對未來工作的想法，以及如何變成「AI 優先」的人。</p>
 
-<p><strong>adlo 解析：</strong>這對在地 SEO 非常關鍵。你給 Google 的資訊越完整（商家描述、照片、貼文、評論回覆），Google 和 AI 就越能精確地把你推薦給對的客人。你的 Google 商家檔案，就是你給 AI 的「context（背景資訊）」。</p>
+<p><strong>adlo 解析：</strong>「AI 優先」對中小企業的意義是：你的行銷流程裡，哪些重複性工作可以讓 AI 加速完成？客服回覆範本、Google 商家貼文草稿、廣告 A/B 測試文案——這些都可以用 AI 提速。但「AI 優先」不等於「AI 全包」，在地感知和客戶關係永遠需要你親自維護。</p>
 
-<h2>總結：Dan Koe 給台灣老闆的三個啟示</h2>
+<h2>⑧ 如何訓練 AI 產出病毒式推文結構</h2>
 
-<p>把他的思維框架套用在你的在地行銷上：</p>
+<p><em>來源：X 發文 — 2025 年 4 月</em></p>
+
+<blockquote>
+  <p>"Here's an example with training AI to interview me to get my own ideas, stories, and experiences then formatting them into viral tweet structures (use with caution and don't be dumb)."</p>
+  <footer>— Dan Koe, April 2025</footer>
+</blockquote>
+
+<p><strong>中文翻譯：</strong>這是一個例子：訓練 AI 訪問我，提取我自己的想法、故事和經驗，然後將它們格式化成病毒式推文結構（謹慎使用，別傻了）。</p>
+
+<p><strong>adlo 解析：</strong>你可以把這個邏輯套用在你的在地行銷上：請 AI 訪問你——你的商家故事、你服務最難忘的客戶、你如何解決一個棘手問題——然後讓 AI 把這些整理成 Google 商家貼文或部落格文章。你的故事本身就是最好的行銷素材，AI 只是幫你整理格式。</p>
+
+<h2>總結：3 個 Dan Koe 思維，立刻用在你的在地行銷</h2>
+
+<p>不需要 260 萬追蹤者才能用這些框架。把它縮小到你的商家規模：</p>
 
 <ol>
-  <li><strong>你的日常就是你的內容。</strong>解決過的問題、服務過的客戶、克服過的挑戰——都是你最真實、最有說服力的行銷素材。</li>
-  <li><strong>重複基本功，別追戰術。</strong>持續經營 Google 商家、定期發貼文、認真回覆評論——6 個月的複利效應，勝過任何短期爆量技巧。</li>
-  <li><strong>現在就開始，不等完美。</strong>你的商家不需要完美的網站才能做 SEO，不需要大預算才能做廣告。今天就能做的事，不要等到明天。</li>
+  <li><strong>先成為那個人，再等結果。</strong>認真對待你的 Google 商家、把評論當作口碑資產、每週產出一則在地內容——這是「認真做數位行銷的商家」的身份認同行動。</li>
+  <li><strong>AI 是讀者，你是作者。</strong>用 AI 質疑你的文案、整理你的想法、加速重複工作——但你的在地故事、客戶關係、服務專業，不外包。</li>
+  <li><strong>把行銷任務變成遊戲關卡。</strong>本月 10 則評論、本週 3 篇商家貼文、這季更新一個落地頁——讓進度可見，執行力自然提高。</li>
 </ol>
 
 <div class="cta-box">
-  <p>想知道你的在地競爭對手現在在做什麼？adlo 提供免費在地 SEO 競爭分析，讓你知道從哪裡開始最有效。</p>
+  <p>你的在地行銷現在缺哪一塊？adlo 提供免費初步評估，20 分鐘告訴你最有效的突破口在哪裡——不推銷、無壓力。</p>
 </div>
     `.trim(),
   },
