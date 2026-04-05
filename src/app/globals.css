@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -92,4 +93,54 @@
 .card-hover:hover {
   transform: translateY(-3px);
   box-shadow: 0 16px 32px -8px rgba(51, 65, 85, 0.12);
+}
+
+/* ── Blog article in-line figures ───────────────────────────────────── */
+.prose figure {
+  margin: 2rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.prose figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  display: block;
+}
+.prose figure figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.5;
+}
+.prose figure figcaption a {
+  color: #1D9E75;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Mobile prose tweaks */
+@media (max-width: 640px) {
+  .prose {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+  .prose h2 {
+    font-size: 1.35rem;
+  }
+  .prose h3 {
+    font-size: 1.15rem;
+  }
+  .prose figure {
+    margin: 1.5rem -0.5rem;
+    border-radius: 0.5rem;
+  }
+  .prose figure img {
+    border-radius: 0.5rem;
+  }
+  .prose blockquote {
+    padding-left: 1rem;
+    font-size: 0.95rem;
+  }
 }

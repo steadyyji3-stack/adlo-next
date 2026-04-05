@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { getPostBySlug, getAllPosts } from '@/lib/posts';
 import { Clock, ArrowLeft } from 'lucide-react';
 import ShareButtons from '@/components/blog/ShareButtons';
+import ReadingProgress from '@/components/blog/ReadingProgress';
 
 interface Props { params: Promise<{ slug: string }> }
 
@@ -71,11 +72,12 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
+      <ReadingProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
 
       <article>
         {/* Hero Image */}
-        <div className="relative w-full h-72 md:h-96 overflow-hidden bg-slate-900">
+        <div className="relative w-full h-56 sm:h-72 md:h-96 overflow-hidden bg-slate-900">
           <Image
             src={post.coverImage.url}
             alt={post.coverImage.alt}
@@ -96,7 +98,7 @@ export default async function BlogPostPage({ params }: Props) {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto px-6 md:px-8 pt-10 pb-24">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 md:px-8 pt-8 md:pt-10 pb-24">
 
           {/* Back */}
           <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-[#1D9E75] transition-colors mb-8">
