@@ -18,9 +18,9 @@ export const metadata: Metadata = {
 };
 
 const competitionColor: Record<string, string> = {
-  taipei:    'text-red-500',
-  taichung:  'text-amber-500',
-  kaohsiung: 'text-[#1D9E75]',
+  taipei:    'text-orange-400',
+  taichung:  'text-amber-400',
+  kaohsiung: 'text-[#34d399]',
 };
 
 export default function CitiesPage() {
@@ -50,7 +50,7 @@ export default function CitiesPage() {
           {cities.map(city => (
             <article
               key={city.slug}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden card-hover"
+              className="bg-white rounded-2xl border border-slate-200 overflow-hidden card-hover flex flex-col"
             >
               {/* Cover */}
               <div
@@ -75,8 +75,8 @@ export default function CitiesPage() {
               </div>
 
               {/* Content */}
-              <div className="p-6">
-                <p className="text-slate-600 text-sm leading-relaxed mb-5 line-clamp-3">
+              <div className="p-6 flex flex-col flex-1">
+                <p className="text-slate-600 text-sm leading-relaxed mb-5 line-clamp-3 flex-1">
                   {city.marketProfile}
                 </p>
 
@@ -90,7 +90,7 @@ export default function CitiesPage() {
                   ))}
                 </div>
 
-                <Button asChild className="w-full cta-gradient text-white hover:opacity-90">
+                <Button asChild className="w-full cta-gradient text-white hover:opacity-90 mt-auto">
                   <Link href={`/cities/${city.slug}`}>
                     {city.name}服務詳情 <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
