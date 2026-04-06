@@ -283,26 +283,46 @@ export default async function CityPage(
         </section>
 
         {/* ── CTA ─────────────────────────────────────────────── */}
-        <section className="bg-slate-900 text-white py-20 px-6 md:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="bg-[#1D9E75]/20 text-[#34d399] border-[#1D9E75]/30 mb-5">
+        <section
+          className="relative overflow-hidden py-24 px-6 md:px-8 text-white"
+          style={{ background: 'linear-gradient(135deg, #0d2b20 0%, #0f3d2b 50%, #112d22 100%)' }}
+        >
+          {/* decorative glow */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-10"
+              style={{ background: 'radial-gradient(circle, #1D9E75 0%, transparent 70%)' }} />
+          </div>
+
+          <div className="relative max-w-3xl mx-auto text-center">
+            <span className="inline-block bg-[#1D9E75]/20 text-[#34d399] border border-[#1D9E75]/30 text-xs font-bold px-3 py-1 rounded-full mb-6 tracking-widest uppercase">
               {city.name}免費評估
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ fontFamily: 'var(--font-manrope)' }}>
+            </span>
+
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-5 leading-tight" style={{ fontFamily: 'var(--font-manrope)' }}>
               你的{city.name}商家<br />
               <span className="text-[#34d399]">現在在 Google 排第幾？</span>
             </h2>
-            <p className="text-slate-400 text-lg mb-8 leading-relaxed">
+
+            <p className="text-slate-300 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
               填寫聯絡表單，我們在 1–2 個工作天內提供你的{city.name}在地 SEO 競爭快照——
               <strong className="text-white">完全免費，不需要先簽約。</strong>
             </p>
+
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild size="lg" className="cta-gradient text-white shadow-xl hover:opacity-90">
-                <Link href="/contact">立即取得免費評估 <ArrowRight className="w-4 h-4 ml-1" /></Link>
+              {/* 主要 CTA */}
+              <Button asChild size="lg" className="cta-gradient text-white shadow-xl hover:opacity-90 h-14 px-8 text-base">
+                <Link href="/contact">
+                  立即取得免費評估 <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10">
-                <Link href="/services">查看服務方案</Link>
-              </Button>
+              {/* 次要連結：純文字樣式，避免 shadcn outline 白底問題 */}
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 h-14 px-8 text-base font-semibold rounded-lg border border-white/25 text-white/80 hover:text-white hover:border-white/50 hover:bg-white/8 transition-all"
+                style={{ backgroundColor: 'transparent' }}
+              >
+                查看服務方案
+              </Link>
             </div>
           </div>
         </section>
