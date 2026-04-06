@@ -52,23 +52,23 @@ export default function CitiesPage() {
               key={city.slug}
               className="bg-white rounded-2xl border border-slate-200 overflow-hidden card-hover flex flex-col"
             >
-              {/* Cover */}
+              {/* Cover — fixed h-44, shrink-0 prevents flex compression */}
               <div
-                className="h-40 relative"
+                className="h-44 relative shrink-0 overflow-hidden"
                 style={{
-                  backgroundImage: `linear-gradient(to bottom, rgba(15,25,20,0.3), rgba(15,25,20,0.75)), url('${city.coverImage.url}')`,
+                  backgroundImage: `linear-gradient(to bottom, rgba(15,25,20,0.15), rgba(15,25,20,0.80)), url('${city.coverImage.url}')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
               >
-                <div className="absolute bottom-4 left-4">
+                <div className="absolute bottom-4 left-4 right-4">
                   <div className="flex items-center gap-1.5 text-white">
-                    <MapPin className="w-4 h-4 text-[#34d399]" />
+                    <MapPin className="w-4 h-4 text-[#34d399] shrink-0" />
                     <span className="font-extrabold text-xl" style={{ fontFamily: 'var(--font-manrope)' }}>
                       {city.name}
                     </span>
                   </div>
-                  <p className={`text-xs font-bold mt-0.5 ${competitionColor[city.slug]}`}>
+                  <p className={`text-[11px] font-bold mt-1 line-clamp-1 ${competitionColor[city.slug]}`}>
                     {city.competitionNote}
                   </p>
                 </div>
