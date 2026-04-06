@@ -281,6 +281,171 @@ export const posts: Post[] = [
 </div>
     `.trim(),
   },
+  /* ─────────────────────────────────────────────────────────────
+     Article 3 | 內容工程
+  ───────────────────────────────────────────────────────────── */
+  {
+    slug: 'content-engineering-what-big-brands-do-2026',
+    title: '不只是行銷！大品牌在做的「內容工程」是什麼？',
+    description: 'HubSpot、Airbnb、Apple 早就不把內容當行銷工具——他們把它當成產品基礎建設。這篇文章拆解「內容工程」的核心概念，並告訴你台灣中小企業如何用 10% 的資源複製這套邏輯。',
+    publishedAt: '2026-04-06',
+    category: '內容策略',
+    tags: ['內容工程', '內容行銷', '品牌策略', 'SEO', '結構化內容', '台灣中小企業'],
+    author: 'adlo 編輯部',
+    readingTime: 9,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&auto=format&fit=crop&q=80',
+      alt: '內容策略工作桌面，白板與筆記',
+      credit: 'Austin Distel',
+      creditUrl: 'https://unsplash.com/@austindistel',
+    },
+    content: `
+<p class="lead">你上一次更新網站內容是什麼時候？如果你的回答是「上個月發了一篇貼文」，那你做的是<strong>內容行銷</strong>。但大品牌在做的，是另一件完全不同的事——</p>
+
+<p>他們叫它「<strong>內容工程（Content Engineering）</strong>」。</p>
+
+<p>這不是文字遊戲。內容工程和內容行銷之間的差距，就像是用 Excel 記帳和建立一套財務系統——做的好像是同一件事，但底層邏輯完全不同，長期結果天差地遠。</p>
+
+<h2>「內容行銷」和「內容工程」有什麼不同？</h2>
+
+<p>先把話說清楚：</p>
+
+<ul>
+  <li><strong>內容行銷</strong>：為了吸引流量和轉換，定期產出內容——部落格、社群貼文、影片、電子報。重點是「發布」。</li>
+  <li><strong>內容工程</strong>：把內容當成<strong>產品基礎建設</strong>來設計和管理。重點是「結構、可重複使用、可擴展」。</li>
+</ul>
+
+<p>最直白的比喻：內容行銷是「蓋房間」，內容工程是「建城市的道路系統」。房間很快就舊了，但路網一旦建好，每個新房間都能自動受益。</p>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80" alt="策略白板規劃，內容架構分析" loading="lazy" />
+  <figcaption>內容工程的起點不是「寫什麼」，而是「這份內容在整個系統裡扮演什麼角色」。Photo by <a href="https://unsplash.com/@homajob" target="_blank" rel="noopener">Scott Graham</a> on Unsplash</figcaption>
+</figure>
+
+<h2>大品牌的內容工程長什麼樣子？</h2>
+
+<h3>HubSpot：「內容叢集」模型</h3>
+
+<p>HubSpot 是把內容工程做到極致的代表。他們不是隨機發部落格，而是建立一套稱為「Topic Cluster（主題叢集）」的架構：</p>
+
+<ul>
+  <li>一篇<strong>支柱頁面（Pillar Page）</strong>：深度覆蓋某個大主題（例如「SEO 完整指南」），字數通常 5,000 字以上</li>
+  <li>多篇<strong>叢集文章（Cluster Content）</strong>：每篇深入討論支柱頁面的某個子主題，互相連結</li>
+  <li>所有叢集文章都連回支柱頁面，形成一個<strong>語意網絡</strong></li>
+</ul>
+
+<p>結果：Google 不只看到一篇好文章，而是看到一個「對某個主題有深度話語權的網站」。這就是為什麼搜尋任何行銷相關關鍵字，HubSpot 幾乎永遠在前三名。</p>
+
+<blockquote>
+  <p>HubSpot 的有機流量超過每月 <strong>800 萬次</strong>，其中 80% 來自內容叢集帶來的長尾關鍵字流量——而不是品牌字搜尋。</p>
+</blockquote>
+
+<h3>Airbnb：「在地故事」即內容資產</h3>
+
+<p>Airbnb 的內容工程核心在於：他們把每一個城市、每一個房東故事，都當成可以重複使用的<strong>內容模組</strong>。</p>
+
+<p>一則台北夜市的房東故事，可以被拆成：</p>
+<ul>
+  <li>官網的城市指南</li>
+  <li>社群貼文的在地視角</li>
+  <li>電子報的精選推薦</li>
+  <li>廣告素材的真實背書</li>
+  <li>SEO 的長尾關鍵字落地頁</li>
+</ul>
+
+<p>一個內容源頭，多個分發出口。這不是靠勤勞，是靠<strong>系統設計</strong>。</p>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80" alt="數據儀表板，內容效果分析" loading="lazy" />
+  <figcaption>內容工程的核心指標不是「發了幾篇文章」，而是「每份內容創造了多少重複使用的價值」。Photo by <a href="https://unsplash.com/@mjessier" target="_blank" rel="noopener">Myriam Jessier</a> on Unsplash</figcaption>
+</figure>
+
+<h3>Apple：沉默的內容工程師</h3>
+
+<p>Apple 幾乎不寫部落格，但他們是最頂級的內容工程師。他們的內容工程展現在：</p>
+
+<ul>
+  <li><strong>產品頁面即支柱內容：</strong>每一頁都是該關鍵字的完整答案——規格、比較、使用情境、技術說明</li>
+  <li><strong>一致的內容結構：</strong>所有產品頁面遵循同樣的資訊架構，讓 Google 的爬蟲可以預測性地理解每個新頁面</li>
+  <li><strong>內容即產品說明書：</strong>每一個功能描述都是精心工程化的，而不是隨意的行銷話術</li>
+</ul>
+
+<p>Apple 的 SEO 表現驚人——不靠頻繁發文，靠的是每份內容的工程品質。</p>
+
+<h2>內容工程的 4 個核心原則</h2>
+
+<h3>① 結構優先於數量</h3>
+<p>不問「這週要發幾篇？」，問「這份內容在我的主題地圖上，填補了哪個空缺？」先有架構，再填充內容。</p>
+
+<h3>② 內容原子化（Content Atomization）</h3>
+<p>每一份長形內容，都能被拆解成多個「原子」——一則金句、一張圖表、一個數據點、一個案例——每個原子可以在不同平台、不同時間重複使用。</p>
+
+<h3>③ 語意連結（Semantic Interlinking）</h3>
+<p>每份內容都不是孤立的。它連結到相關頁面、引用相關數據、指向下一個邏輯步驟。對 Google 來說，這是「話語權」的信號；對讀者來說，這是「深度」的體驗。</p>
+
+<h3>④ 可量測的內容 KPI</h3>
+<p>不只看「流量」，看「每份內容的轉換價值」——這份文章帶來了幾個詢問？支柱頁面的停留時間是多少？哪個叢集文章的反彈率最高？</p>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900&auto=format&fit=crop&q=80" alt="小型團隊討論內容策略，筆電與便利貼" loading="lazy" />
+  <figcaption>內容工程不需要大團隊——需要的是清晰的架構思維。Photo by <a href="https://unsplash.com/@jasongoodman_youxventures" target="_blank" rel="noopener">Jason Goodman</a> on Unsplash</figcaption>
+</figure>
+
+<h2>台灣中小企業怎麼用 10% 的資源複製這套邏輯</h2>
+
+<p>你不是 HubSpot，你沒有內容團隊——但你有大品牌沒有的東西：<strong>深度在地知識</strong>。</p>
+
+<p>這是一套你現在就能開始的簡化版內容工程框架：</p>
+
+<h3>步驟一：選定一個核心主題</h3>
+<p>你的商家類型 + 所在城市 + 最常被問到的問題。例如：台北內湖的牙醫 → 核心主題「內湖牙齒矯正完整指南」。這就是你的支柱頁面。</p>
+
+<h3>步驟二：列出 5–8 個子主題</h3>
+<p>從這個核心主題延伸：矯正費用比較、矯正流程說明、隱形矯正 vs 傳統矯正、矯正期間飲食注意、內湖哪裡有矯正診所……每個子主題都是一篇叢集文章。</p>
+
+<h3>步驟三：建立內部連結網絡</h3>
+<p>每篇叢集文章都連回支柱頁面，支柱頁面連結到所有叢集文章。Google 看到的不是 9 篇獨立文章，而是一個對「內湖牙齒矯正」這個主題有深度話語權的網站。</p>
+
+<h3>步驟四：把每篇長文「原子化」</h3>
+<p>完成一篇叢集文章後，立刻提取：1 個 Google 商家貼文素材、1 則社群短文、1 個 FAQ 答案加入網站。同樣的時間投入，內容覆蓋面 × 4。</p>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=900&auto=format&fit=crop&q=80" alt="手機搜尋在地服務" loading="lazy" />
+  <figcaption>你的客人在手機上搜尋「附近的⋯⋯」——內容工程讓你的答案永遠在他們找到的第一個位置。Photo by <a href="https://unsplash.com/@firmbee" target="_blank" rel="noopener">Firmbee.com</a> on Unsplash</figcaption>
+</figure>
+
+<h2>內容工程的真正門檻：不是技術，是思維轉換</h2>
+
+<p>大多數台灣中小企業卡在這裡：他們把發文當成一次性任務，而不是長期資產的累積。</p>
+
+<p>內容工程要求你換一個問題：</p>
+
+<table>
+  <thead>
+    <tr><th>內容行銷思維</th><th>內容工程思維</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>「這週要發什麼？」</td><td>「這份內容在 6 個月後還有價值嗎？」</td></tr>
+    <tr><td>「這篇文章有沒有人看？」</td><td>「這份內容帶來了多少連結和子主題機會？」</td></tr>
+    <tr><td>「我要怎麼讓更多人看到這篇貼文？」</td><td>「我要怎麼讓這個主題成為我的代名詞？」</td></tr>
+    <tr><td>「我需要更多內容。」</td><td>「我需要更好的內容架構。」</td></tr>
+  </tbody>
+</table>
+
+<h2>結語：你的內容資產正在折舊，還是在增值？</h2>
+
+<p>每一篇發完就忘的貼文，是在折舊。</p>
+<p>每一份有結構、有連結、有被引用可能的深度內容，是在增值。</p>
+
+<p>大品牌早就不問「要發什麼」——他們在建造一個內容系統，讓每一份新內容的邊際效益遞增，而不是遞減。</p>
+
+<p>你的商家不需要 HubSpot 的資源才能開始。你需要的是今天就選定一個核心主題，然後把「發文」這個動作，換成「建造你的在地話語權資產」這個思維。</p>
+
+<div class="cta-box">
+  <p>你的產業還沒有人做過完整的內容叢集？這就是你最大的機會。讓 adlo 幫你找出你的核心主題，設計你的內容工程藍圖。</p>
+</div>
+    `.trim(),
+  },
 ];
 
 export function getPostBySlug(slug: string): Post | undefined {
