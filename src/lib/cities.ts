@@ -261,8 +261,8 @@ export const cities: CityData[] = [
       },
     ],
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1598548685150-2d0f6e85ce6e?w=1200&auto=format&fit=crop&q=80',
-      alt: '高雄港口城市夜景',
+      url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&auto=format&fit=crop&q=80',
+      alt: '高雄城市夜景燈光',
     },
   },
 ];
