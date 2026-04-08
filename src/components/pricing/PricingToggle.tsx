@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { CheckCircle, X } from 'lucide-react';
+import CheckoutButton from '@/components/pricing/CheckoutButton';
 
 type Plan = {
   id: string;
@@ -108,19 +107,18 @@ export default function PricingToggle({ plans }: { plans: Plan[] }) {
                 ))}
               </ul>
 
-              <Button
-                asChild
-                size="lg"
-                className={`w-full mt-8 font-bold ${
-                  plan.highlight
-                    ? 'cta-gradient text-white hover:opacity-90 shadow-lg shadow-green-900/20'
-                    : 'bg-slate-800 text-white hover:bg-slate-700'
-                }`}
-              >
-                <Link href={`${plan.ctaHref}${isAnnual ? '&billing=annual' : ''}`}>
-                  {plan.cta}
-                </Link>
-              </Button>
+              <div className="mt-8">
+                <CheckoutButton
+                  planId={plan.id}
+                  billing={isAnnual ? 'yearly' : 'monthly'}
+                  label={plan.cta}
+                  className={`font-bold ${
+                    plan.highlight
+                      ? 'cta-gradient text-white hover:opacity-90 shadow-lg shadow-green-900/20'
+                      : 'bg-slate-800 text-white hover:bg-slate-700'
+                  }`}
+                />
+              </div>
             </CardContent>
           </Card>
         ))}
