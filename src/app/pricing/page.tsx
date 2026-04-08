@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import PageHeader from '@/components/layout/PageHeader';
-import { CheckCircle, X, Zap, CheckCircle2, ClipboardList, Bot, BarChart2, ChevronRight } from 'lucide-react';
+import { CheckCircle, X, Zap, CheckCircle2, Bot, BarChart2, ChevronRight } from 'lucide-react';
 import PricingToggle from '@/components/pricing/PricingToggle';
 
 export const metadata: Metadata = {
@@ -185,7 +185,6 @@ const faqs = [
   { q: '可以中途升級方案嗎？', a: '可以，隨時可以升級到更高方案，費用差額按比例計算。' },
   { q: '如果沒有效果怎麼辦？', a: '我們提供 60 天成效保證。若第 60 天排名未有明顯改善，我們將免費延長服務 30 天，直到達標。' },
   { q: '你們服務哪些地區？', a: '全台灣都服務，以台北、新北、台中、高雄為主要服務重心，其他縣市也歡迎諮詢。' },
-  { q: 'AI 代管協助為什麼不公開價格？', a: '每個企業的流程複雜度、系統串接數量、知識庫規模都不同，導致工程量差異可能達 3–5 倍。我們需要先了解你的需求才能給出精確報價，通常在首次諮詢後 1–2 個工作天提供書面提案。' },
   { q: '數位市調的費用可以分期嗎？', a: '可以。完整市調報告與新產品上市研究可拆分為「啟動金 50% + 報告交付後 50%」兩期付款。' },
 ];
 
@@ -309,20 +308,9 @@ export default function PricingPage() {
               了解服務詳情 <ChevronRight className="w-3 h-3" />
             </Link>
           </div>
-          <p className="text-slate-500 text-sm mb-3 pl-11">
-            每個企業的流程複雜度不同，工程量差異可達 3–5 倍，因此不公開定價。
+          <p className="text-slate-500 text-sm mb-10 pl-11">
             填寫需求後 1–2 個工作天提供書面提案，含建置費 + 月維護費明細。
           </p>
-
-          {/* 說明提示 */}
-          <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-10 ml-11">
-            <ClipboardList className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <p className="text-sm text-amber-800">
-              <strong>為什麼不公開報價？</strong>{' '}
-              建置費因系統串接複雜度差異大（NT$35,000 至 NT$150,000+）；月維護費依功能規模而定。
-              我們需要先了解你的業務流程，才能給出精確且合理的報價。
-            </p>
-          </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {aiPlans.map(plan => (
