@@ -111,7 +111,7 @@ const faqJsonLd = {
 const offerJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'adlo 在地行銷定價方案',
+  name: 'adlo 在地行銷服務方案',
   itemListElement: plans.map((plan, i) => ({
     '@type': 'ListItem',
     position: i + 1,
@@ -119,10 +119,9 @@ const offerJsonLd = {
       '@type': 'Offer',
       name: plan.name,
       description: plan.desc,
-      price: plan.monthlyPrice,
       priceCurrency: 'TWD',
       priceSpecification: { '@type': 'UnitPriceSpecification', unitText: '月' },
-      url: `https://adlo.tw/pricing`,
+      url: 'https://adlo.tw/pricing',
       seller: { '@id': 'https://adlo.tw/#organization' },
     },
   })),
@@ -134,9 +133,9 @@ export default function PricingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd) }} />
       <PageHeader
-        eyebrow="PRICING"
-        title="透明定價，沒有隱藏費用"
-        description="按月付費，隨時可暫停。年繳享 85 折，省下 2 個月費用"
+        eyebrow="服務方案"
+        title="選擇適合你的方案"
+        description="填寫詢問表單，我們在 1–2 個工作天內提供專屬報價單"
       />
 
       {/* Pricing Cards */}
@@ -169,6 +168,40 @@ export default function PricingPage() {
             <p className="text-slate-500 text-sm">選擇服務項目，立即試算估價</p>
           </div>
           <QuoteCalculator />
+        </div>
+      </section>
+
+      {/* 付款方式說明 */}
+      <section className="py-14 px-6 md:px-8 bg-white border-t border-slate-100">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+            <h2 className="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2" style={{ fontFamily: 'var(--font-manrope)' }}>
+              💳 目前承接方式
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* 問卷詢問 */}
+              <div className="bg-white rounded-xl border border-slate-200 p-5">
+                <p className="font-bold text-slate-800 mb-2">① 填寫詢問問卷</p>
+                <p className="text-slate-500 text-sm leading-relaxed mb-4">
+                  告訴我們你的商家類型、城市、目標，我們在 1–2 個工作天內回覆並提供專屬報價單。
+                </p>
+                <Button asChild className="cta-gradient text-white hover:opacity-90 w-full">
+                  <Link href="/contact">前往填寫問卷 →</Link>
+                </Button>
+              </div>
+              {/* 匯款 */}
+              <div className="bg-white rounded-xl border border-slate-200 p-5">
+                <p className="font-bold text-slate-800 mb-2">② 報價確認後匯款</p>
+                <p className="text-slate-500 text-sm leading-relaxed">
+                  收到報價單並確認後，我們提供銀行匯款帳號。
+                  款項確認後 1–2 個工作天內正式啟動服務。
+                </p>
+                <p className="text-xs text-slate-400 mt-3">
+                  * 線上金流串接預計開放，敬請期待。
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

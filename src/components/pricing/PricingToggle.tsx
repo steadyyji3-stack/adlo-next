@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { CheckCircle, X } from 'lucide-react';
-import CheckoutButton from '@/components/pricing/CheckoutButton';
+import { CheckCircle, X, FileText } from 'lucide-react';
 
 type Plan = {
   id: string;
@@ -22,29 +20,14 @@ type Plan = {
 };
 
 export default function PricingToggle({ plans }: { plans: Plan[] }) {
-  const [isAnnual, setIsAnnual] = useState(false);
-
-  function displayPrice(monthly: number) {
-    const price = isAnnual ? Math.round(monthly * 0.85) : monthly;
-    return price.toLocaleString('zh-TW');
-  }
-
   return (
     <>
-      {/* Toggle */}
-      <div className="flex items-center justify-center gap-4 mb-12">
-        <Label className={`text-sm font-medium ${!isAnnual ? 'text-slate-800' : 'text-slate-400'}`}>月繳</Label>
-        <Switch
-          checked={isAnnual}
-          onCheckedChange={setIsAnnual}
-          className="data-[state=checked]:bg-[#1D9E75]"
-        />
-        <Label className={`text-sm font-medium ${isAnnual ? 'text-slate-800' : 'text-slate-400'}`}>
-          年繳
-          <span className="ml-2 inline-flex items-center bg-[#E1F5EE] text-[#0F6E56] text-xs font-bold px-2 py-0.5 rounded-full">
-            省 15%
-          </span>
-        </Label>
+      {/* 目前狀態說明 */}
+      <div className="flex items-center justify-center gap-3 mb-10 bg-amber-50 border border-amber-200 rounded-xl px-6 py-3 max-w-xl mx-auto">
+        <FileText className="w-4 h-4 text-amber-600 shrink-0" />
+        <p className="text-sm text-amber-800 text-center">
+          目前以<strong>問卷詢問 + 匯款</strong>方式承接業務，詳細報價請填寫下方表單。
+        </p>
       </div>
 
       {/* Cards */}
@@ -75,22 +58,12 @@ export default function PricingToggle({ plans }: { plans: Plan[] }) {
               </h3>
               <p className="text-slate-500 text-sm mt-1 leading-relaxed">{plan.desc}</p>
 
+              {/* 價格區：改為「依需求報價」 */}
               <div className="mt-6">
-                <div className="flex items-end gap-1">
-                  <span className="text-slate-400 text-sm mb-1">NT$</span>
-                  <span className="text-4xl font-extrabold text-slate-800" style={{ fontFamily: 'var(--font-manrope)' }}>
-                    {displayPrice(plan.monthlyPrice)}
-                  </span>
-                  <span className="text-slate-400 text-sm mb-1">/月</span>
-                </div>
-                {isAnnual && (
-                  <p className="text-xs text-slate-400 mt-1">
-                    原價 NT${plan.monthlyPrice.toLocaleString('zh-TW')}，年繳省{' '}
-                    <span className="text-[#1D9E75] font-bold">
-                      NT${(plan.monthlyPrice * 0.15 * 12).toLocaleString('zh-TW')}
-                    </span>
-                  </p>
-                )}
+                <p className="text-2xl font-extrabold text-slate-800" style={{ fontFamily: 'var(--font-manrope)' }}>
+                  依需求報價
+                </p>
+                <p className="text-xs text-slate-400 mt-1">填寫表單後 1–2 工作天內提供報價單</p>
               </div>
             </CardHeader>
 
@@ -107,18 +80,19 @@ export default function PricingToggle({ plans }: { plans: Plan[] }) {
                 ))}
               </ul>
 
-              <div className="mt-8">
-                <CheckoutButton
-                  planId={plan.id}
-                  billing={isAnnual ? 'yearly' : 'monthly'}
-                  label={plan.cta}
-                  className={`font-bold ${
-                    plan.highlight
-                      ? 'cta-gradient text-white hover:opacity-90 shadow-lg shadow-green-900/20'
-                      : 'bg-slate-800 text-white hover:bg-slate-700'
-                  }`}
-                />
-              </div>
+              <Button
+                asChild
+                size="lg"
+                className={`w-full mt-8 font-bold ${
+                  plan.highlight
+                    ? 'cta-gradient text-white hover:opacity-90 shadow-lg shadow-green-900/20'
+                    : 'bg-slate-800 text-white hover:bg-slate-700'
+                }`}
+              >
+                <Link href={`/contact?plan=${plan.id}`}>
+                  索取報價單
+                </Link>
+              </Button>
             </CardContent>
           </Card>
         ))}

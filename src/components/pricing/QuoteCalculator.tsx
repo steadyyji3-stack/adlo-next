@@ -175,11 +175,11 @@ export default function QuoteCalculator() {
                   className="w-full cta-gradient text-white font-bold hover:opacity-90 shadow-lg shadow-green-900/20"
                 >
                   <Link href={`/contact${queryStr}`}>
-                    用此組合免費諮詢 <ArrowRight className="w-4 h-4 ml-1" />
+                    索取此組合報價單 <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
                 </Button>
                 <p className="text-xs text-slate-400 text-center mt-3">
-                  實際費用依需求客製，諮詢完全免費無壓力
+                  填寫問卷後 1–2 工作天內寄出報價單，確認後以匯款付款
                 </p>
               </div>
             )}
