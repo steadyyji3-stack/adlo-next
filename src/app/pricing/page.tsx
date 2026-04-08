@@ -7,7 +7,6 @@ import { Separator } from '@/components/ui/separator';
 import PageHeader from '@/components/layout/PageHeader';
 import { CheckCircle, X, Zap, CheckCircle2, ClipboardList, Bot, BarChart2, ChevronRight } from 'lucide-react';
 import PricingToggle from '@/components/pricing/PricingToggle';
-import QuoteCalculator from '@/components/pricing/QuoteCalculator';
 
 export const metadata: Metadata = {
   title: '定價方案 | adlo 台灣在地 SEO 行銷',
@@ -360,24 +359,6 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      <Separator />
-
-      {/* ── 自訂組合計算器 ── */}
-      <section className="py-20 px-6 md:px-8 bg-slate-50">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <Badge className="mb-3 text-[#0F6E56] border-[#1D9E75]/30 bg-[#E1F5EE] tracking-widest text-xs font-bold uppercase" variant="outline">
-              專屬報價
-            </Badge>
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>
-              自訂你的在地行銷組合
-            </h2>
-            <p className="text-slate-500 text-sm">選擇服務項目，立即試算在地行銷月費估價</p>
-          </div>
-          <QuoteCalculator />
         </div>
       </section>
 
