@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import PageHeader from '@/components/layout/PageHeader';
-import { MapPin, Search, PenLine, MousePointerClick, CheckCircle, Frown, TrendingDown, HelpCircle, Clock } from 'lucide-react';
+import { MapPin, Search, PenLine, MousePointerClick, CheckCircle, Frown, TrendingDown, HelpCircle, Clock, Bot, BarChart2, ArrowRight } from 'lucide-react';
+import { getAllNewServices } from '@/lib/new-services';
 
 export const metadata: Metadata = {
   title: '服務方案 | adlo 台灣在地 SEO 行銷',
@@ -74,6 +75,18 @@ const serviceJsonLd = {
       serviceType: 'Local SEO Marketing',
     },
   })),
+};
+
+const newServices = getAllNewServices();
+
+const newServiceIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  'ai-management': Bot,
+  'market-research': BarChart2,
+};
+
+const newServiceColors: Record<string, { badge: string; icon: string; border: string }> = {
+  'ai-management': { badge: 'bg-violet-500/10 text-violet-600 border-violet-200', icon: 'text-violet-500', border: 'hover:border-violet-200' },
+  'market-research': { badge: 'bg-blue-500/10 text-blue-600 border-blue-200', icon: 'text-blue-500', border: 'hover:border-blue-200' },
 };
 
 export default function ServicesPage() {
@@ -152,6 +165,56 @@ export default function ServicesPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 進階服務 */}
+      <section className="py-20 px-6 md:px-8 bg-slate-900 text-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <Badge className="mb-3 bg-white/10 text-white border-white/20 tracking-widest text-xs font-bold uppercase">
+              進階服務
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>
+              AI 自動化 × 市場研究
+            </h2>
+            <p className="text-slate-400 text-sm">超越傳統行銷，讓 AI 和數據成為你最強的競爭力</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {newServices.map(svc => {
+              const IconComp = newServiceIcons[svc.slug] ?? Bot;
+              const colors = newServiceColors[svc.slug] ?? newServiceColors['ai-management'];
+              return (
+                <article key={svc.slug}
+                  className={`bg-slate-800 border border-slate-700 rounded-2xl p-8 flex flex-col hover:border-slate-500 transition-all ${colors.border}`}>
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                      <IconComp className={`w-5 h-5 ${colors.icon}`} />
+                    </div>
+                    <div>
+                      <Badge className={`text-xs font-bold border ${colors.badge}`}>{svc.nameEn}</Badge>
+                    </div>
+                    <span className="ml-auto text-[10px] font-black bg-[#1D9E75]/20 text-[#34d399] border border-[#1D9E75]/30 px-2 py-0.5 rounded-full">NEW</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">{svc.name}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1">{svc.tagline}</p>
+                  <ul className="space-y-2 mb-8">
+                    {svc.features.slice(0, 3).map(f => (
+                      <li key={f.title} className="flex items-center gap-2 text-sm text-slate-300">
+                        <CheckCircle className={`w-4 h-4 shrink-0 ${colors.icon}`} />
+                        {f.title}
+                      </li>
+                    ))}
+                    <li className="text-xs text-slate-500 pl-6">+ {svc.features.length - 3} 項更多功能…</li>
+                  </ul>
+                  <Link href={`/services/${svc.slug}`}
+                    className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all border border-white/10 hover:border-white/20">
+                    了解詳情 <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

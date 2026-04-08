@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllPosts } from '@/lib/posts';
 import { getAllIssues } from '@/lib/dankoe';
 import { getAllCities } from '@/lib/cities';
+import { getAllNewServices } from '@/lib/new-services';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPosts();
@@ -28,6 +29,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
   }));
 
+  const advancedServices = getAllNewServices();
+  const advancedServiceEntries: MetadataRoute.Sitemap = advancedServices.map(svc => ({
+    url: `https://adlo.tw/services/${svc.slug}`,
+    lastModified: new Date(),
+    priority: 0.85,
+    changeFrequency: 'monthly',
+  }));
+
   return [
     { url: 'https://adlo.tw',                lastModified: new Date(), priority: 1.0, changeFrequency: 'weekly' },
     { url: 'https://adlo.tw/services',       lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
@@ -42,5 +51,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...blogEntries,
     ...dkEntries,
     ...cityEntries,
+    ...advancedServiceEntries,
   ];
 }
