@@ -12,6 +12,7 @@ const links = [
   { href: '/services', label: '服務方案' },
   { href: '/pricing', label: '定價方案' },
   { href: '/cities', label: '城市服務' },
+  { href: '/cases', label: '成效案例' },
   { href: '/blog', label: 'SEO 專欄' },
   { href: '/blog/dan-koe', label: 'Dan Koe 週報', badge: 'NEW' },
   { href: '/trends', label: '趨勢分析' },
