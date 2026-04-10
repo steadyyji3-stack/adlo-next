@@ -57,7 +57,21 @@ const team = [
     role: '創辦人 / 策略總監',
     type: 'human' as const,
     bio: '8 年數位行銷資歷。看過太多本地企業花了大錢做行銷，卻得不到可量化的成果——所以決定建立一個不一樣的工作方式。',
-    tags: ['SEO 策略', '廣告投放', '客戶顧問'],
+    tags: ['SEO 策略', '整合行銷', '客戶顧問'],
+  },
+  {
+    name: 'Sin',
+    role: '技術工程師',
+    type: 'human' as const,
+    bio: '負責網站技術開發、系統串接與自動化工程。把行銷策略轉化為真正可執行的技術架構，確保每一個數位資產都穩定運作。',
+    tags: ['網站開發', 'API 串接', '自動化工程'],
+  },
+  {
+    name: 'Shou',
+    role: '廣告投手',
+    type: 'human' as const,
+    bio: '專注 Google Ads 與 Meta 廣告的精準操盤。從受眾設定、素材測試到預算分配，用數據驅動每一分廣告費的效益最大化。',
+    tags: ['Google Ads', 'Meta 廣告', '成效優化'],
   },
   {
     name: '克勞德',
@@ -202,7 +216,7 @@ export default function AboutPage() {
                 人負責判斷與策略，AI 負責執行與規模化。這才是 2026 年真實的工作方式。
               </p>
             </div>
-            <div className="grid md:grid-cols-3 gap-6 mt-10">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
               {team.map(member => (
                 <div key={member.name}
                   className="bg-white border border-slate-200 rounded-2xl p-7 flex flex-col hover:border-[#1D9E75]/40 hover:shadow-md transition-all">
