@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const links = [
   { href: '/', label: '首頁' },
+  { href: '/about', label: '關於我們' },
   { href: '/services', label: '服務方案' },
   { href: '/pricing', label: '定價方案' },
   { href: '/cities', label: '城市服務' },

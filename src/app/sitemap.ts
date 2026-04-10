@@ -39,6 +39,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: 'https://adlo.tw',                lastModified: new Date(), priority: 1.0, changeFrequency: 'weekly' },
+    { url: 'https://adlo.tw/about',          lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/services',       lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/pricing',        lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/blog',           lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
