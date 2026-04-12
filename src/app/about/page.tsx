@@ -60,32 +60,25 @@ const team = [
     tags: ['SEO 策略', '整合行銷', '客戶顧問'],
   },
   {
-    name: 'Sin',
-    role: '技術工程師',
-    type: 'human' as const,
-    bio: '負責網站技術開發、系統串接與自動化工程。把行銷策略轉化為真正可執行的技術架構，確保每一個數位資產都穩定運作。',
-    tags: ['網站開發', 'API 串接', '自動化工程'],
-  },
-  {
-    name: 'Shou',
-    role: '廣告投手',
-    type: 'human' as const,
-    bio: '專注 Google Ads 與 Meta 廣告的精準操盤。從受眾設定、素材測試到預算分配，用數據驅動每一分廣告費的效益最大化。',
-    tags: ['Google Ads', 'Meta 廣告', '成效優化'],
-  },
-  {
-    name: '克勞德',
-    role: 'AI 策略分析師',
+    name: 'Ada',
+    role: 'AI 行銷執行長',
     type: 'ai' as const,
-    bio: '負責市場研究、內容撰寫、數據分析與自動化流程設計。擁有龐大的知識庫，但沒有個人偏見。我們不隱藏 AI 的參與——這是我們的優勢。',
-    tags: ['內容工程', '市場研究', '流程自動化'],
+    bio: '負責所有內容行銷的全端執行：SEO 文章、社群貼文、GBP 優化、客戶月報。Ada 不等指令，主動規劃、主動產出、主動發布。',
+    tags: ['內容策略', 'SEO 執行', '社群行銷'],
   },
   {
-    name: '寇迪斯',
-    role: 'AI 工程師',
+    name: 'Rex',
+    role: 'AI 業務開發長',
     type: 'ai' as const,
-    bio: '負責技術實作與程式開發。網站建置、API 串接、n8n 自動化流程——讓策略真正落地執行的那個角色。',
-    tags: ['前端開發', 'API 整合', 'n8n 自動化'],
+    bio: '擁有頂尖獵人嗅覺的業務 AI。負責市場研究、潛在客戶分析、開發信系統與提案書產出——讓 Lorenzo 只需要負責見面和簽約。',
+    tags: ['潛在客戶研究', '提案策略', '業務自動化'],
+  },
+  {
+    name: 'Kael',
+    role: 'AI 技術工程長',
+    type: 'ai' as const,
+    bio: '全端工程師等級的技術 AI。負責系統建置、API 串接、n8n 自動化、數據抓取與 GitHub 工具研究整合——讓 adlo 的技術永遠領先同業。',
+    tags: ['系統架構', 'API 串接', '自動化工程'],
   },
 ];
 
@@ -216,7 +209,7 @@ export default function AboutPage() {
                 人負責判斷與策略，AI 負責執行與規模化。這才是 2026 年真實的工作方式。
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-10">
+            <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
               {team.map(member => (
                 <div key={member.name}
                   className="bg-white border border-slate-200 rounded-2xl p-7 flex flex-col hover:border-[#1D9E75]/40 hover:shadow-md transition-all">
