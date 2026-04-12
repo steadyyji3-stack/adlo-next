@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, MapPin, Globe, CheckCircle2, Zap, Bot } from 'lucide-react';
+import { ArrowRight, MapPin, Globe, CheckCircle2, Zap } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '關於 adlo | 協助本地品牌完成數位轉型',
@@ -42,8 +42,8 @@ const beliefs = [
     desc: '每一個決策都有數據支撐。我們不靠感覺做行銷——關鍵字搜尋量、廣告受眾分析、GA4 流量結構，是我們最常說的語言。',
   },
   {
-    title: 'AI 是夥伴，不是噱頭',
-    desc: '我們的團隊本身就是人 + AI 的混合體。我們用 AI 加速執行，讓人專注在判斷與策略——這也是我們服務客戶的方式。',
+    title: '科技輔助，人來判斷',
+    desc: '我們善用最新的數位工具加速執行，讓團隊把時間放在真正重要的地方：策略判斷、客戶溝通、創意發想——這也是我們服務客戶的方式。',
   },
   {
     title: '在地，才能真正轉型',
@@ -55,29 +55,25 @@ const team = [
   {
     name: 'Lorenzo',
     role: '創辦人 / 策略總監',
-    type: 'human' as const,
     bio: '8 年數位行銷資歷。看過太多本地企業花了大錢做行銷，卻得不到可量化的成果——所以決定建立一個不一樣的工作方式。',
     tags: ['SEO 策略', '整合行銷', '客戶顧問'],
   },
   {
     name: 'Ada',
-    role: 'AI 行銷執行長',
-    type: 'ai' as const,
-    bio: '負責所有內容行銷的全端執行：SEO 文章、社群貼文、GBP 優化、客戶月報。Ada 不等指令，主動規劃、主動產出、主動發布。',
+    role: '行銷執行長',
+    bio: '負責所有內容行銷的全端執行：SEO 文章、社群貼文、GBP 優化、客戶月報。主動規劃、主動產出，確保每個月都有可量化的成效。',
     tags: ['內容策略', 'SEO 執行', '社群行銷'],
   },
   {
     name: 'Rex',
-    role: 'AI 業務開發長',
-    type: 'ai' as const,
-    bio: '擁有頂尖獵人嗅覺的業務 AI。負責市場研究、潛在客戶分析、開發信系統與提案書產出——讓 Lorenzo 只需要負責見面和簽約。',
-    tags: ['潛在客戶研究', '提案策略', '業務自動化'],
+    role: '業務開發長',
+    bio: '擁有頂尖獵人嗅覺的業務專家。負責市場研究、潛在客戶分析、開發系統與提案產出——讓 Lorenzo 專注於關係與策略。',
+    tags: ['市場研究', '提案策略', '業務開發'],
   },
   {
     name: 'Kael',
-    role: 'AI 技術工程長',
-    type: 'ai' as const,
-    bio: '全端工程師等級的技術 AI。負責系統建置、API 串接、n8n 自動化、數據抓取與 GitHub 工具研究整合——讓 adlo 的技術永遠領先同業。',
+    role: '技術工程長',
+    bio: '全端工程師。負責系統建置、API 串接、自動化流程與數據基礎建設——讓 adlo 的每一個執行都有技術支撐。',
     tags: ['系統架構', 'API 串接', '自動化工程'],
   },
 ];
@@ -205,8 +201,8 @@ export default function AboutPage() {
               <Badge className="bg-[#E1F5EE] text-[#0F6E56] border-[#1D9E75]/30 text-xs font-bold mb-4">THE TEAM</Badge>
               <h2 className="text-3xl font-extrabold text-slate-900 mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>人 + AI 的混合團隊</h2>
               <p className="text-slate-500 text-sm max-w-xl mx-auto">
-                我們不隱藏 AI 的角色——我們把它當成真正的團隊成員。
-                人負責判斷與策略，AI 負責執行與規模化。這才是 2026 年真實的工作方式。
+                小而精的團隊，每個人都有明確的專業分工。
+                從策略到執行、從業務到技術，我們讓每一個環節都有專人負責，不漏接。
               </p>
             </div>
             <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
@@ -215,16 +211,10 @@ export default function AboutPage() {
                   className="bg-white border border-slate-200 rounded-2xl p-7 flex flex-col hover:border-[#1D9E75]/40 hover:shadow-md transition-all">
                   {/* Avatar */}
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shrink-0 bg-[#E1F5EE] border border-[#1D9E75]/20">
-                    {member.type === 'human'
-                      ? <span className="text-2xl font-extrabold text-[#1D9E75]">{member.name[0]}</span>
-                      : <Bot className="w-6 h-6 text-[#1D9E75]" />
-                    }
+                    <span className="text-2xl font-extrabold text-[#1D9E75]">{member.name[0]}</span>
                   </div>
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-extrabold text-slate-900">{member.name}</h3>
-                    {member.type === 'ai' && (
-                      <span className="text-[9px] font-black bg-[#1D9E75] text-white px-1.5 py-0.5 rounded-full leading-none">AI</span>
-                    )}
                   </div>
                   <p className="text-xs text-[#1D9E75] font-semibold mb-3">{member.role}</p>
                   <p className="text-slate-500 text-sm leading-relaxed flex-1 mb-5">{member.bio}</p>
