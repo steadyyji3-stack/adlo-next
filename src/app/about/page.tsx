@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -57,24 +58,28 @@ const team = [
     role: '創辦人 / 策略總監',
     bio: '8 年數位行銷資歷。看過太多本地企業花了大錢做行銷，卻得不到可量化的成果——所以決定建立一個不一樣的工作方式。',
     tags: ['SEO 策略', '整合行銷', '客戶顧問'],
+    photo: 'https://i.pravatar.cc/300?img=68',
   },
   {
     name: 'Ada',
     role: '行銷執行長',
     bio: '負責所有內容行銷的全端執行：SEO 文章、社群貼文、GBP 優化、客戶月報。主動規劃、主動產出，確保每個月都有可量化的成效。',
     tags: ['內容策略', 'SEO 執行', '社群行銷'],
+    photo: 'https://i.pravatar.cc/300?img=47',
   },
   {
     name: 'Rex',
     role: '業務開發長',
     bio: '擁有頂尖獵人嗅覺的業務專家。負責市場研究、潛在客戶分析、開發系統與提案產出——讓 Lorenzo 專注於關係與策略。',
     tags: ['市場研究', '提案策略', '業務開發'],
+    photo: 'https://i.pravatar.cc/300?img=33',
   },
   {
     name: 'Kael',
     role: '技術工程長',
     bio: '全端工程師。負責系統建置、API 串接、自動化流程與數據基礎建設——讓 adlo 的每一個執行都有技術支撐。',
     tags: ['系統架構', 'API 串接', '自動化工程'],
+    photo: 'https://i.pravatar.cc/300?img=52',
   },
 ];
 
@@ -210,8 +215,14 @@ export default function AboutPage() {
                 <div key={member.name}
                   className="bg-white border border-slate-200 rounded-2xl p-7 flex flex-col hover:border-[#1D9E75]/40 hover:shadow-md transition-all">
                   {/* Avatar */}
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shrink-0 bg-[#E1F5EE] border border-[#1D9E75]/20">
-                    <span className="text-2xl font-extrabold text-[#1D9E75]">{member.name[0]}</span>
+                  <div className="w-16 h-16 rounded-2xl mb-5 shrink-0 overflow-hidden border border-slate-200">
+                    <Image
+                      src={member.photo}
+                      alt={member.name}
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-extrabold text-slate-900">{member.name}</h3>
