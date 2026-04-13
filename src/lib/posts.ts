@@ -652,6 +652,155 @@ export const posts: Post[] = [
 </div>
     `.trim(),
   },
+  {
+    slug: 'dan-koe-narrow-content-strategy-2026',
+    title: 'Dan Koe 的一人公司哲學：為什麼「窄眾內容」才是 2026 年最強的行銷策略',
+    description: '年收 NT$1.5 億、只有一個人。Dan Koe 用「窄眾內容」策略顛覆了傳統行銷邏輯——越窄越賺錢。台灣中小企業主、個人品牌該怎麼學？',
+    publishedAt: '2026-04-13',
+    category: '內容行銷',
+    tags: ['Dan Koe', '個人品牌', '一人公司', '內容行銷', '窄眾策略', '數位創業'],
+    author: 'adlo 編輯部',
+    readingTime: 8,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80',
+      alt: '一人在咖啡廳專注工作的場景',
+      credit: 'Andrew Neel',
+      creditUrl: 'https://unsplash.com/@andrewtneel',
+    },
+    content: `
+<p class="lead">年收 NT$1.5 億。員工人數：1 個人。這不是矽谷獨角獸的故事，而是一個叫 Dan Koe 的美國創作者，靠著寫作、一份電子報，和一個反直覺的核心原則做到的事——<strong>越窄，越賺錢。</strong></p>
+
+<p>2026 年的內容行銷世界，充斥著 AI 生成的通用內容、無數「10 個行銷技巧」清單文、和越來越難突破的演算法。如果你還在做「所有人都看得懂」的廣泛內容，你的競爭對手不是人——而是每分鐘產出數千篇文章的 AI。</p>
+
+<p>Dan Koe 的邏輯給了我們一個出路：<strong>不要寫給所有人，寫給一個非常具體的人。</strong></p>
+
+<h2>Dan Koe 是誰？數字先說話</h2>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80" alt="一個人在電腦前專注工作" loading="lazy" />
+  <figcaption>一人公司的本質：深度專注，而非規模擴張。Photo by Glenn Carstens-Peters on Unsplash</figcaption>
+</figure>
+
+<p>Dan Koe 是亞利桑那州的創作者，經營「The Koe Letter」電子報和「Modern Mastery」教育品牌。他的背景並不特別：從自由接案的網頁設計師起家，2019 年開始建立線上受眾。</p>
+
+<p>但到了 2023 年，他公開宣布一人公司年收突破 430 萬美元（約 NT$1.4 億）。2024 年更進一步突破 500 萬美元。他的電子報訂閱者超過 25 萬人，X（Twitter）追蹤者 170 萬，YouTube 40 萬，Instagram 70 萬。</p>
+
+<p>更重要的是：他幾乎沒有員工。最多 1–3 個承包商協助行政。</p>
+
+<p>這套模式的核心，就是他反覆強調的一件事：<strong>「Specificity is the only differentiator left.（具體性是唯一剩下的差異化工具。）」</strong></p>
+
+<h2>什麼是「窄眾內容」？</h2>
+
+<p>Dan Koe 本人不使用「窄眾內容」這個詞，但他的整套方法論，正是行銷界所說的 Narrow Content Strategy（窄眾內容策略）的最佳實踐範本。</p>
+
+<p>概念很簡單：<strong>不要寫給一個群體，寫給一個具體的人。</strong></p>
+
+<table>
+  <thead>
+    <tr><th>廣泛內容</th><th>窄眾內容（Koe 模式）</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>「給創業者的行銷技巧」</td><td>「台中醫美診所還沒開始做 Google SEO 的那位院長」</td></tr>
+    <tr><td>「如何增加社群追蹤者」</td><td>「在 Threads 上連發 30 天但沒人互動的台灣品牌小編」</td></tr>
+    <tr><td>「電商行銷攻略」</td><td>「在蝦皮賣手作飾品、想打進 IG 客群的台北設計師」</td></tr>
+    <tr><td>觸及所有人，留住沒人</td><td>觸及少數人，留住精準受眾</td></tr>
+  </tbody>
+</table>
+
+<p>Koe 的原話是：<strong>「Write for one person. If one specific person finds your writing and thinks 'this was written for me,' you've done your job.（寫給一個人。如果有一個具體的人讀了你的內容，心想『這是專為我寫的』，你就成功了。）」</strong></p>
+
+<h2>為什麼 2026 年「越窄越強」？</h2>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&q=80" alt="數位內容的海洋" loading="lazy" />
+  <figcaption>每分鐘有 500 小時的 YouTube 影片上傳。廣泛內容在這個洪流中根本沒有聲音。Photo by Unsplash</figcaption>
+</figure>
+
+<p>有三個結構性原因，讓窄眾策略在 2026 年比任何時候都更重要：</p>
+
+<h3>① AI 內容氾濫，通用內容失去價值</h3>
+
+<p>生成式 AI 自 2023 年起大規模普及，讓「生產內容」的成本趨近於零。結果是：網路上充斥著大量結構正確、SEO 友善、但毫無個人觀點的文章。</p>
+
+<p>Koe 的洞見：<strong>「AI can produce generic. It cannot produce you.（AI 能產出通用內容，但它無法產出你。）」</strong>第一人稱、具體觀點、真實經驗——這些是 AI 無法複製的，也正是窄眾內容的核心材料。</p>
+
+<h3>② 平台演算法從「社交圖譜」轉向「興趣圖譜」</h3>
+
+<p>X、LinkedIn、Instagram、YouTube 在 2023–2024 年間，都大幅轉向以「用戶興趣」而非「追蹤關係」決定內容分發。這對窄眾內容極為有利：</p>
+
+<p>一篇關於「台灣 B2B 製造業的 LINE 行銷策略」的文章，可以觸達所有在 LinkedIn 上對這個主題感興趣的人——即使你一個追蹤者都沒有。廣泛內容反而因為沒有明確興趣標籤，在演算法中漂流。</p>
+
+<h3>③ 訂閱轉換數據：窄眾電子報完勝</h3>
+
+<p>2024 年的創作者經濟數據顯示：擁有不到 1 萬訂閱者但開信率超過 40% 的電子報，在付費轉換率上，遠勝過 10 萬訂閱者但開信率只有 15% 的大型電子報。</p>
+
+<p>精準受眾 × 高度相關內容 = 更高的商業價值。這就是窄眾策略的商業邏輯。</p>
+
+<h2>台灣中小企業怎麼用？5 步驟實戰</h2>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80" alt="台灣在地品牌會議討論" loading="lazy" />
+  <figcaption>台灣在地品牌最大的機會：用具體的在地視角，做出差異化內容。Photo by Unsplash</figcaption>
+</figure>
+
+<p>台灣市場有一個特殊優勢：大多數中文行銷內容是從英文翻譯，或是針對中國大陸市場撰寫的。<strong>真正針對台灣在地脈絡的具體內容，嚴重供給不足。</strong>這是你的藍海。</p>
+
+<h3>Step 1：定義「一個讀者」，不是「一個族群」</h3>
+
+<p>不是「台灣 25–40 歲創業者」，而是「在台中開診所三年、有穩定舊客但不知道怎麼靠 Google 吸引新患者的院長」。越具體，內容越有力。</p>
+
+<h3>Step 2：用「交集公式」找到你的定位</h3>
+
+<blockquote>
+  <p>[你的專業技能] + [具體受眾的問題] + [具體期望的結果] = 你的窄眾內容定位</p>
+</blockquote>
+
+<p>範例：[SEO 專業] + [台灣電商品牌看不懂英文 SEO 工具] + [想進入海外市場第一步] = 極度精準的內容定位，而且幾乎沒有競爭。</p>
+
+<h3>Step 3：寫「你上週解決的真實問題」</h3>
+
+<p>Koe 的寫作頻率策略：不需要內容日曆，只需要記錄你實際解決過的問題。「我上週幫一個台中電商品牌做了這個改變，GA4 數據出現了這樣的變化……」——這種第一人稱的真實案例，是 AI 無法產出的，也是讀者最願意分享的。</p>
+
+<h3>Step 4：一個平台先做精，再擴散</h3>
+
+<p>Koe 的規則：選一個主要發布管道，在你的利基主題上成為那個平台最好的創作者，然後才擴展。對台灣市場而言：B2B 服務先攻 LinkedIn；消費品牌先攻 Instagram Reels；30 歲以上的在地受眾優先考慮 LINE 官方帳號電子報。</p>
+
+<h3>Step 5：建立「窄眾內容漏斗」</h3>
+
+<ul>
+  <li>免費窄眾內容（平台貼文）→ 吸引精準受眾</li>
+  <li>具體的潛在客戶誘因（如「台灣餐飲業 Google Maps 優化完整指南 PDF」）→ 建立名單</li>
+  <li>週報 / LINE 廣播（每週一個具體洞察）→ 培養信任</li>
+  <li>服務 / 產品（解決他們精確的問題）→ 高轉換成交</li>
+</ul>
+
+<h2>Koe 的電子報讓它運作的 5 個關鍵</h2>
+
+<p>Dan Koe 的「The Koe Letter」為什麼有效？拆解如下：</p>
+
+<ul>
+  <li><strong>一封信，一個核心概念</strong> — 絕不試圖在一封信裡涵蓋多個主題</li>
+  <li><strong>開頭直接進入故事或觀點</strong> — 沒有「在這封信裡我將分享……」這種廢話前言</li>
+  <li><strong>語氣是直接的、有觀點的</strong> — 從不兩面討好，從不「另一方面也許……」</li>
+  <li><strong>結尾只有一個 CTA</strong> — 一個行動呼籲，不是三個</li>
+  <li><strong>讀者是故事的主角，不是 Koe 自己</strong> — 讀者讀完後看到的是自己的可能性</li>
+</ul>
+
+<p>這套邏輯完全可以移植到台灣的 LINE 官方帳號廣播、電子報、甚至 Threads 貼文。核心永遠一樣：<strong>寫給一個人，說一件具體的事。</strong></p>
+
+<h2>結語：窄，才是新的廣</h2>
+
+<p>在一個每分鐘有 500 小時影片上傳、每天有數百萬篇文章發布的世界，「寫給所有人」等於「誰都不會記住你」。</p>
+
+<p>Dan Koe 用一人公司、年收 NT$1.5 億的成績，示範了另一條路：找到一個非常具體的人，說他最需要聽到的話，用你最真實的聲音說。</p>
+
+<p>台灣中小企業主、個人品牌經營者——你的機會不是在跟大公司競爭廣泛受眾，而是在他們忽略的那個具體角落，成為不可替代的聲音。</p>
+
+<div class="cta-box">
+  <p>想把窄眾內容策略落地到你的品牌？adlo 提供從內容定位、關鍵字策略到每月 SEO 文章執行的完整服務。<a href="/contact">免費諮詢，了解適合你的方案 →</a></p>
+</div>
+    `.trim(),
+  },
 ];
 
 export function getPostBySlug(slug: string): Post | undefined {
