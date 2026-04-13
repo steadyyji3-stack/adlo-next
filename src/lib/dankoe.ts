@@ -113,8 +113,63 @@ export const danKoeIssues: DanKoeIssue[] = [
     ],
   },
   /* ─────────────────────────────────────────────────────────────
-     Issue #2  →  下期預告位（敬請期待 2026-W15）
+     Issue #2  |  2026-W15  |  窄眾策略：只對「那個人」說話
   ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w15',
+    issueNumber: 2,
+    theme: '你花 3 小時寫的貼文沒人看完——差別在這裡',
+    publishedAt: '2026-04-13',
+    summary: '本期聚焦 Dan Koe 的「窄眾內容策略」：為什麼對所有人說話等於對沒有人說話？以及台灣品牌如何用窄眾思維創造不可取代的位置。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&auto=format&fit=crop&q=80',
+      alt: '一個人專注寫作，筆記本與咖啡桌',
+      credit: 'Aaron Burden',
+      creditUrl: 'https://unsplash.com/@aaronburden',
+    },
+    posts: [
+      {
+        id: 'w15-01',
+        original: `"Stop trying to appeal to everyone. The more specific you get, the more you attract the exact people who will pay you, follow you, and tell others about you."`,
+        translation: '不要試圖吸引所有人。你越具體，你就越能吸引那些會付錢給你、追蹤你、並告訴別人你的人。',
+        insight: '台灣中小企業最常犯的錯：「我的產品/服務人人都適合」。這句話讓你的行銷失去力量。試著把你的目標客群縮小到一個人——「台中 30–40 歲女性，在意皮膚狀況但工作太忙沒時間做功課」——然後只對她說話。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-01',
+      },
+      {
+        id: 'w15-02',
+        original: `"Your content isn't failing because of the algorithm. It's failing because you're broadcasting, not conversing. Write to one person. That one person is your most valuable audience."`,
+        translation: '你的內容不是因為演算法而失敗的。它失敗是因為你在「廣播」，而不是在「對話」。為一個人而寫。那個人，才是你最有價值的受眾。',
+        insight: '下次寫 Threads 貼文或 IG 文案前，先想一個你真實認識的客人。為他/她寫這篇文章。「共鳴感」就是這樣來的——不是靠技巧，是靠真實瞄準。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-03',
+      },
+      {
+        id: 'w15-03',
+        original: `"Narrow content doesn't mean small reach. It means deeper impact. A post about 'how introverted founders can sell without feeling gross' will outperform 'sales tips for everyone' every single time."`,
+        translation: '「窄眾內容」不代表觸及率小。它代表更深的影響力。一篇關於「內向創業者如何不尷尬地銷售」的文章，每次都會勝過「給所有人的銷售技巧」。',
+        insight: '台灣在地商家的窄眾切入範例：「台中七期 30–45 歲媽媽的皮膚保養困境」比「台中醫美推薦」更精準，轉換率也更高。窄，不是小，是準。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-05',
+      },
+      {
+        id: 'w15-04',
+        original: `"If your brand disappeared tomorrow, would anyone miss it? That question is the core of all marketing. Build something irreplaceable for someone, not something acceptable to everyone."`,
+        translation: '如果你的品牌明天消失，會有人想念它嗎？這個問題是所有行銷的核心。為某個人建造一個不可取代的東西，而不是為所有人建造一個可以接受的東西。',
+        insight: '你的診所、你的餐廳、你的工作室——有沒有一群人，如果你不在了他們會找不到替代品？這才是品牌力的真正定義。adlo 幫助台灣商家找到這個「不可取代的利基」，然後用內容和 SEO 把它說清楚。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-07',
+      },
+      {
+        id: 'w15-05',
+        original: `"Most people are afraid to niche down because they think they'll lose potential customers. The reality: you'll lose the wrong customers and gain the right ones."`,
+        translation: '大多數人害怕縮小定位，因為他們覺得會失去潛在客戶。現實是：你會失去錯誤的客戶，並獲得正確的客戶。',
+        insight: '縮小定位讓你的獲客成本下降、客單價上升、口碑傳播更快。台灣市場夠小，窄眾策略反而是放大器。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-09',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
