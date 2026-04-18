@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter, Manrope, Playfair_Display } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import SiteNav from '@/components/layout/SiteNav';
 import SiteFooter from '@/components/layout/SiteFooter';
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const inter = Inter({
   subsets: ['latin'],
@@ -153,6 +156,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="pt-24">{children}</main>
         <SiteFooter />
       </body>
+      {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }
