@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter, Manrope, Playfair_Display } from 'next/font/google';
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import './globals.css';
 import SiteNav from '@/components/layout/SiteNav';
 import SiteFooter from '@/components/layout/SiteFooter';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 const inter = Inter({
   subsets: ['latin'],
@@ -151,6 +152,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
+      {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <body className={`${inter.variable} ${manrope.variable} ${playfair.variable} font-body antialiased`}>
         <SiteNav />
         <main className="pt-24">{children}</main>
