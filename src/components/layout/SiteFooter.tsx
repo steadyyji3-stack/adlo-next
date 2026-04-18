@@ -13,10 +13,10 @@ const footerLinks = [
 ];
 
 const socials = [
-  { name: 'X', icon: 'simple-icons:x', href: 'https://x.com/adlo_tw' },
-  { name: 'Instagram', icon: 'simple-icons:instagram', href: 'https://instagram.com/adlo.tw' },
-  { name: 'Facebook', icon: 'simple-icons:facebook', href: 'https://facebook.com/adlo.tw' },
-  { name: 'LINE', icon: 'simple-icons:line', href: 'https://line.me/ti/p/adlo_tw' },
+  { name: 'X', icon: 'simple-icons:x', href: 'https://x.com/adlo_tw', event: 'social_click', platform: 'x' },
+  { name: 'Instagram', icon: 'simple-icons:instagram', href: 'https://instagram.com/adlo.tw', event: 'social_click', platform: 'instagram' },
+  { name: 'Facebook', icon: 'simple-icons:facebook', href: 'https://facebook.com/adlo.tw', event: 'social_click', platform: 'facebook' },
+  { name: 'LINE', icon: 'simple-icons:line', href: 'https://line.me/ti/p/adlo_tw', event: 'line_click', platform: 'line' },
 ];
 
 export default function SiteFooter() {
@@ -42,6 +42,9 @@ export default function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.name}
+                  data-gtm-event={s.event}
+                  data-gtm-platform={s.platform}
+                  data-gtm-location="footer"
                   className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-[#1D9E75] hover:text-white transition-all duration-200"
                 >
                   <Icon icon={s.icon} width={16} />
@@ -65,7 +68,7 @@ export default function SiteFooter() {
         <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-xs text-slate-600">© 2026 adlo 區域精準行銷</p>
           <p className="text-xs text-slate-700">
-            <a href="mailto:hello@adlo.tw" className="hover:text-slate-400 transition-colors">hello@adlo.tw</a>
+            <a href="mailto:hello@adlo.tw" data-gtm-event="email_click" data-gtm-location="footer" className="hover:text-slate-400 transition-colors">hello@adlo.tw</a>
           </p>
         </div>
       </div>

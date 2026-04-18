@@ -18,6 +18,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '@/components/ui/dialog';
+import { trackContactSubmit } from '@/lib/gtm';
 
 const industryOptions = [
   '餐飲 / 咖啡廳',
@@ -87,6 +88,12 @@ export default function ContactForm() {
     });
     const json = await res.json();
     if (json.success) {
+      trackContactSubmit({
+        form_id: json.id,
+        industry: data.industry,
+        service: data.service,
+        challenges_count: data.challenges.length,
+      });
       setSuccessId(json.id);
       form.reset();
     } else {

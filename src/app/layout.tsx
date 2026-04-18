@@ -4,6 +4,7 @@ import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import './globals.css';
 import SiteNav from '@/components/layout/SiteNav';
 import SiteFooter from '@/components/layout/SiteFooter';
+import ClickTracker from '@/components/tracking/ClickTracker';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
@@ -157,6 +158,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteNav />
         <main className="pt-24">{children}</main>
         <SiteFooter />
+        {GTM_ID && <ClickTracker />}
       </body>
       {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
     </html>

@@ -57,7 +57,7 @@ export default function SiteNav() {
             </Link>
           ))}
           <Button asChild className="ml-3 cta-gradient text-white hover:opacity-90 shadow-md">
-            <Link href="/contact">立即諮詢</Link>
+            <Link href="/contact" data-gtm-event="nav_contact_cta_click">立即諮詢</Link>
           </Button>
         </nav>
 
@@ -92,7 +92,7 @@ export default function SiteNav() {
                 </Link>
               ))}
               <Button asChild className="mt-4 cta-gradient text-white hover:opacity-90">
-                <Link href="/contact">立即諮詢</Link>
+                <Link href="/contact" data-gtm-event="nav_contact_cta_click">立即諮詢</Link>
               </Button>
             </nav>
           </SheetContent>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { trackPricingClick } from '@/lib/gtm';
 
 interface CheckoutButtonProps {
   planId: string;
@@ -25,6 +26,7 @@ export default function CheckoutButton({
   async function handleCheckout() {
     setLoading(true);
     setError('');
+    trackPricingClick(planId, billing);
 
     try {
       const res = await fetch('/api/checkout', {

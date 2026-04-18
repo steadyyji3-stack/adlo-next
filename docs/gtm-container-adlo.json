@@ -1,0 +1,374 @@
+{
+  "exportFormatVersion": 2,
+  "exportTime": "2026-04-18 00:00:00",
+  "containerVersion": {
+    "accountId": "REPLACE_ACCOUNT_ID",
+    "containerId": "REPLACE_CONTAINER_ID",
+    "containerVersionId": "0",
+    "container": {
+      "accountId": "REPLACE_ACCOUNT_ID",
+      "containerId": "REPLACE_CONTAINER_ID",
+      "name": "adlo.tw",
+      "publicId": "GTM-WN4QZF7D",
+      "usageContext": ["WEB"],
+      "features": {
+        "supportUserPermissions": true,
+        "supportEnvironments": true,
+        "supportWorkspaces": true,
+        "supportTags": true,
+        "supportTriggers": true,
+        "supportVariables": true,
+        "supportFolders": true,
+        "supportBuiltInVariables": true,
+        "supportClients": false,
+        "supportTemplates": true,
+        "supportTransformations": false,
+        "supportZones": true
+      },
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/REPLACE_ACCOUNT_ID/containers/REPLACE_CONTAINER_ID/workspaces?apiLink=container"
+    },
+    "tag": [
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "tagId": "1",
+        "name": "GA4 Configuration - adlo",
+        "type": "googtag",
+        "parameter": [
+          { "type": "template", "key": "tagId", "value": "G-NJ13ZSMK7W" }
+        ],
+        "firingTriggerId": ["2147479553"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": { "consentStatus": "NOT_SET" }
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "tagId": "2",
+        "name": "GA4 Event - contact_form_submit",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "template", "key": "eventName", "value": "contact_form_submit" },
+          { "type": "boolean", "key": "sendEcommerceData", "value": "false" },
+          {
+            "type": "list",
+            "key": "eventParameters",
+            "list": [
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "form_id" },
+                { "type": "template", "key": "value", "value": "{{DLV - form_id}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "industry" },
+                { "type": "template", "key": "value", "value": "{{DLV - industry}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "service" },
+                { "type": "template", "key": "value", "value": "{{DLV - service}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "challenges_count" },
+                { "type": "template", "key": "value", "value": "{{DLV - challenges_count}}" }
+              ]}
+            ]
+          },
+          { "type": "tagReference", "key": "measurementId", "value": "GA4 Configuration - adlo" }
+        ],
+        "firingTriggerId": ["10"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": { "consentStatus": "NOT_SET" }
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "tagId": "3",
+        "name": "GA4 Event - pricing_plan_click",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "template", "key": "eventName", "value": "pricing_plan_click" },
+          { "type": "boolean", "key": "sendEcommerceData", "value": "false" },
+          {
+            "type": "list",
+            "key": "eventParameters",
+            "list": [
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "plan_id" },
+                { "type": "template", "key": "value", "value": "{{DLV - plan_id}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "billing" },
+                { "type": "template", "key": "value", "value": "{{DLV - billing}}" }
+              ]}
+            ]
+          },
+          { "type": "tagReference", "key": "measurementId", "value": "GA4 Configuration - adlo" }
+        ],
+        "firingTriggerId": ["11"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": { "consentStatus": "NOT_SET" }
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "tagId": "4",
+        "name": "GA4 Event - adlo_interaction",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "template", "key": "eventName", "value": "{{DLV - interaction_name}}" },
+          { "type": "boolean", "key": "sendEcommerceData", "value": "false" },
+          {
+            "type": "list",
+            "key": "eventParameters",
+            "list": [
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "interaction_name" },
+                { "type": "template", "key": "value", "value": "{{DLV - interaction_name}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "link_url" },
+                { "type": "template", "key": "value", "value": "{{DLV - link_url}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "platform" },
+                { "type": "template", "key": "value", "value": "{{DLV - platform}}" }
+              ]},
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "location" },
+                { "type": "template", "key": "value", "value": "{{DLV - location}}" }
+              ]}
+            ]
+          },
+          { "type": "tagReference", "key": "measurementId", "value": "GA4 Configuration - adlo" }
+        ],
+        "firingTriggerId": ["12"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": { "consentStatus": "NOT_SET" }
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "tagId": "5",
+        "name": "GA4 Event - scroll_75",
+        "type": "gaawe",
+        "parameter": [
+          { "type": "template", "key": "eventName", "value": "scroll_75" },
+          { "type": "boolean", "key": "sendEcommerceData", "value": "false" },
+          {
+            "type": "list",
+            "key": "eventParameters",
+            "list": [
+              { "type": "map", "map": [
+                { "type": "template", "key": "name", "value": "page_path" },
+                { "type": "template", "key": "value", "value": "{{Page Path}}" }
+              ]}
+            ]
+          },
+          { "type": "tagReference", "key": "measurementId", "value": "GA4 Configuration - adlo" }
+        ],
+        "firingTriggerId": ["13"],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "consentSettings": { "consentStatus": "NOT_SET" }
+      }
+    ],
+    "trigger": [
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "triggerId": "10",
+        "name": "Custom Event - contact_form_submit",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "template", "key": "arg0", "value": "{{_event}}" },
+              { "type": "template", "key": "arg1", "value": "contact_form_submit" }
+            ]
+          }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "triggerId": "11",
+        "name": "Custom Event - pricing_plan_click",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "template", "key": "arg0", "value": "{{_event}}" },
+              { "type": "template", "key": "arg1", "value": "pricing_plan_click" }
+            ]
+          }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "triggerId": "12",
+        "name": "Custom Event - adlo_interaction",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              { "type": "template", "key": "arg0", "value": "{{_event}}" },
+              { "type": "template", "key": "arg1", "value": "adlo_interaction" }
+            ]
+          }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "triggerId": "13",
+        "name": "Scroll Depth - 75%",
+        "type": "SCROLL_DEPTH",
+        "parameter": [
+          { "type": "boolean", "key": "verticalThresholdOn", "value": "true" },
+          { "type": "template", "key": "verticalThresholdUnits", "value": "PERCENT" },
+          { "type": "template", "key": "verticalThresholdsPercent", "value": "75" },
+          { "type": "boolean", "key": "horizontalThresholdOn", "value": "false" },
+          { "type": "template", "key": "triggerStartOption", "value": "WINDOW_LOADED" }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "20",
+        "name": "DLV - form_id",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "form_id" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "21",
+        "name": "DLV - industry",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "industry" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "22",
+        "name": "DLV - service",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "service" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "23",
+        "name": "DLV - challenges_count",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "challenges_count" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "24",
+        "name": "DLV - plan_id",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "plan_id" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "25",
+        "name": "DLV - billing",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "billing" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "26",
+        "name": "DLV - interaction_name",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "interaction_name" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "27",
+        "name": "DLV - link_url",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "link_url" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "28",
+        "name": "DLV - platform",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "platform" }
+        ]
+      },
+      {
+        "accountId": "REPLACE_ACCOUNT_ID",
+        "containerId": "REPLACE_CONTAINER_ID",
+        "variableId": "29",
+        "name": "DLV - location",
+        "type": "v",
+        "parameter": [
+          { "type": "integer", "key": "dataLayerVersion", "value": "2" },
+          { "type": "boolean", "key": "setDefaultValue", "value": "false" },
+          { "type": "template", "key": "name", "value": "location" }
+        ]
+      }
+    ],
+    "builtInVariable": [
+      { "type": "PAGE_URL", "name": "Page URL" },
+      { "type": "PAGE_PATH", "name": "Page Path" },
+      { "type": "PAGE_HOSTNAME", "name": "Page Hostname" },
+      { "type": "REFERRER", "name": "Referrer" },
+      { "type": "EVENT", "name": "Event" },
+      { "type": "CLICK_ELEMENT", "name": "Click Element" },
+      { "type": "CLICK_URL", "name": "Click URL" },
+      { "type": "SCROLL_DEPTH_THRESHOLD", "name": "Scroll Depth Threshold" },
+      { "type": "SCROLL_DEPTH_UNITS", "name": "Scroll Depth Units" },
+      { "type": "SCROLL_DIRECTION", "name": "Scroll Direction" }
+    ],
+    "fingerprint": "0",
+    "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/REPLACE_ACCOUNT_ID/containers/REPLACE_CONTAINER_ID/workspaces?apiLink=container"
+  }
+}
