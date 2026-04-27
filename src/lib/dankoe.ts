@@ -170,6 +170,80 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+  /* ─────────────────────────────────────────────────────────────
+     Issue #3  |  2026-W17  |  複利寫作：這週寫的一篇，可能養你五年
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w17',
+    issueNumber: 3,
+    theme: '這週寫的一篇，可能養你五年',
+    publishedAt: '2026-04-22',
+    summary: '本期聚焦 Dan Koe 的「複利寫作」觀——為什麼一次產出勝過每天焦慮發文，以及台灣在地商家如何讓一篇內容變成五年導流資產。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1200&auto=format&fit=crop&q=80',
+      alt: '桌上攤開的筆記本與筆',
+      credit: 'Aaron Burden',
+      creditUrl: 'https://unsplash.com/@aaronburden',
+    },
+    posts: [
+      {
+        id: 'w17-01',
+        original: `"Most people write for today's algorithm. The people who win write for a stranger who will find it 3 years from now and say 'holy shit'. Same effort, 1000x the payoff."`,
+        translation: '大多數人為今天的演算法而寫。贏的人為「三年後偶然發現它的陌生人」而寫——那個看完會說「靠，太棒了」的人。同樣的付出，回報差一千倍。',
+        insight: '你寫的 Google 商家貼文、部落格文章、FAQ 頁，如果只是為了這週觸及率，壽命大約 72 小時。但如果你寫的是「客人三年後 Google 搜尋問題時會找到」的內容——那是你的複利資產。adlo 做的 SEO 文章，都是往三年尺度寫。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-15',
+      },
+      {
+        id: 'w17-02',
+        original: `"The reason you feel behind is because you measure in days. Compounding doesn't show up in days. It shows up in 18-month windows. Keep writing."`,
+        translation: '你覺得落後，是因為你用「天」來衡量。複利不在「天」這個尺度出現。它在 18 個月的窗口裡才會現形。繼續寫就對了。',
+        insight: '台灣很多老闆做行銷做三個月看不到訂單就放棄。真正會翻身的是那些每週更新、每月檢視、一年後回頭看的人。SEO 的複利通常在第 9-12 個月才會明顯，這不是技術問題，是耐心問題。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-16',
+      },
+      {
+        id: 'w17-03',
+        original: `"One deeply useful article > 100 generic tweets. The article earns trust. The tweets earn dopamine. Only one of those pays your rent."`,
+        translation: '一篇真正有用的長文 > 100 則泛泛推文。文章賺到的是信任，推文賺到的只是多巴胺。只有一樣東西能付你的房租。',
+        insight: '別誤會——adlo 當然也做 Threads、做 IG。但我們清楚分工：短內容是入口，長內容才是客戶做決定時讀的東西。台灣中小商家預算有限，「一週一篇長文」比「每天發 Threads」對生意更實在。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-18',
+      },
+      {
+        id: 'w17-04',
+        original: `"Your old content is a free employee. It works 24/7, doesn't ask for a raise, and introduces you to strangers while you sleep. Most people fire that employee by never updating the post."`,
+        translation: '你的舊內容是一個免費員工。它 24 小時上班、不要求加薪、你睡覺時幫你認識陌生人。但多數人因為從不回頭更新，等於把這員工開除了。',
+        insight: '你店家頁的 Google 商家簡介、兩年前寫的部落格、FAQ——這些是你的免費員工。每季花 30 分鐘更新一次（新照片、新 FAQ、新案例），它們的流量會多兩三倍。adlo 的客戶月報裡，我們會標出「值得再優化的老內容」，這一條的 ROI 通常最高。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-19',
+      },
+      {
+        id: 'w17-05',
+        original: `"Stop publishing 'content'. Start publishing answers. Answers get saved. Content gets scrolled past. The difference is whether you wrote from your experience or from what you think 'sounds smart'."`,
+        translation: '不要再發「內容」。開始發「答案」。答案會被儲存，內容會被滑過。差別在於——你是從自己的經驗寫，還是從「聽起來聰明」的角度寫。',
+        insight: '台灣在地商家最強大的武器就是「我每天處理的真實問題」。燒肉店老闆被客人問過最奇怪的保存方法、美甲師看過最難救的指甲、會計師遇過最複雜的報稅情境——這些不是內容，是答案。而 Google 的搜尋結果，95% 的高排名都是答案型內容。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-20',
+      },
+      {
+        id: 'w17-06',
+        original: `"The hardest skill in the creator economy isn't writing. It's not quitting when nobody is reading yet. Most of your early posts won't work. They weren't supposed to. They were the reps that made the later posts land."`,
+        translation: '創作者經濟裡最難的技能不是寫作。是在還沒有人讀的時候不放棄。你早期的文章多數不會成功——它們本來就不該成功。它們是讓後面的文章發光的練習量。',
+        insight: '這句話對 adlo 客戶我們講得特別直白：你第一個月的商家貼文沒人看，第二個月評論還是少——不代表策略錯了。在地 SEO 前三個月是「地基期」，第四個月開始才看得到自然流量加速。半途放棄的人永遠走不到那個轉折點。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-21',
+      },
+      {
+        id: 'w17-07',
+        original: `"Don't optimize for viral. Optimize for 'this person's life changed 6 months after reading'. One of those is vanity. The other is why anyone remembers you at all."`,
+        translation: '不要優化「爆紅」。優化「某個人讀完六個月後生活改變了」。前者是虛榮，後者是任何人還會記得你的唯一原因。',
+        insight: '爆紅的貼文兩週後沒人記得。但一篇「我照著做，半年後真的有客人找上門」的內容，會被存、會被轉、會被口耳相傳。adlo 寫每一篇 SEO 文章前都先問一句：讀者照做，六個月後他的生意會不會真的不一樣？這個標準篩掉了 80% 的水內容。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-22',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {

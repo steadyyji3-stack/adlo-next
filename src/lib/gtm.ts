@@ -47,3 +47,58 @@ export function trackContactSubmit(params: {
 export function trackInteraction(name: string, extra: EventParams = {}) {
   pushEvent('adlo_interaction', { interaction_name: name, ...extra });
 }
+
+// ==================== /check 免費健檢事件（Ada × Kael 2026-04-21） ====================
+
+/** 將分數轉為分段標籤，方便 GA4 做區隔分析 */
+export function scoreBand(score: number): 'high' | 'mid' | 'low' | 'poor' {
+  if (score >= 80) return 'high';
+  if (score >= 60) return 'mid';
+  if (score >= 40) return 'low';
+  return 'poor';
+}
+
+/** /check 使用者送出查詢（不論是否成功） */
+export function trackCheckSubmit(queryLength: number) {
+  pushEvent('check_submit', { query_length: queryLength });
+}
+
+/** /check 成功取得結果（分數 + 最弱指標 + 區域排名） */
+export function trackCheckResult(params: {
+  score: number;
+  weakest_metric: string;
+  region_rank_percent: number;
+  location?: string;
+}) {
+  pushEvent('check_result', {
+    ...params,
+    score_band: scoreBand(params.score),
+  });
+}
+
+/** /check 觸發 rate limit（客端或 server 端 429） */
+export function trackCheckRateLimited(source: 'client' | 'server') {
+  pushEvent('check_rate_limited', { source });
+}
+
+/** /check Email gate 解鎖成功（L0 收集） */
+export function trackCheckEmailUnlock() {
+  pushEvent('check_email_unlock', {});
+}
+
+/** /check 分享卡點擊（download / share / copy / upgrade） */
+export function trackCheckShare(
+  action: 'download' | 'share' | 'copy' | 'upgrade_cta',
+  params: { score?: number; size?: 'square' | 'story' } = {},
+) {
+  pushEvent('check_share', {
+    share_action: action,
+    ...(params.score !== undefined ? { score_band: scoreBand(params.score) } : {}),
+    ...(params.size ? { card_size: params.size } : {}),
+  });
+}
+
+/** /diagnostic R-01 升級 CTA 點擊（哪個區塊觸發） */
+export function trackDiagnosticCtaClick(location: string) {
+  pushEvent('diagnostic_cta_click', { cta_location: location });
+}

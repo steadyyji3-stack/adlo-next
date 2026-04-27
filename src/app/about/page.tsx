@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -52,34 +51,42 @@ const beliefs = [
   },
 ];
 
+// 團隊插畫：採用 adlo 綠手繪風格（DiceBear notionists，MIT License），每位成員固定 seed
 const team = [
   {
     name: 'Lorenzo',
     role: '創辦人 / 策略總監',
     bio: '8 年數位行銷資歷。看過太多本地企業花了大錢做行銷，卻得不到可量化的成果——所以決定建立一個不一樣的工作方式。',
     tags: ['SEO 策略', '整合行銷', '客戶顧問'],
-    photo: 'https://i.pravatar.cc/300?img=68',
+    photo: 'https://api.dicebear.com/9.x/notionists/svg?seed=Lorenzo&backgroundColor=E1F5EE&radius=20',
   },
   {
     name: 'Ada',
     role: '行銷執行長',
     bio: '負責所有內容行銷的全端執行：SEO 文章、社群貼文、GBP 優化、客戶月報。主動規劃、主動產出，確保每個月都有可量化的成效。',
     tags: ['內容策略', 'SEO 執行', '社群行銷'],
-    photo: 'https://i.pravatar.cc/300?img=47',
+    photo: 'https://api.dicebear.com/9.x/notionists/svg?seed=Ada-adlo&backgroundColor=E1F5EE&radius=20',
   },
   {
     name: 'Rex',
     role: '業務開發長',
     bio: '擁有頂尖獵人嗅覺的業務專家。負責市場研究、潛在客戶分析、開發系統與提案產出——讓 Lorenzo 專注於關係與策略。',
     tags: ['市場研究', '提案策略', '業務開發'],
-    photo: 'https://i.pravatar.cc/300?img=33',
+    photo: 'https://api.dicebear.com/9.x/notionists/svg?seed=Rex-adlo&backgroundColor=E1F5EE&radius=20',
   },
   {
     name: 'Kael',
     role: '技術工程長',
     bio: '全端工程師。負責系統建置、API 串接、自動化流程與數據基礎建設——讓 adlo 的每一個執行都有技術支撐。',
     tags: ['系統架構', 'API 串接', '自動化工程'],
-    photo: 'https://i.pravatar.cc/300?img=52',
+    photo: 'https://api.dicebear.com/9.x/notionists/svg?seed=Kael-adlo&backgroundColor=E1F5EE&radius=20',
+  },
+  {
+    name: 'Dior',
+    role: '網頁設計總監',
+    bio: '法式極簡 × 東京細節 × 矽谷產品思維。負責 adlo.tw 每個頁面的視覺與體驗，Landing Page、分享卡、設計系統——讓一看就信任、一掃就想點。',
+    tags: ['Landing Page', '設計系統', '品牌視覺'],
+    photo: 'https://api.dicebear.com/9.x/notionists/svg?seed=Dior-adlo&backgroundColor=E1F5EE&radius=20',
   },
 ];
 
@@ -204,24 +211,26 @@ export default function AboutPage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-4">
               <Badge className="bg-[#E1F5EE] text-[#0F6E56] border-[#1D9E75]/30 text-xs font-bold mb-4">THE TEAM</Badge>
-              <h2 className="text-3xl font-extrabold text-slate-900 mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>人 + AI 的混合團隊</h2>
-              <p className="text-slate-500 text-sm max-w-xl mx-auto">
+              <h2 className="text-3xl font-extrabold text-slate-900 mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>核心團隊</h2>
+              <p className="text-slate-500 text-sm max-w-xl mx-auto leading-relaxed">
                 小而精的團隊，每個人都有明確的專業分工。
                 從策略到執行、從業務到技術，我們讓每一個環節都有專人負責，不漏接。
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-10">
               {team.map(member => (
                 <div key={member.name}
-                  className="bg-white border border-slate-200 rounded-2xl p-7 flex flex-col hover:border-[#1D9E75]/40 hover:shadow-md transition-all">
-                  {/* Avatar */}
-                  <div className="w-16 h-16 rounded-2xl mb-5 shrink-0 overflow-hidden border border-slate-200">
-                    <Image
+                  className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col hover:border-[#1D9E75]/40 hover:shadow-md transition-all">
+                  {/* Illustrated Avatar（DiceBear notionists SVG，插畫風格）*/}
+                  <div className="w-20 h-20 rounded-2xl mb-4 shrink-0 overflow-hidden bg-[#E1F5EE] border border-[#1D9E75]/20 flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={member.photo}
-                      alt={member.name}
-                      width={64}
-                      height={64}
+                      alt={`${member.name} illustrated avatar`}
+                      width={80}
+                      height={80}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                   <div className="flex items-center gap-2 mb-1">

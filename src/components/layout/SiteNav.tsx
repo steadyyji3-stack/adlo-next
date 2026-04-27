@@ -7,17 +7,16 @@ import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
+// 2026-04-23 Lorenzo 決策：工具站改版（方案乙 Rolling 6 週）
+// 導航主推：免費工具箱 + 月訂閱 waitlist，舊 /pricing /services /cities 頁面保留吃 SEO 流量
 const links = [
   { href: '/', label: '首頁' },
-  { href: '/about', label: '關於我們' },
-  { href: '/services', label: '服務方案' },
-  { href: '/pricing', label: '定價方案' },
-  { href: '/cities', label: '城市服務' },
-  { href: '/cases', label: '成效案例' },
+  { href: '/tools', label: '免費工具', badge: 'FREE' },
+  { href: '/diagnostic', label: '深度診斷' },
+  { href: '/subscribe', label: '月訂閱', badge: 'NEW' },
   { href: '/blog', label: 'SEO 專欄' },
-  { href: '/blog/dan-koe', label: 'Dan Koe 週報', badge: 'NEW' },
-  { href: '/trends', label: '趨勢分析' },
-  { href: '/process', label: '接單流程' },
+  { href: '/cases', label: '成效案例' },
+  { href: '/about', label: '關於我們' },
 ];
 
 export default function SiteNav() {
