@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { PenLine, Shield, Clock, UserX } from 'lucide-react';
+import PostWriterIllustration from './PostWriterIllustration';
 import type { Industry, PostWriterInput } from './mock-data';
 
 interface Props {
@@ -60,6 +61,8 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
     <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 via-white to-emerald-50/40 py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 md:px-8">
         <div className="text-center mb-10 md:mb-14">
+          <PostWriterIllustration />
+
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/60 px-4 py-1.5 text-xs font-medium text-emerald-800 backdrop-blur-sm mb-6">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -68,18 +71,12 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
             免費 · 不用註冊 · 30 秒出 7 篇
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 mb-5 leading-[1.15]">
-            下週 7 天的
-            <br className="md:hidden" />
-            <span className="text-[#1D9E75]">Google 商家貼文</span>
-            <br className="hidden md:block" />
-            ，3 秒產出。
+          <h1 className="text-[28px] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 mb-5 leading-[1.15]">
+            下週 7 天貼文，<span className="text-[#1D9E75]">3 秒搞定</span>。
           </h1>
 
           <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            不是 AI 自動發，是給你寫好的初稿。
-            <br className="hidden md:block" />
-            節慶、教育、QA、幕後、促銷自動配，每週不再卡題。
+            Google 商家貼文初稿。節慶、教育、QA、幕後、促銷自動配，每週不再卡題。
           </p>
         </div>
 
