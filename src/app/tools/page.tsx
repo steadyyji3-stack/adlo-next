@@ -62,8 +62,7 @@ const tools: Tool[] = [
     description:
       '告訴我你賣什麼、客人是誰，AI 幫你寫一週 7 篇 Google 商家貼文。含節慶、促銷、QA、幕後四種風格，直接複製貼上。',
     icon: PenLine,
-    status: 'soon',
-    eta: 'Week 2',
+    status: 'live',
     replaces: '基礎版 NT$8,800 裡的「月 4 篇貼文」',
   },
   {
