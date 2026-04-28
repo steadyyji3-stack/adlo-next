@@ -15,7 +15,6 @@ interface Plan {
   tagline: string;
   highlighted?: boolean;
   features: string[];
-  replaces: string;
 }
 
 const plans: Plan[] = [
@@ -32,7 +31,6 @@ const plans: Plan[] = [
       '評論自動提醒 + 回覆文案庫',
       '每月一份 1 頁重點月報',
     ],
-    replaces: '取代原 NT$8,800 基礎方案',
   },
   {
     id: 'local-seo',
@@ -49,7 +47,6 @@ const plans: Plan[] = [
       '城市 / 區域頁優化（最多 3 個據點）',
       '每月一份 3 頁深度月報',
     ],
-    replaces: '取代原 NT$18,800 Growth 方案',
   },
   {
     id: 'ads-managed',
@@ -65,7 +62,6 @@ const plans: Plan[] = [
       '廣告預算建議最低 NT$15,000/月',
       '可與 Local SEO Pack 疊加',
     ],
-    replaces: '取代原 NT$32,800 代操方案',
   },
 ];
 
@@ -167,11 +163,8 @@ export default function SubscribePlans() {
                     </li>
                   ))}
                 </ul>
-                <div className="pt-4 border-t border-slate-100 text-xs text-slate-400">
-                  {plan.replaces}
-                </div>
                 <div
-                  className={`mt-4 text-center py-2 rounded-lg text-sm font-bold transition-all ${
+                  className={`mt-6 text-center py-2 rounded-lg text-sm font-bold transition-all ${
                     isSelected
                       ? 'bg-[#1D9E75] text-white'
                       : 'bg-slate-100 text-slate-500'
