@@ -64,8 +64,8 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
           <PostWriterIllustration />
 
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/60 px-4 py-1.5 text-xs font-medium text-emerald-800 backdrop-blur-sm mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             免費 · 不用註冊 · 30 秒出 7 篇
@@ -100,7 +100,7 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
                 onChange={(e) => setStoreName(e.target.value)}
                 placeholder="例：好初早餐 信義店"
                 className="h-12 text-base"
-                aria-required
+                aria-required="true"
               />
             </div>
 
@@ -115,7 +115,11 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
                 value={industry}
                 onValueChange={(v) => setIndustry(v as Industry)}
               >
-                <SelectTrigger id="industry" className="h-12 text-base">
+                <SelectTrigger
+                  id="industry"
+                  className="h-12 text-base"
+                  aria-required="true"
+                >
                   <SelectValue placeholder="選一個你的產業" />
                 </SelectTrigger>
                 <SelectContent>

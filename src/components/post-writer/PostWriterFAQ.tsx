@@ -54,6 +54,8 @@ export default function PostWriterFAQ() {
         <div className="space-y-3">
           {FAQS.map((faq, idx) => {
             const isOpen = open === idx;
+            const panelId = `post-writer-faq-panel-${idx}`;
+            const buttonId = `post-writer-faq-button-${idx}`;
             return (
               <div
                 key={idx}
@@ -61,25 +63,31 @@ export default function PostWriterFAQ() {
               >
                 <button
                   type="button"
+                  id={buttonId}
                   onClick={() => setOpen(isOpen ? null : idx)}
                   className="w-full px-5 md:px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-100/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-inset"
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span className="text-sm md:text-base font-semibold text-slate-900">
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-500 shrink-0 transition-transform ${
+                    className={`w-4 h-4 text-slate-500 shrink-0 transition-transform motion-safe:transition-transform ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                     aria-hidden
                   />
                 </button>
-                {isOpen && (
-                  <div className="px-5 md:px-6 pb-4 text-sm md:text-[15px] text-slate-700 leading-relaxed">
-                    {faq.a}
-                  </div>
-                )}
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={buttonId}
+                  hidden={!isOpen}
+                  className="px-5 md:px-6 pb-4 text-sm md:text-[15px] text-slate-700 leading-relaxed"
+                >
+                  {faq.a}
+                </div>
               </div>
             );
           })}

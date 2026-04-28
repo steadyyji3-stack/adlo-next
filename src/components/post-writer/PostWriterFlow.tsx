@@ -75,7 +75,7 @@ export default function PostWriterFlow() {
     return (
       <section className="min-h-[60vh] flex items-center justify-center bg-gradient-to-b from-emerald-50 via-white to-emerald-50/40 py-20">
         <div className="text-center max-w-md mx-auto px-6">
-          <Loader2 className="w-12 h-12 mx-auto text-[#1D9E75] animate-spin mb-6" aria-hidden />
+          <Loader2 className="w-12 h-12 mx-auto text-[#1D9E75] motion-safe:animate-spin mb-6" aria-hidden />
           <h2 className="text-2xl font-bold text-slate-900 mb-3">
             正在幫 {storeName} 想下週貼文…
           </h2>

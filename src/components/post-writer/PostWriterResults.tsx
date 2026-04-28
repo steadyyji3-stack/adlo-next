@@ -53,7 +53,10 @@ function PostCard({ post }: { post: GeneratedPost }) {
   }
 
   return (
-    <article className="bg-white rounded-2xl border border-slate-200 p-6 md:p-7 hover:border-emerald-200 hover:shadow-md transition-all">
+    <article
+      aria-label={`${post.day} ${post.category} 貼文：${post.title}`}
+      className="bg-white rounded-2xl border border-slate-200 p-6 md:p-7 hover:border-emerald-200 hover:shadow-md transition-all"
+    >
       <header className="flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2 flex-wrap">
           <Badge
@@ -100,6 +103,7 @@ function PostCard({ post }: { post: GeneratedPost }) {
           onClick={handleCopy}
           className="text-xs"
           data-gtm-event="post_writer_copy"
+          aria-label={copied ? '已複製到剪貼簿' : `複製 ${post.day} ${post.category} 文案`}
         >
           {copied ? (
             <>
@@ -114,6 +118,10 @@ function PostCard({ post }: { post: GeneratedPost }) {
           )}
         </Button>
       </div>
+      {/* SR live region — copy 成功時對視障使用者播報 */}
+      <span className="sr-only" role="status" aria-live="polite">
+        {copied ? `${post.day} 文案已複製到剪貼簿` : ''}
+      </span>
     </article>
   );
 }
@@ -158,6 +166,7 @@ export default function PostWriterResults({ storeName, posts, onReset }: Props) 
         <div className="mt-16 grid md:grid-cols-3 gap-4">
           <Link
             href="/check"
+            aria-label="相關工具：先測 GBP 分數 — 30 秒看你家 Google 商家幾分"
             className="group bg-white rounded-xl border border-slate-200 hover:border-[#1D9E75] hover:shadow-md transition-all p-5"
             data-gtm-event="post_writer_to_check"
           >
@@ -173,6 +182,7 @@ export default function PostWriterResults({ storeName, posts, onReset }: Props) 
 
           <Link
             href="/blog/google-business-profile-6d-health-check-taiwan-2026"
+            aria-label="延伸閱讀：GBP 六維度健檢清單 — 台灣中小店家 2026 GBP 優化完整教學"
             className="group bg-white rounded-xl border border-slate-200 hover:border-[#1D9E75] hover:shadow-md transition-all p-5"
             data-gtm-event="post_writer_to_blog"
           >
@@ -188,6 +198,7 @@ export default function PostWriterResults({ storeName, posts, onReset }: Props) 
 
           <Link
             href="/diagnostic"
+            aria-label="預約 30 分鐘深度診斷 — 我們直接看你的 GBP 給你客製建議"
             className="group bg-white rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white hover:border-[#1D9E75] hover:shadow-md transition-all p-5"
             data-gtm-event="post_writer_to_diagnostic"
           >
