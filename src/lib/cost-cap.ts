@@ -116,6 +116,7 @@ export async function checkCostCap(
     if (burstCount === 1) {
       await redis.expire(burstKey, 120); // 2 分鐘 TTL（容錯）
     }
+    console.log('[cost-cap] burst', { ip: normIp, slot: minuteSlot, count: burstCount });
   } catch (err) {
     console.error('[cost-cap] burst check Redis 失敗，放行', err);
     burstCount = 0;
