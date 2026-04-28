@@ -6,6 +6,7 @@ import {
   incrementRateLimit,
   getClientIp,
 } from '@/lib/rate-limit';
+import { checkCostCap, incrementCostCap } from '@/lib/cost-cap';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -36,8 +37,23 @@ export async function POST(req: NextRequest) {
     }
 
     const ip = getClientIp(req.headers);
+    const userAgent = req.headers.get('user-agent') ?? '';
 
-    // 1. 先檢查速率限制（Redis 失敗 → 放行不阻擋用戶）
+    // 1. Cost cap 預檢（UA filter / IP burst / 全站日 / 全站月）
+    //    最便宜的擋在前面，避免浪費後續 Redis call 與 Places API quota
+    const cap = await checkCostCap(ip, userAgent);
+    if (!cap.allowed) {
+      const status = cap.reason === 'BOT_UA' ? 403 : 429;
+      return NextResponse.json(
+        {
+          error: cap.reason,
+          message: cap.message,
+        },
+        { status },
+      );
+    }
+
+    // 2. 個別 IP 速率限制（Redis 失敗 → 放行不阻擋用戶）
     let rl;
     try {
       rl = await checkRateLimit(ip);
@@ -68,13 +84,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. 抓 GBP → 3. 算分
+    // 3. 抓 GBP → 4. 算分
     const snap = await fetchGBP(query);
     const result = computeScore(snap);
 
-    // 4. 成功後才遞增計數（失敗不扣額度）
+    // 5. 成功後才遞增 IP 計數 + 全站計數（失敗不扣額度）
     try {
-      await incrementRateLimit(ip);
+      await Promise.all([incrementRateLimit(ip), incrementCostCap()]);
     } catch (err) {
       console.error('[api/check] increment 失敗（忽略，不影響回傳）', err);
     }
