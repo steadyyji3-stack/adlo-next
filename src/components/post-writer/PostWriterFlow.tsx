@@ -4,13 +4,17 @@ import { useState } from 'react';
 import PostWriterHero from './PostWriterHero';
 import PostWriterResults from './PostWriterResults';
 import { Loader2 } from 'lucide-react';
-import {
-  mockGeneratePosts,
-  type GeneratedPost,
-  type PostWriterInput,
-} from './mock-data';
+import type { GeneratedPost, PostWriterInput } from './mock-data';
 
 type Stage = 'idle' | 'loading' | 'done';
+
+interface GenerateApiResponse {
+  posts?: GeneratedPost[];
+  source?: 'groq' | 'mock';
+  error?: string;
+  message?: string;
+  quota?: { count: number; limit: number; emailUnlocked: boolean };
+}
 
 export default function PostWriterFlow() {
   const [stage, setStage] = useState<Stage>('idle');
@@ -23,16 +27,36 @@ export default function PostWriterFlow() {
     setStage('loading');
     setStoreName(input.storeName);
 
-    // Path C: mock 2 秒延遲，模擬真實 AI 回應的等待
-    await new Promise((r) => setTimeout(r, 2000));
-
     try {
-      const generated = mockGeneratePosts(input);
-      setPosts(generated);
+      const res = await fetch('/api/post-writer/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+      });
+
+      const data = (await res.json()) as GenerateApiResponse;
+
+      if (!res.ok) {
+        if (res.status === 429) {
+          setErrorMsg(data.message ?? '今日免費額度已用完，請明天再試');
+        } else {
+          setErrorMsg(data.message ?? data.error ?? '產生失敗，請稍後再試');
+        }
+        setStage('idle');
+        return;
+      }
+
+      if (!data.posts || data.posts.length !== 7) {
+        setErrorMsg('產生結果不完整，請再試一次');
+        setStage('idle');
+        return;
+      }
+
+      setPosts(data.posts);
       setStage('done');
     } catch (err) {
-      console.error('[post-writer] mock 失敗', err);
-      setErrorMsg('產生失敗，請稍後再試');
+      console.error('[post-writer] API 失敗', err);
+      setErrorMsg('連線失敗，請稍後再試');
       setStage('idle');
     }
   }

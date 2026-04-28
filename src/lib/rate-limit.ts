@@ -23,10 +23,13 @@ const WINDOW_SECONDS = 60 * 60 * 24; // 24h
  * - 預設 3 次 / 24h
  * - 若該 IP 已留 email（unlock），升為 10 次 / 24h
  */
-export async function checkRateLimit(ip: string): Promise<RateLimitResult> {
+export async function checkRateLimit(
+  ip: string,
+  tool: string = 'check',
+): Promise<RateLimitResult> {
   const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
-  const countKey = `adlo:check:ip:${normalizedIp}:count`;
-  const unlockKey = `adlo:check:ip:${normalizedIp}:unlocked`;
+  const countKey = `adlo:${tool}:ip:${normalizedIp}:count`;
+  const unlockKey = `adlo:${tool}:ip:${normalizedIp}:unlocked`;
 
   const [currentCount, unlocked] = await Promise.all([
     redis.get<number>(countKey),
@@ -50,9 +53,12 @@ export async function checkRateLimit(ip: string): Promise<RateLimitResult> {
 }
 
 /** 成功查詢後呼叫，遞增計數 */
-export async function incrementRateLimit(ip: string): Promise<void> {
+export async function incrementRateLimit(
+  ip: string,
+  tool: string = 'check',
+): Promise<void> {
   const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
-  const countKey = `adlo:check:ip:${normalizedIp}:count`;
+  const countKey = `adlo:${tool}:ip:${normalizedIp}:count`;
   const next = await redis.incr(countKey);
   if (next === 1) {
     await redis.expire(countKey, WINDOW_SECONDS);
@@ -60,11 +66,15 @@ export async function incrementRateLimit(ip: string): Promise<void> {
 }
 
 /** Email gate 解鎖：記錄 unlocked 30 天 + 清零當前視窗計數 */
-export async function unlockEmailGate(ip: string, email: string): Promise<void> {
+export async function unlockEmailGate(
+  ip: string,
+  email: string,
+  tool: string = 'check',
+): Promise<void> {
   const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
-  const unlockKey = `adlo:check:ip:${normalizedIp}:unlocked`;
-  const countKey = `adlo:check:ip:${normalizedIp}:count`;
-  const emailKey = `adlo:check:ip:${normalizedIp}:email`;
+  const unlockKey = `adlo:${tool}:ip:${normalizedIp}:unlocked`;
+  const countKey = `adlo:${tool}:ip:${normalizedIp}:count`;
+  const emailKey = `adlo:${tool}:ip:${normalizedIp}:email`;
 
   await Promise.all([
     redis.set(unlockKey, '1', { ex: 60 * 60 * 24 * 30 }), // 30 days
