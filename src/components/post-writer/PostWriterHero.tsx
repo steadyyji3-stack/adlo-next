@@ -58,7 +58,7 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
   const displayError = error || errorMsg || '';
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 via-white to-emerald-50/40 py-20 md:py-28">
+    <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 via-white to-emerald-50/40 py-16 sm:py-20 md:py-28 lg:py-32">
       <div className="max-w-5xl mx-auto px-6 md:px-8">
         <div className="text-center mb-10 md:mb-14">
           <PostWriterIllustration />
@@ -71,11 +71,11 @@ export default function PostWriterHero({ onSubmit, errorMsg }: Props) {
             免費 · 不用註冊 · 30 秒出 7 篇
           </div>
 
-          <h1 className="text-[28px] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 mb-5 leading-[1.15]">
+          <h1 className="text-[32px] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
             下週 7 天貼文，<span className="text-[#1D9E75]">3 秒搞定</span>。
           </h1>
 
-          <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Google 商家貼文初稿。節慶、教育、QA、幕後、促銷自動配，每週不再卡題。
           </p>
         </div>
