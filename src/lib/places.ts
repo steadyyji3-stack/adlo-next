@@ -306,8 +306,13 @@ function estimateKeywordHits(types: string[], summary?: string): number {
 
 function extractRegion(address: string): string {
   // 台灣地址常見格式："XXX縣/市XX區..."
-  const match = address.match(/(台北|新北|桃園|台中|台南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|澎湖|金門|連江)[市縣]?[\s\S]*?([\u4e00-\u9fff]{1,3}區)?/);
-  if (match) return `${match[1]}${match[2] ?? ''}`;
+  // ⚠️ Google formattedAddress 用「臺」（U+81FA 正體），不是「台」（U+53F0 俗體）
+  // 必須兩種都認；輸出統一用「台」。
+  const match = address.match(/([臺台]北|新北|桃園|[臺台]中|[臺台]南|高雄|基隆|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|[臺台]東|澎湖|金門|連江)[市縣]?[\s\S]*?([\u4e00-\u9fff]{1,3}區)?/);
+  if (match) {
+    const city = match[1].replace(/^臺/, '台'); // 正體 → 常用體
+    return `${city}${match[2] ?? ''}`;
+  }
   return address.slice(0, 16);
 }
 
