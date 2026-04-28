@@ -131,12 +131,43 @@ function normalizePost(raw: Record<string, unknown>, idx: number): GeneratedPost
  * 後處理過濾：把最 obviously 的簡中味/套話拿掉。
  * 只做整詞/整句移除或 您→你 這類零風險替換，避免破壞語法。
  */
+/** 軟替換：保留語法但置換成中性詞，避免 PHRASE_REMOVAL 直接 drop 造成「最的咖啡」這種破句 */
+const WORD_REPLACEMENTS: Record<string, string> = {
+  最優質的: '最好的',
+  高優質: '高品質',
+  優質: '不錯',
+  打造的: '做的',
+  打造一個: '做一個',
+  打造: '做',
+  極致的: '十足的',
+  極致: '十足',
+  卓越的: '出色的',
+  卓越: '出色',
+  璀璨: '亮眼',
+  邁進: '前進',
+  致力於: '專注在',
+  致力: '專注',
+  賦能: '幫',
+  傾力: '用心',
+  煥新: '更新',
+  煥發: '看起來',
+  彰顯: '看得出',
+  典範: '榜樣',
+  共創: '一起做',
+  共榮: '一起好',
+  品牌升級: '更新',
+  輝煌: '不錯',
+  業界領先: '領先',
+};
+
 const PHRASE_REMOVALS = [
   '希望大家',
   '希望你能夠',
   '讓我們一起',
   '歡迎大家來詢問',
+  '今天我們要跟大家分享',
   '今天要跟大家分享',
+  '我們要跟大家分享',
   '一起來看看',
   '邀請您',
   '敬請關注',
@@ -144,6 +175,7 @@ const PHRASE_REMOVALS = [
   '不容錯過',
   '為您提供',
   '讓您',
+  '總之',
 ];
 
 const SIMP_TO_TRAD: Record<string, string> = {
@@ -189,13 +221,22 @@ const SIMP_TO_TRAD: Record<string, string> = {
 
 function sanitizeText(s: string): string {
   let out = s;
+  // 1. 軟替換（先做，最長 key 優先以避免 子字串先被吃掉，例如「最優質的」要先於「優質」）
+  const sortedReplacements = Object.entries(WORD_REPLACEMENTS).sort(
+    (a, b) => b[0].length - a[0].length,
+  );
+  for (const [bad, good] of sortedReplacements) {
+    out = out.split(bad).join(good);
+  }
+  // 2. 整句移除
   for (const phrase of PHRASE_REMOVALS) {
     out = out.split(phrase).join('');
   }
+  // 3. 簡→繁 字符
   for (const [simp, trad] of Object.entries(SIMP_TO_TRAD)) {
     out = out.split(simp).join(trad);
   }
-  // 連續空白與多餘標點清理
+  // 4. 連續空白與多餘標點清理
   return out.replace(/  +/g, ' ').replace(/。{2,}/g, '。').trim();
 }
 
