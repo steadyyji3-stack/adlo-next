@@ -2,9 +2,21 @@ import 'server-only';
 import type { GBPSnapshot } from './scoring';
 
 /**
+ * /check 在無 API key 的 production 環境會丟出此錯誤，
+ * 讓 route handler 回傳 503 而不是用 mock 騙人。
+ */
+export class PlacesApiUnavailableError extends Error {
+  constructor() {
+    super('GOOGLE_PLACES_API_KEY 未設定，/check 服務暫時無法定位');
+    this.name = 'PlacesApiUnavailableError';
+  }
+}
+
+/**
  * 抓取 GBP 資料。
  * - 若環境變數 GOOGLE_PLACES_API_KEY 存在 → 走 Places API (New)
- * - 否則 → 降級 mock（基於 query hash 產生穩定的隨機值）
+ * - production 無 key → 拋出 PlacesApiUnavailableError（不可用 mock 假資料）
+ * - dev 無 key → 走 mock，方便本機 QA
  *
  * 無論哪條路徑，回傳 GBPSnapshot 介面，scoring.ts 不需要知道來源。
  *
@@ -24,11 +36,17 @@ export async function fetchGBP(rawQuery: string): Promise<GBPSnapshot> {
       }
       return await fetchFromPlacesAPI(query, apiKey);
     } catch (err) {
-      // Places API 失敗 → 降級 mock，避免用戶看到錯誤
+      // Places API 失敗（quota/network）→ 降級 mock 維持服務可用
       console.error('[places] Places API 失敗，降級 mock', err);
       return generateMock(query);
     }
   }
+
+  // production 無 key → 不允許用 mock，避免散布隨機假資料
+  if (process.env.NODE_ENV === 'production') {
+    throw new PlacesApiUnavailableError();
+  }
+  // dev 走 mock
   return generateMock(query);
 }
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchGBP } from '@/lib/places';
+import { fetchGBP, PlacesApiUnavailableError } from '@/lib/places';
 import { computeScore } from '@/lib/scoring';
 import {
   checkRateLimit,
@@ -93,6 +93,18 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err) {
+    // Places API 服務未配置 → 503，不消耗用戶額度
+    if (err instanceof PlacesApiUnavailableError) {
+      console.warn('[api/check] GOOGLE_PLACES_API_KEY 未設定');
+      return NextResponse.json(
+        {
+          error: 'SERVICE_UNAVAILABLE',
+          message:
+            '健檢服務正在升級中，預計 24 小時內恢復。已在路上，先用 Google 商家搜尋你的店家確認資料完整度。',
+        },
+        { status: 503 },
+      );
+    }
     // Top-level safety net — 任何未預期錯誤都回 JSON，避免 Vercel 回空 500
     console.error('[api/check] 未預期錯誤', err);
     return NextResponse.json(
