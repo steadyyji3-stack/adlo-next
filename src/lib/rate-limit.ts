@@ -83,14 +83,25 @@ export async function unlockEmailGate(
   ]);
 }
 
-/** 從 NextRequest headers 解析 client IP（Vercel / Cloudflare / 一般 proxy） */
+/** 從 NextRequest headers 解析 client IP（Vercel / Cloudflare / 一般 proxy）
+ *
+ * 優先順序（2026-04-29 修正）：
+ * 1. `cf-connecting-ip` — Cloudflare 直接告知的真實 client IP（最可信）
+ * 2. `x-vercel-forwarded-for` — Vercel 自家平台 header
+ * 3. `x-real-ip` — 一般反代設定
+ * 4. `x-forwarded-for` 第一個值 — 鏈式 proxy 場景的標準 fallback
+ *
+ * ❌ 舊版錯誤：把 `x-forwarded-for` 第一個放最前面，但 Vercel + Cloudflare
+ * 環境下，那欄位的第一個值是 CF edge IP（172.71.x / 104.22.x 等），
+ * 導致每個 burst request 都拿到不同 CF POP IP，rate-limit 跟 burst
+ * counter 都失效（每次「不同人」進來）。
+ */
 export function getClientIp(headers: Headers): string {
-  const forwarded = headers.get('x-forwarded-for');
-  if (forwarded) return forwarded.split(',')[0].trim();
   return (
-    headers.get('x-real-ip') ??
     headers.get('cf-connecting-ip') ??
     headers.get('x-vercel-forwarded-for') ??
+    headers.get('x-real-ip') ??
+    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
     'unknown'
   );
 }
