@@ -93,6 +93,7 @@ function isSuspiciousUA(ua: string): boolean {
 export async function checkCostCap(
   ip: string,
   userAgent: string,
+  tool: 'check' | 'post-writer' = 'check',
 ): Promise<CostCapResult> {
   const normIp = normalizeIp(ip);
 
@@ -108,7 +109,7 @@ export async function checkCostCap(
 
   // 2. Burst per IP (1 min)
   const minuteSlot = Math.floor(Date.now() / 60000);
-  const burstKey = `adlo:check:burst:${normIp}:${minuteSlot}`;
+  const burstKey = `adlo:${tool}:burst:${normIp}:${minuteSlot}`;
 
   let burstCount: number;
   try {
@@ -131,6 +132,15 @@ export async function checkCostCap(
       allowed: false,
       reason: 'IP_BURST',
       message: '請求過於頻繁，請等 1 分鐘再試',
+    };
+  }
+
+  // 3. Global cost cap 只對 /check 套用（Places API 付費）
+  // /post-writer 走 Groq free tier，不需要全站總量限制
+  if (tool !== 'check') {
+    return {
+      allowed: true,
+      stats: { burstCount, dailyCount: 0, monthlyCount: 0, monthlyLimit: 0 },
     };
   }
 

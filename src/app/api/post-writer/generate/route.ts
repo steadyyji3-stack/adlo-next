@@ -6,6 +6,7 @@ import {
   incrementRateLimit,
   getClientIp,
 } from '@/lib/rate-limit';
+import { checkCostCap } from '@/lib/cost-cap';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -58,6 +59,16 @@ export async function POST(req: NextRequest) {
     };
 
     const ip = getClientIp(req.headers);
+    const userAgent = req.headers.get('user-agent') ?? '';
+
+    // 0. Abuse defense — UA filter + IP burst (避免 Groq free tier 被刷爆)
+    const cap = await checkCostCap(ip, userAgent, 'post-writer');
+    if (!cap.allowed) {
+      return NextResponse.json(
+        { error: cap.reason, message: cap.message },
+        { status: cap.reason === 'BOT_UA' ? 403 : 429 },
+      );
+    }
 
     // 1. 速率限制（Redis 失敗 → 放行）
     let rl;
