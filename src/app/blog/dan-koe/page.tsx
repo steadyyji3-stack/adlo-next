@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getAllIssues } from '@/lib/dankoe';
 import { ArrowRight, Rss, ExternalLink } from 'lucide-react';
+import AboutDanKoe from '@/components/dankoe/AboutDanKoe';
 
 export const metadata: Metadata = {
   title: 'Dan Koe 週報 | adlo 在地行銷實戰筆記',
@@ -63,6 +64,9 @@ export default function DanKoeColumnPage() {
           </p>
         </div>
       </section>
+
+      {/* About Dan Koe — 給第一次來的讀者一個 anchor */}
+      <AboutDanKoe variant="full" />
 
       {/* Latest Issue Highlight */}
       {latest && (

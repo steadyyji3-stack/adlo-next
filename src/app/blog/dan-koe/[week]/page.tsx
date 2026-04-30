@@ -9,6 +9,7 @@ import { getIssueByWeek, getAllIssues, getAdjacentIssues } from '@/lib/dankoe';
 import { ArrowLeft, ArrowRight, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import ReadingProgress from '@/components/blog/ReadingProgress';
 import ShareButtons from '@/components/blog/ShareButtons';
+import AboutDanKoe from '@/components/dankoe/AboutDanKoe';
 
 interface Props { params: Promise<{ week: string }> }
 
@@ -212,6 +213,9 @@ export default async function DanKoeIssuePage({ params }: Props) {
               </div>
             )}
           </nav>
+
+          {/* About Dan Koe (compact)：第一次來的讀者快速了解作者 */}
+          <AboutDanKoe variant="compact" />
 
           {/* Share */}
           <ShareButtons title={`Dan Koe 週報 第${issue.issueNumber}期：${issue.theme}`} url={pageUrl} />
