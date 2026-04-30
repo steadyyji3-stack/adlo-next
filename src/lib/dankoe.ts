@@ -244,6 +244,80 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+  /* ─────────────────────────────────────────────────────────────
+     Issue #4  |  2026-W18  |  90 天承諾，是行銷複利的入場券
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w18',
+    issueNumber: 4,
+    theme: '你不是沒有策略，是你 60 天就換一次',
+    publishedAt: '2026-04-30',
+    summary: '本期聚焦 Dan Koe 反覆談的「stop strategy hopping」——為什麼 60 天換一次策略等於原地踏步？以及台灣中小店家如何用 90 天承諾論建立長期行銷複利。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=1200&auto=format&fit=crop&q=80',
+      alt: '一人在桌前專注工作，光線從旁打進來',
+      credit: 'Christin Hume',
+      creditUrl: 'https://unsplash.com/@christinhumephoto',
+    },
+    posts: [
+      {
+        id: 'w18-01',
+        original: `"You don't have a strategy problem. You have a commitment problem. You quit at month 2 of a 9-month game and tell yourself the strategy didn't work."`,
+        translation: '你不是有策略問題，你是有承諾問題。你在一場九個月的遊戲打到第二個月就退出，然後告訴自己「策略沒用」。',
+        insight: '台灣老闆最常說：「SEO 我做兩個月沒效就不做了」「Threads 發了三週沒人理」。問題不是策略不對，是你給策略的時間不夠。在地 SEO 真正起飛通常在第 6–9 個月，前面看似沒進度的時期就是地基。退場前先問：你給了它幾個月？',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-23',
+      },
+      {
+        id: 'w18-02',
+        original: `"Pick a niche, pick a format, pick a frequency. Don't change them for 90 days. Iteration is fine. Abandonment in disguise of iteration is not."`,
+        translation: '選一個利基、選一個格式、選一個頻率。90 天內不要動它。迭代沒問題，但用「迭代」當藉口拋棄它就不行。',
+        insight: '90 天承諾論套用到台灣中小店家：選定 GBP + Threads + 一篇月部落格三件套，固定發布頻率，90 天內不換通路、不改 tone。三個月後再回頭看數據決定優化方向——這比「每月換一個新平台」省下整年的試錯成本。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-24',
+      },
+      {
+        id: 'w18-03',
+        original: `"Burnout doesn't come from working too hard. It comes from working hard on too many things. Cut your projects in half. The remaining ones will move 4x faster."`,
+        translation: '倦怠不是因為太努力，是因為在太多事情上太努力。把你的專案砍一半，剩下的會跑得快四倍。',
+        insight: '常見台灣老闆的行銷現況：IG + Threads + FB + 抖音 + 小紅書 + LINE 官方帳號全部要做，每個都做不好。Dan Koe 的處方：砍掉一半。對台灣中小店家來說，留 GBP + Threads 兩個就好——其他全停。集中火力的速度勝過分散執行的疲憊。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-25',
+      },
+      {
+        id: 'w18-04',
+        original: `"Mastery beats novelty. The 100th time you do something is when you start to understand it. Most people quit at #20 and call themselves 'experimental'."`,
+        translation: '精通勝過新鮮。你做某件事的第 100 次，才會開始真正理解它。多數人做到第 20 次就放棄，然後自稱「在實驗」。',
+        insight: '寫了 20 篇 GBP 貼文還沒成效就放棄的老闆，永遠不會抵達第 100 篇之後的回報遞增曲線。adlo 客戶最常見的轉折點落在「第 80–100 篇 GBP 貼文」之間——演算法開始把你當「持續活躍商家」推。20 跟 100 之間，是篩掉 90% 同行的門檻。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-26',
+      },
+      {
+        id: 'w18-05',
+        original: `"Stop managing time. Start managing energy. You have 4 hours of peak focus per day. Most people burn it on email and meetings, then try to 'do creative work' at 9pm and wonder why nothing comes out."`,
+        translation: '別再管理時間了，開始管理能量。你每天有 4 小時高峰專注力。多數人把它燒在 email 跟會議上，然後晚上九點才坐下來「做創作」，再納悶為什麼什麼都生不出來。',
+        insight: '套用到老闆身上：你的高能量時段（通常是早上 8–11 點）用在收銀、進貨、雜事，留下精疲力盡的晚上才開始想行銷文案——當然寫不出有靈魂的內容。試試把每週二、四的早上 9–11 點鎖定成「行銷產出時段」，其他時間都不准進行銷腦袋。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-27',
+      },
+      {
+        id: 'w18-06',
+        original: `"Stop chasing growth hacks. Hacks expire in 6 months. Skills compound for life. The boring fundamentals are still undefeated."`,
+        translation: '別再追成長 hack。Hack 半年後就失效，技能卻會複利一輩子。那些無聊的基本功，到現在還沒被打敗過。',
+        insight: '「IG 必勝七秘訣」「Threads 演算法 2026 必看」這種內容兩季後全部過期。但「怎麼把客戶痛點寫成有人看的故事」「怎麼把好評變成下一個客人的決策依據」這種基本功，學會就用一輩子。adlo 不教 hack，因為三個月後又要重學一次——我們教的都是不會過期的肌肉。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-28',
+      },
+      {
+        id: 'w18-07',
+        original: `"The fastest path to revenue isn't more content. It's sharper positioning. One sentence that makes the right person think 'yes, that's me' will outperform 100 generic posts."`,
+        translation: '通往營收最快的路不是更多內容，是更銳利的定位。一句話讓對的人覺得「對，那就是我」，會勝過 100 則泛泛貼文。',
+        insight: '台灣中小店家最值得花時間打磨的不是貼文數量，是那句「我們是 _____ 給 _____ 的選擇」。寫不出來這句話之前發再多貼文都是空轉。先把這句話跟 5 位真實客人對過、改到他們聽完點頭——再來談內容產出。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-29',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
