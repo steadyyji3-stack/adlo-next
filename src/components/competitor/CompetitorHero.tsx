@@ -64,7 +64,7 @@ export default function CompetitorHero({ onSubmit, errorMsg }: Props) {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            告訴我你的店、要打的關鍵字、所在城市。我們抓出同區 3 家對手，
+            <strong className="text-slate-900">用 Google 地圖真實搜尋結果</strong>抓出同區同類前 3 家。
             做六維度比較，告訴你哪裡領先、哪裡落後。
           </p>
         </div>

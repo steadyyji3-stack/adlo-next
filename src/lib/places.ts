@@ -290,6 +290,78 @@ async function placeToSnapshot(place: Place, apiKey: string): Promise<GBPSnapsho
   };
 }
 
+/**
+ * Lite snapshot：跳過 regionalCompetitors 額外 nearby 查詢。
+ * 用於批次比較場景（如 /tools/competitor），不需要每家都重算同區密度。
+ */
+function placeToSnapshotLite(place: Place): GBPSnapshot {
+  let completeness = 40;
+  if (place.formattedAddress) completeness += 10;
+  if (place.nationalPhoneNumber) completeness += 10;
+  if (place.websiteUri) completeness += 10;
+  if (place.regularOpeningHours) completeness += 10;
+  if (place.editorialSummary?.text) completeness += 10;
+  if ((place.types?.length ?? 0) > 2) completeness += 10;
+
+  const reviewCount = place.userRatingCount ?? 0;
+  const replyRate = estimateReplyRate(reviewCount, place.rating ?? 0);
+  const photoCount = place.photos?.length ?? 0;
+  const keywordHits = estimateKeywordHits(place.types ?? [], place.editorialSummary?.text);
+  const region = extractRegion(place.formattedAddress ?? '');
+
+  return {
+    name: place.displayName?.text ?? '',
+    location: region,
+    profileCompleteness: Math.min(100, completeness),
+    reviewCount,
+    avgRating: place.rating ?? 0,
+    replyRate,
+    photoCount,
+    keywordHits,
+    regionalCompetitors: 30, // 比較場景固定 default — 客觀比較用，與單店分數脫鉤
+  };
+}
+
+/**
+ * 一次抓多家店家並算 lite snapshot。
+ * 用於 /tools/competitor — 一個 searchText 呼叫拿到所有對手 = $0.032。
+ *
+ * @param query 搜尋字串，建議格式「{keyword} {city}」
+ * @param count 最多回傳幾家（max 20）
+ */
+export async function searchTopPlaces(
+  query: string,
+  count: number = 5,
+): Promise<GBPSnapshot[]> {
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+  if (!apiKey) throw new PlacesApiUnavailableError();
+
+  const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': apiKey,
+      'X-Goog-FieldMask':
+        'places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount,places.types,places.primaryType,places.businessStatus,places.photos,places.websiteUri,places.nationalPhoneNumber,places.regularOpeningHours,places.editorialSummary',
+    },
+    body: JSON.stringify({
+      textQuery: query,
+      languageCode: 'zh-TW',
+      regionCode: 'TW',
+      pageSize: Math.min(Math.max(count, 1), 20),
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Places searchText ${res.status}`);
+  }
+
+  const data = (await res.json()) as PlaceSearchResponse;
+  const places = data.places ?? [];
+
+  return places.slice(0, count).map(placeToSnapshotLite);
+}
+
 function estimateReplyRate(reviewCount: number, rating: number): number {
   if (reviewCount === 0) return 0;
   if (reviewCount < 10) return 0.2;

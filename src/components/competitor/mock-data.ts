@@ -38,7 +38,8 @@ export interface StoreScore {
 
 export interface CompetitorResult {
   you: StoreScore;
-  competitors: [StoreScore, StoreScore, StoreScore];
+  /** 通常 3 家。真實 API 可能 < 3（市場太小）或 > 3（極少數情況截斷） */
+  competitors: StoreScore[];
   insight: string;
 }
 
@@ -132,13 +133,13 @@ export function mockGenerateCompetitorReport(
   const you = buildScore(input.storeName || '你的店', true, youRand);
 
   const candidates = COMPETITOR_NAMES[input.city] ?? COMPETITOR_NAMES['其他'];
-  const competitors = candidates.slice(0, 3).map((name, idx) => {
+  const competitors: StoreScore[] = candidates.slice(0, 3).map((name, idx) => {
     const seed = hash(`comp:${name}:${input.keyword}:${idx}`);
     const rand = mulberry32(seed);
     // 對手 A 略強、B 接近、C 略弱（讓視覺更有差異）
     const bias = idx === 0 ? 8 : idx === 1 ? 0 : -6;
     return buildScore(name, false, rand, bias);
-  }) as [StoreScore, StoreScore, StoreScore];
+  });
 
   // 一句總結
   const youOverall = you.overall;

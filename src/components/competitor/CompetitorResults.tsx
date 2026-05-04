@@ -8,6 +8,7 @@ import {
   ArrowRight,
   RefreshCw,
   TrendingUp,
+  Crown,
 } from 'lucide-react';
 import Link from 'next/link';
 import CompetitorRadar from './CompetitorRadar';
@@ -35,14 +36,17 @@ function ScoreCell({
   const isBest = value === best;
   return (
     <div
-      className={`text-center px-2 py-2 rounded-md font-bold text-sm ${
+      className={`text-center px-2 py-2 rounded-md font-bold text-sm flex items-center justify-center gap-1 ${
         isYou
           ? 'bg-[#1D9E75] text-white'
           : isBest
-          ? 'bg-amber-50 text-amber-700'
+          ? 'bg-amber-100 text-amber-800 ring-1 ring-amber-200'
           : 'bg-slate-50 text-slate-600'
       }`}
     >
+      {isBest && !isYou && (
+        <Crown className="w-3 h-3" aria-label="同區最高分" />
+      )}
       {value}
     </div>
   );
@@ -59,11 +63,17 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
         <header className="mb-10 md:mb-14 text-center">
           <Badge className="bg-[#1D9E75] text-white border-0 mb-4">完成 ✓</Badge>
           <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-3 leading-tight">
-            <span className="text-[#1D9E75]">{storeName}</span> vs 同區 3 家
+            <span className="text-[#1D9E75] break-all">{storeName}</span>{' '}
+            vs 同區 {competitors.length} 家
           </h2>
           <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
             {insight}
           </p>
+          {competitors.length === 0 && (
+            <p className="mt-3 text-xs text-amber-700 bg-amber-50 inline-block px-3 py-1.5 rounded-full">
+              ⚠️ 沒找到對手——關鍵字可能太冷門，試試把字放寬
+            </p>
+          )}
         </header>
 
         {/* Radar chart */}
@@ -114,18 +124,25 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[640px]">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="text-left p-3 md:p-4 font-bold text-slate-700">維度</th>
+                  <th className="text-left p-3 md:p-4 font-bold text-slate-700 sticky left-0 bg-slate-50/95 backdrop-blur-sm w-20">
+                    維度
+                  </th>
                   {allStores.map((s) => (
                     <th
                       key={s.storeName}
-                      className={`p-3 md:p-4 font-bold ${
+                      className={`p-3 md:p-4 font-bold align-top ${
                         s.isYou ? 'text-[#1D9E75]' : 'text-slate-700'
                       }`}
                     >
-                      <div className="text-xs">{s.storeName}</div>
+                      <div
+                        className="text-xs leading-snug line-clamp-2"
+                        title={s.storeName}
+                      >
+                        {s.storeName}
+                      </div>
                       <div className="text-[10px] font-normal text-slate-400 mt-0.5">
                         總分 {s.overall}
                       </div>
@@ -139,7 +156,9 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
                   const best = Math.max(...values);
                   return (
                     <tr key={d.key} className="border-b border-slate-50 last:border-b-0">
-                      <td className="p-3 md:p-4 font-semibold text-slate-700">{d.label}</td>
+                      <td className="p-3 md:p-4 font-semibold text-slate-700 sticky left-0 bg-white">
+                        {d.label}
+                      </td>
                       {allStores.map((s, idx) => (
                         <td key={s.storeName} className="p-2 md:p-3">
                           <ScoreCell value={values[idx]} best={best} isYou={s.isYou} />

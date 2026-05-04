@@ -5,12 +5,52 @@ import { Loader2 } from 'lucide-react';
 import CompetitorHero from './CompetitorHero';
 import CompetitorResults from './CompetitorResults';
 import {
-  mockGenerateCompetitorReport,
   type CompetitorInput,
   type CompetitorResult,
+  type StoreScore,
+  type DimensionScores,
 } from './mock-data';
 
 type Stage = 'idle' | 'loading' | 'done';
+
+/** API response shape — 對應 src/lib/competitor.ts CompetitorReport */
+interface ApiScoredStore {
+  storeName: string;
+  location: string;
+  isYou: boolean;
+  overall: number;
+  breakdown: DimensionScores;
+  highlight: string;
+  weakness: string;
+}
+
+interface ApiResponse {
+  you?: ApiScoredStore;
+  competitors?: ApiScoredStore[];
+  insight?: string;
+  query?: string;
+  error?: string;
+  message?: string;
+  quota?: { count: number; limit: number; emailUnlocked: boolean };
+}
+
+/** API → UI 結構轉換（breakdown → dimensions） */
+function apiToResult(data: ApiResponse): CompetitorResult | null {
+  if (!data.you || !Array.isArray(data.competitors)) return null;
+  const toUi = (s: ApiScoredStore): StoreScore => ({
+    storeName: s.storeName,
+    isYou: s.isYou,
+    dimensions: s.breakdown,
+    overall: s.overall,
+    highlight: s.highlight,
+    weakness: s.weakness,
+  });
+  return {
+    you: toUi(data.you),
+    competitors: data.competitors.map(toUi),
+    insight: data.insight ?? '',
+  };
+}
 
 export default function CompetitorFlow() {
   const [stage, setStage] = useState<Stage>('idle');
@@ -23,16 +63,32 @@ export default function CompetitorFlow() {
     setStage('loading');
     setStoreName(input.storeName);
 
-    // Path C：mock 2 秒延遲
-    await new Promise((r) => setTimeout(r, 2200));
-
     try {
-      const generated = mockGenerateCompetitorReport(input);
-      setResult(generated);
+      const res = await fetch('/api/competitor/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+      });
+      const data = (await res.json()) as ApiResponse;
+
+      if (!res.ok) {
+        setErrorMsg(data.message ?? data.error ?? '比較失敗，請稍後再試');
+        setStage('idle');
+        return;
+      }
+
+      const ui = apiToResult(data);
+      if (!ui) {
+        setErrorMsg('回應格式異常，請再試一次');
+        setStage('idle');
+        return;
+      }
+
+      setResult(ui);
       setStage('done');
     } catch (err) {
-      console.error('[competitor] mock 失敗', err);
-      setErrorMsg('產生失敗，請稍後再試');
+      console.error('[competitor] API 失敗', err);
+      setErrorMsg('連線失敗，請稍後再試');
       setStage('idle');
     }
   }
@@ -59,9 +115,9 @@ export default function CompetitorFlow() {
             正在抓 {storeName} 的同區對手⋯
           </h2>
           <p className="text-sm text-slate-600">
-            掃同產業前 3 名 + 算六維度分數，
+            打 Google 地圖的「{storeName}」 + 同區關鍵字搜尋前 3 名，
             <br />
-            最後輸出一張雷達圖 + 攻防建議。
+            算六維度分數 + 攻防建議。
           </p>
         </div>
       </section>

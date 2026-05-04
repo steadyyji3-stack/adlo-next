@@ -93,7 +93,7 @@ function isSuspiciousUA(ua: string): boolean {
 export async function checkCostCap(
   ip: string,
   userAgent: string,
-  tool: 'check' | 'post-writer' = 'check',
+  tool: 'check' | 'post-writer' | 'competitor' = 'check',
 ): Promise<CostCapResult> {
   const normIp = normalizeIp(ip);
 
@@ -135,14 +135,17 @@ export async function checkCostCap(
     };
   }
 
-  // 3. Global cost cap 只對 /check 套用（Places API 付費）
+  // 3. Global cost cap 套用範圍：/check 與 /competitor 都吃 Places API 付費
   // /post-writer 走 Groq free tier，不需要全站總量限制
-  if (tool !== 'check') {
+  if (tool === 'post-writer') {
     return {
       allowed: true,
       stats: { burstCount, dailyCount: 0, monthlyCount: 0, monthlyLimit: 0 },
     };
   }
+
+  // 注意：/check 與 /competitor 共用同一個全站 cost-cap key（adlo:check:global:*）
+  // 因為它們都打 Places API、都消耗同一個 $10/月預算池
 
   // 3. Global daily cap（最重要的保命）
   const dayKey = `adlo:check:global:daily:${todayISO()}`;
