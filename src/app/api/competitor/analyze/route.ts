@@ -130,6 +130,16 @@ export async function POST(req: NextRequest) {
         { status: 404 },
       );
     }
+    if (err instanceof Error && err.message === 'STORE_NOT_FOUND') {
+      return NextResponse.json(
+        {
+          error: 'STORE_NOT_FOUND',
+          message:
+            '在 Google 地圖找不到你輸入的店名。請確認店名跟你的 Google 商家檔案上完全一致——多一個字、少一個店字、或括號內副標都會找不到。',
+        },
+        { status: 404 },
+      );
+    }
     console.error('[api/competitor] 未預期錯誤', err);
     return NextResponse.json(
       {

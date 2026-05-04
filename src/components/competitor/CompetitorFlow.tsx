@@ -29,16 +29,18 @@ interface ApiResponse {
   competitors?: ApiScoredStore[];
   insight?: string;
   query?: string;
+  yourStoreInResults?: boolean;
   error?: string;
   message?: string;
   quota?: { count: number; limit: number; emailUnlocked: boolean };
 }
 
 /** API → UI 結構轉換（breakdown → dimensions） */
-function apiToResult(data: ApiResponse): CompetitorResult | null {
+function apiToResult(data: ApiResponse, inputCity: string): CompetitorResult | null {
   if (!data.you || !Array.isArray(data.competitors)) return null;
   const toUi = (s: ApiScoredStore): StoreScore => ({
     storeName: s.storeName,
+    location: s.location,
     isYou: s.isYou,
     dimensions: s.breakdown,
     overall: s.overall,
@@ -49,6 +51,9 @@ function apiToResult(data: ApiResponse): CompetitorResult | null {
     you: toUi(data.you),
     competitors: data.competitors.map(toUi),
     insight: data.insight ?? '',
+    yourStoreInResults: data.yourStoreInResults,
+    inputCity,
+    query: data.query,
   };
 }
 
@@ -77,7 +82,7 @@ export default function CompetitorFlow() {
         return;
       }
 
-      const ui = apiToResult(data);
+      const ui = apiToResult(data, input.city);
       if (!ui) {
         setErrorMsg('回應格式異常，請再試一次');
         setStage('idle');

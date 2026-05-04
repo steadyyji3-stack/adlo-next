@@ -76,17 +76,22 @@ export default function CompetitorHero({ onSubmit, errorMsg }: Props) {
           <div className="space-y-5">
             <div>
               <Label htmlFor="store-name" className="text-sm font-semibold text-slate-900 mb-2 block">
-                你的店名 <span className="text-rose-500">*</span>
+                你的店名（Google 地圖完整名稱）<span className="text-rose-500">*</span>
               </Label>
               <Input
                 id="store-name"
                 type="text"
                 value={storeName}
                 onChange={(e) => setStoreName(e.target.value)}
-                placeholder="例：好初早餐 信義店"
+                placeholder="例：LE BANHMI 樂粄米 敦北店"
                 className="h-12 text-base"
                 aria-required="true"
+                aria-describedby="store-name-help"
               />
+              <p id="store-name-help" className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                請打開 Google 地圖查你的店，<strong>複製顯示的完整店名</strong>。
+                少一個字就找不到。
+              </p>
             </div>
 
             <div>

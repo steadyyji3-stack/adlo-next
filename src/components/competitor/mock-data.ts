@@ -29,6 +29,8 @@ export interface DimensionScores {
 
 export interface StoreScore {
   storeName: string;
+  /** 從 GBP formattedAddress 抽出的「縣市 + 區」（API 才有；mock 不填） */
+  location?: string;
   isYou: boolean;
   dimensions: DimensionScores;
   overall: number;
@@ -41,6 +43,12 @@ export interface CompetitorResult {
   /** 通常 3 家。真實 API 可能 < 3（市場太小）或 > 3（極少數情況截斷） */
   competitors: StoreScore[];
   insight: string;
+  /** 你的店是否真的出現在「{keyword} {city}」搜尋前 10 名裡（API 才有的欄位）*/
+  yourStoreInResults?: boolean;
+  /** 用戶輸入的城市（給結果頁判斷地點不一致用）*/
+  inputCity?: string;
+  /** 實際送給 Places API 的字串（debug + 透明度）*/
+  query?: string;
 }
 
 export const DIMENSION_LABELS: { key: keyof DimensionScores; label: string }[] = [

@@ -36,6 +36,12 @@ export interface CompetitorReport {
   competitors: ScoredStore[]; // 通常 3 家，<3 時補不滿
   insight: string;
   query: string; // 實際送給 Places API 的字串（debug + 透明度）
+  /**
+   * 你的店是否真的出現在搜尋「{keyword} {city}」的前 10 名裡。
+   * false = 你的店是用第二次「直接搜店名」找到的（你可能不在這個 city）
+   * 影響：UI 應顯示提示，告訴用戶這個比較的前提是「你 vs 該 city 同類前 3」
+   */
+  yourStoreInResults: boolean;
 }
 
 const DIM_LABEL: Record<keyof ScoreBreakdown, string> = {
@@ -117,22 +123,41 @@ export async function fetchCompetitorReport(
     throw new Error('NO_RESULTS');
   }
 
-  // 找用戶的店
-  let yourIdx = findUserStoreIndex(places, input.storeName);
+  // 嘗試在「{keyword} {city}」前 10 家裡找用戶的店
+  const yourIdx = findUserStoreIndex(places, input.storeName);
 
   let yourSnap: GBPSnapshot;
+  let yourStoreInResults = false;
+  let competitorsPool = [...places];
+
   if (yourIdx >= 0) {
+    // 找到了 — 你的店真的在這個 city 的前 10 名裡
     yourSnap = places[yourIdx];
-    places.splice(yourIdx, 1); // 從 array 移除
+    competitorsPool.splice(yourIdx, 1);
+    yourStoreInResults = true;
   } else {
-    // 找不到 → 用搜尋第 1 名當「你的店」（用戶可能打錯字或店名跟 GBP 不一致）
-    // 同時把用戶輸入的 storeName 標示出來
-    yourSnap = { ...places[0], name: input.storeName || places[0].name };
-    places.splice(0, 1);
+    // 找不到 — 不可以假裝。第二次直接用 storeName 抓真正的你的店。
+    // 這次成本多 $0.032（年累計微小）但保住資料完整性。
+    const candidates = await searchTopPlaces(input.storeName, 3);
+    const yourTarget = normalizeStoreName(input.storeName);
+    const exact = candidates.find((c) => {
+      const n = normalizeStoreName(c.name);
+      return n.includes(yourTarget) || yourTarget.includes(n);
+    });
+
+    if (!exact) {
+      // 連直接搜尋都找不到 → Google 地圖上沒這家店（或店名跟 GBP 不一致）
+      throw new Error('STORE_NOT_FOUND');
+    }
+
+    yourSnap = exact;
+    yourStoreInResults = false;
+    // competitorsPool 維持原本「{keyword} {city}」前 10 家
+    // 因為用戶想看的是「我 vs 這個 city 的同類對手」
   }
 
   const you = buildScoredStore(yourSnap, true);
-  const competitors = places.slice(0, 3).map((p) => buildScoredStore(p, false));
+  const competitors = competitorsPool.slice(0, 3).map((p) => buildScoredStore(p, false));
   const insight = buildInsight(you, competitors);
 
   return {
@@ -140,5 +165,6 @@ export async function fetchCompetitorReport(
     competitors,
     insight,
     query,
+    yourStoreInResults,
   };
 }

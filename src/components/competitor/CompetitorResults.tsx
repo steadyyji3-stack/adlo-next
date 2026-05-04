@@ -9,6 +9,7 @@ import {
   RefreshCw,
   TrendingUp,
   Crown,
+  AlertTriangle,
 } from 'lucide-react';
 import Link from 'next/link';
 import CompetitorRadar from './CompetitorRadar';
@@ -53,7 +54,7 @@ function ScoreCell({
 }
 
 export default function CompetitorResults({ storeName, result, onReset }: Props) {
-  const { you, competitors, insight } = result;
+  const { you, competitors, insight, yourStoreInResults, inputCity } = result;
   const allStores = [you, ...competitors];
 
   return (
@@ -75,6 +76,31 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
             </p>
           )}
         </header>
+
+        {/* 你的店不在搜尋結果裡 — 透明告知 */}
+        {yourStoreInResults === false && (
+          <div className="mb-8 bg-amber-50 border border-amber-200 rounded-2xl p-5 md:p-6">
+            <div className="flex gap-3">
+              <AlertTriangle
+                className="w-5 h-5 text-amber-600 shrink-0 mt-0.5"
+                aria-hidden
+              />
+              <div>
+                <p className="text-sm font-extrabold text-amber-900 mb-1.5">
+                  注意：你的店不在「{inputCity}」的「{result.query?.split(' ')[0] ?? '搜尋'}」前 10 名
+                </p>
+                <p className="text-xs md:text-sm text-amber-800 leading-relaxed">
+                  我們在 Google 地圖直接搜店名找到「
+                  <strong>{you.storeName}</strong>」
+                  {you.location ? `（位於 ${you.location}）` : ''}。
+                  比較對象是<strong>「{inputCity}」當地同類前 3 家</strong>——
+                  如果你的目標市場是 {inputCity}，這個比較就是有意義的（你想打進的對手）。
+                  如果你只想看自己所在區的對手，請回到上一頁改選你店家所在的城市重跑。
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Radar chart */}
         <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-10 mb-8">
