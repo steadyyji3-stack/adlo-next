@@ -57,7 +57,7 @@ export default function CompetitorHero({ onSubmit, errorMsg }: Props) {
             免費 · 不用註冊 · 30 秒看完
           </div>
 
-          <h1 className="text-[32px] sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+          <h1 className="text-[32px] sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
             你 vs 同區 3 家，
             <br className="md:hidden" />
             <span className="text-[#1D9E75]">一張雷達圖</span>看清。

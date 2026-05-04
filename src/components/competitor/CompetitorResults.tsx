@@ -73,11 +73,14 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
           <Badge className="bg-[#1D9E75] text-white border-0 mb-5 px-3 py-1 text-xs font-extrabold tracking-wide">
             ✓ 比較完成
           </Badge>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
-            <span className="text-[#1D9E75] break-all">{storeName}</span>
-            <br className="sm:hidden" />
-            <span className="text-slate-400 mx-2 font-bold">vs</span>
-            同區 {competitors.length} 家
+          <h2 className="font-extrabold text-slate-900 mb-4 leading-tight">
+            <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#1D9E75] mb-2">
+              {storeName}
+            </span>
+            <span className="block text-lg sm:text-xl md:text-2xl text-slate-700">
+              <span className="text-slate-400 font-bold mr-2">vs</span>
+              同區 {competitors.length} 家
+            </span>
           </h2>
           <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
             {insight}
