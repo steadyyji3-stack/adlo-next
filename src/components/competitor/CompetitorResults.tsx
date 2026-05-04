@@ -57,25 +57,72 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
   const { you, competitors, insight, yourStoreInResults, inputCity } = result;
   const allStores = [you, ...competitors];
 
+  // 對手平均分（給 header 對比卡用）
+  const compAvg = competitors.length
+    ? Math.round(competitors.reduce((s, c) => s + c.overall, 0) / competitors.length)
+    : 0;
+  const diff = you.overall - compAvg;
+  const leadingOrTrailing = diff > 0 ? '領先' : diff < 0 ? '落後' : '持平';
+  const diffColor = diff > 5 ? 'text-emerald-600' : diff < -5 ? 'text-rose-600' : 'text-slate-600';
+
   return (
-    <section className="bg-slate-50 py-12 md:py-20">
+    <section className="bg-slate-50 py-16 sm:py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6 md:px-8">
-        {/* Header */}
+        {/* Header — 大號儀式感 */}
         <header className="mb-10 md:mb-14 text-center">
-          <Badge className="bg-[#1D9E75] text-white border-0 mb-4">完成 ✓</Badge>
-          <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-3 leading-tight">
-            <span className="text-[#1D9E75] break-all">{storeName}</span>{' '}
-            vs 同區 {competitors.length} 家
+          <Badge className="bg-[#1D9E75] text-white border-0 mb-5 px-3 py-1 text-xs font-extrabold tracking-wide">
+            ✓ 比較完成
+          </Badge>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 leading-tight">
+            <span className="text-[#1D9E75] break-all">{storeName}</span>
+            <br className="sm:hidden" />
+            <span className="text-slate-400 mx-2 font-bold">vs</span>
+            同區 {competitors.length} 家
           </h2>
           <p className="text-sm md:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
             {insight}
           </p>
           {competitors.length === 0 && (
-            <p className="mt-3 text-xs text-amber-700 bg-amber-50 inline-block px-3 py-1.5 rounded-full">
+            <p className="mt-4 text-xs text-amber-700 bg-amber-50 inline-block px-3 py-1.5 rounded-full">
               ⚠️ 沒找到對手——關鍵字可能太冷門，試試把字放寬
             </p>
           )}
         </header>
+
+        {/* 大號分數對比卡（你 vs 同區平均） */}
+        {competitors.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8 max-w-3xl mx-auto">
+            <div className="bg-gradient-to-br from-emerald-50 to-white border-2 border-[#1D9E75]/30 rounded-2xl p-4 sm:p-6 text-center">
+              <p className="text-[10px] sm:text-xs font-bold text-emerald-700 uppercase tracking-widest mb-2">
+                你的店
+              </p>
+              <p className="text-3xl sm:text-5xl font-extrabold text-[#1D9E75] leading-none mb-1">
+                {you.overall}
+              </p>
+              <p className="text-[10px] sm:text-xs text-slate-500">/ 100 分</p>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 text-center flex flex-col justify-center">
+              <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+                差距
+              </p>
+              <p className={`text-2xl sm:text-3xl font-extrabold leading-none mb-1 ${diffColor}`}>
+                {diff > 0 ? '+' : ''}{diff}
+              </p>
+              <p className="text-[10px] sm:text-xs text-slate-500">{leadingOrTrailing}</p>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 text-center">
+              <p className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+                同區平均
+              </p>
+              <p className="text-3xl sm:text-5xl font-extrabold text-slate-700 leading-none mb-1">
+                {compAvg}
+              </p>
+              <p className="text-[10px] sm:text-xs text-slate-500">/ 100 分</p>
+            </div>
+          </div>
+        )}
 
         {/* 你的店不在搜尋結果裡 — 透明告知 */}
         {yourStoreInResults === false && (
@@ -103,33 +150,44 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
         )}
 
         {/* Radar chart */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-10 mb-8">
+        <div className="bg-white rounded-2xl border-2 border-slate-100 shadow-sm p-6 md:p-10 mb-8">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 text-center">
+            六維度雷達圖
+          </p>
           <CompetitorRadar you={you} competitors={competitors} />
         </div>
 
         {/* 你的優劣勢 */}
-        <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Trophy className="w-4 h-4 text-emerald-700" aria-hidden />
+        <div className="grid md:grid-cols-2 gap-4 md:gap-5 mb-8">
+          <div className="bg-gradient-to-br from-emerald-50 to-white border-2 border-emerald-200 rounded-2xl p-6 md:p-7">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <Trophy className="w-5 h-5" aria-hidden />
+              </div>
               <p className="text-xs font-extrabold text-emerald-700 uppercase tracking-widest">
                 你的強項
               </p>
             </div>
-            <p className="text-lg font-extrabold text-slate-900 mb-1">{you.highlight}</p>
+            <p className="text-xl md:text-2xl font-extrabold text-slate-900 mb-2">
+              {you.highlight}
+            </p>
             <p className="text-sm text-slate-600 leading-relaxed">
-              這項你做得比同區三家都好。穩住，繼續加大這個優勢就是你的差異化。
+              這項你做得比同區都好。穩住，繼續加大這個優勢就是你的差異化。
             </p>
           </div>
 
-          <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-rose-700" aria-hidden />
+          <div className="bg-gradient-to-br from-rose-50 to-white border-2 border-rose-200 rounded-2xl p-6 md:p-7">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center">
+                <Target className="w-5 h-5" aria-hidden />
+              </div>
               <p className="text-xs font-extrabold text-rose-700 uppercase tracking-widest">
                 該補的破口
               </p>
             </div>
-            <p className="text-lg font-extrabold text-slate-900 mb-1">{you.weakness}</p>
+            <p className="text-xl md:text-2xl font-extrabold text-slate-900 mb-2">
+              {you.weakness}
+            </p>
             <p className="text-sm text-slate-600 leading-relaxed">
               這項你最弱，且對手有人做得比你好。先補這項，分數能跳最快。
             </p>
@@ -137,39 +195,42 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
         </div>
 
         {/* 詳細表格 */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
-          <div className="p-5 md:p-6 border-b border-slate-100">
-            <h3 className="text-base md:text-lg font-extrabold text-slate-900 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#1D9E75]" aria-hidden />
+        <div className="bg-white rounded-2xl border-2 border-slate-100 shadow-sm overflow-hidden mb-8">
+          <div className="p-5 md:p-7 border-b border-slate-100">
+            <h3 className="text-lg md:text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-2">
+              <TrendingUp className="w-5 h-5 text-[#1D9E75]" aria-hidden />
               六維度分項對照
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500">
               <span className="inline-block w-3 h-3 rounded bg-[#1D9E75] mr-1 align-middle" /> 你的店
-              <span className="ml-3 inline-block w-3 h-3 rounded bg-amber-50 border border-amber-200 mr-1 align-middle" /> 同區最高分
+              <span className="ml-3 inline-flex items-center gap-1">
+                <Crown className="w-3 h-3 text-amber-700" />
+                <span className="text-amber-700">同區最高分</span>
+              </span>
             </p>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm min-w-[640px]">
+            <table className="w-full text-sm min-w-[680px]">
               <thead>
-                <tr className="border-b border-slate-100 bg-slate-50/50">
-                  <th className="text-left p-3 md:p-4 font-bold text-slate-700 sticky left-0 bg-slate-50/95 backdrop-blur-sm w-20">
+                <tr className="border-b border-slate-100 bg-slate-50/60">
+                  <th className="text-left p-4 md:p-5 font-bold text-slate-700 sticky left-0 bg-slate-50/95 backdrop-blur-sm w-24 text-xs uppercase tracking-widest">
                     維度
                   </th>
                   {allStores.map((s) => (
                     <th
                       key={s.storeName}
-                      className={`p-3 md:p-4 font-bold align-top ${
+                      className={`p-4 md:p-5 font-bold align-top ${
                         s.isYou ? 'text-[#1D9E75]' : 'text-slate-700'
                       }`}
                     >
                       <div
-                        className="text-xs leading-snug line-clamp-2"
+                        className="text-xs md:text-sm leading-snug line-clamp-2"
                         title={s.storeName}
                       >
                         {s.storeName}
                       </div>
-                      <div className="text-[10px] font-normal text-slate-400 mt-0.5">
+                      <div className="text-[10px] md:text-xs font-normal text-slate-400 mt-1">
                         總分 {s.overall}
                       </div>
                     </th>
@@ -181,12 +242,12 @@ export default function CompetitorResults({ storeName, result, onReset }: Props)
                   const values = allStores.map((s) => s.dimensions[d.key as keyof DimensionScores]);
                   const best = Math.max(...values);
                   return (
-                    <tr key={d.key} className="border-b border-slate-50 last:border-b-0">
-                      <td className="p-3 md:p-4 font-semibold text-slate-700 sticky left-0 bg-white">
+                    <tr key={d.key} className="border-b border-slate-50 last:border-b-0 hover:bg-slate-50/40 transition-colors">
+                      <td className="p-4 md:p-5 font-semibold text-slate-800 sticky left-0 bg-white text-sm">
                         {d.label}
                       </td>
                       {allStores.map((s, idx) => (
-                        <td key={s.storeName} className="p-2 md:p-3">
+                        <td key={s.storeName} className="p-3 md:p-4">
                           <ScoreCell value={values[idx]} best={best} isYou={s.isYou} />
                         </td>
                       ))}
