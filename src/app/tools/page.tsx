@@ -75,8 +75,7 @@ const tools: Tool[] = [
     description:
       '輸入你的店名 + 一個關鍵字，adlo 幫你抓 Google 地圖前 3 名競爭對手，產出六維度雷達比較圖。',
     icon: Radar,
-    status: 'soon',
-    eta: 'Week 3',
+    status: 'live',
     replaces: '數位市調 NT$15,000 的快速版',
   },
   {
@@ -230,8 +229,8 @@ export default function ToolsIndexPage() {
                 name: '競爭對手雷達',
                 action: '看對手在做什麼',
                 desc: '同區 3 家比一比，找你還沒做但對手做的',
-                href: '#all-tools',
-                tone: 'soon',
+                href: '/tools/competitor',
+                tone: 'live',
               },
             ].map((it) => {
               const isLive = it.tone === 'live';

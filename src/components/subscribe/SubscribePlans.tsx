@@ -10,6 +10,8 @@ type PlanId = 'gbp-auto' | 'local-seo' | 'ads-managed';
 interface Plan {
   id: PlanId;
   name: string;
+  /** 第一層用戶看到「英文方案名」會跳，先給中文主標 */
+  chineseName: string;
   price: string;
   priceHint: string;
   tagline: string;
@@ -21,9 +23,10 @@ const plans: Plan[] = [
   {
     id: 'gbp-auto',
     name: 'GBP Auto',
+    chineseName: 'Google 商家自動管家',
     price: 'NT$3,980',
     priceHint: '/月（含稅）',
-    tagline: 'Google 商家全自動管理',
+    tagline: '每天自動發貼文、追數據、提醒回覆，幫你顧好 Google 商家頁',
     features: [
       '每月 8 則 GBP 貼文（節慶 + 促銷 + QA + 幕後）',
       '每週追蹤 GBP 洞察數據（搜尋、通話、路線）',
@@ -35,9 +38,10 @@ const plans: Plan[] = [
   {
     id: 'local-seo',
     name: 'Local SEO Pack',
+    chineseName: '在地 SEO 全套包',
     price: 'NT$9,800',
     priceHint: '/月（含稅）',
-    tagline: '在地流量全套：GBP + 網站 SEO + 內容',
+    tagline: '商家、網站、內容、關鍵字全套照顧，讓你被在地客人搜得到',
     highlighted: true,
     features: [
       '包含 GBP Auto 全部內容',
@@ -51,9 +55,10 @@ const plans: Plan[] = [
   {
     id: 'ads-managed',
     name: 'Ads Managed',
+    chineseName: '廣告代管套餐',
     price: 'NT$5,000',
     priceHint: '+ 廣告費 15% 服務費',
-    tagline: 'Google + Meta 廣告全代管',
+    tagline: 'Google 跟 Facebook 的廣告我們投，你只看每週成效報告',
     features: [
       'Google Ads 搜尋 / 在地 / 購物全帳戶代管',
       'Meta Ads FB/IG 廣告代操',
@@ -135,13 +140,16 @@ export default function SubscribePlans() {
                     主推方案
                   </Badge>
                 )}
+                <p className="text-[11px] font-bold text-slate-400 tracking-widest uppercase mb-1">
+                  {plan.name}
+                </p>
                 <h3
-                  className="text-xl font-extrabold text-slate-900 mb-1"
+                  className="text-xl font-extrabold text-slate-900 mb-2 leading-tight"
                   style={{ fontFamily: 'var(--font-manrope)' }}
                 >
-                  {plan.name}
+                  {plan.chineseName}
                 </h3>
-                <p className="text-sm text-[#0F6E56] font-semibold mb-4">
+                <p className="text-sm text-[#0F6E56] font-semibold mb-4 leading-relaxed">
                   {plan.tagline}
                 </p>
                 <div className="mb-5">
