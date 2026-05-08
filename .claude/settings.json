@@ -1,6 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings",
-  "_comment": "adlo.tw 專案級安全設定。依 ~/Desktop/CLAUDE.md 與 docs/security/access-audit-2026-05.md 落實分權機制。Agent 永遠不得執行 deny list 的指令。",
+  "_comment": "adlo.tw 專案級安全設定 v2 — 雙軌權限制度。依 ~/Desktop/CLAUDE.md 與 docs/security/access-policy.md 落實。",
+  "_dual_track": {
+    "track_a": "SEO 文章 / UI / 免費工具 / 公開來源名單 — agent 開 PR 後可 gh pr merge --auto 自合，CI 過即上線",
+    "track_b": "金流 / 客戶資料 / 客戶 API / 客戶歷史 / 安全相關 — agent 開 PR 後不得自合，由 CODEOWNERS 自動 request Lorenzo review，等他親自 merge",
+    "灰色地帶": "永遠當 Track B 處理（取嚴格的）",
+    "詳細路徑清單": "見 docs/security/access-policy.md"
+  },
   "permissions": {
     "deny": [
       "Bash(vercel --prod*)",
@@ -35,26 +41,43 @@
       "Bash(gh api * -X DELETE*)",
       "Bash(gh repo delete*)",
       "Bash(gh release delete*)",
+      "Bash(gh pr merge * --admin*)",
 
       "Bash(curl * -X DELETE *upstash*)",
       "Bash(curl * -X DELETE *places.googleapis*)",
 
       "Bash(stripe * --live*)",
-      "Bash(stripe events resend*)"
+      "Bash(stripe events resend*)",
+      "Bash(stripe products *)",
+      "Bash(stripe prices create*)",
+      "Bash(stripe prices update*)"
     ],
     "allow": [
       "Bash(npm run *)",
       "Bash(git checkout -b*)",
+      "Bash(git checkout main)",
+      "Bash(git pull origin main*)",
+      "Bash(git fetch origin*)",
       "Bash(git add*)",
       "Bash(git commit*)",
       "Bash(git push origin chore/*)",
       "Bash(git push origin feat/*)",
       "Bash(git push origin fix/*)",
       "Bash(git push origin docs/*)",
+      "Bash(git push origin style/*)",
+      "Bash(git push origin content/*)",
+      "Bash(git push -u origin chore/*)",
+      "Bash(git push -u origin feat/*)",
+      "Bash(git push -u origin fix/*)",
+      "Bash(git push -u origin docs/*)",
+      "Bash(git push -u origin style/*)",
+      "Bash(git push -u origin content/*)",
       "Bash(gh pr create*)",
       "Bash(gh pr list*)",
       "Bash(gh pr view*)",
-      "Bash(gh pr checks*)"
+      "Bash(gh pr checks*)",
+      "Bash(gh pr merge --auto --squash*)",
+      "Bash(gh pr merge * --auto --squash*)"
     ]
   }
 }
