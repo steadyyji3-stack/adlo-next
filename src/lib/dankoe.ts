@@ -318,6 +318,81 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #5  |  2026-W19  |  客人不要更多內容，要的是清楚的思考
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w19',
+    issueNumber: 5,
+    theme: '客人不要更多內容，他們要的是清楚的思考',
+    publishedAt: '2026-05-08',
+    summary: '本期聚焦 Dan Koe 近兩週反覆談的「內容飽和 vs 思考清晰」——為什麼一篇精煉觀點勝過 200 條熱門看法？以及台灣中小店家如何從「內容工廠」轉成「點子工廠」。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=1200&auto=format&fit=crop&q=80',
+      alt: '安靜的書桌與書本，象徵慢思考勝過快產出',
+      credit: 'Aaron Burden',
+      creditUrl: 'https://unsplash.com/@aaronburden',
+    },
+    posts: [
+      {
+        id: 'w19-01',
+        original: `"Your audience doesn't want more content. They want clearer thinking. The creator who refines one idea for 6 months will outperform the creator who shotgunned 200 hot takes."`,
+        translation: '你的觀眾不要更多內容，他們要的是更清楚的思考。一個花六個月精煉一個想法的創作者，會勝過散彈打 200 條熱門看法的人。',
+        insight: '套用台灣中小店家：每週發 5 篇 GBP 貼文但每篇都泛泛，輸給每月發 1 篇但講透「為什麼我們的咖啡豆貴 50 元」的店家。客人記得的不是貼文總量，是清楚的觀點。先想清楚那一句話，再決定要不要發那 200 篇。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-29',
+      },
+      {
+        id: 'w19-02',
+        original: `"Curiosity is more profitable than discipline. Discipline forces you to keep showing up at something you've stopped caring about. Curiosity makes you obsessed with finding the next layer."`,
+        translation: '好奇心比紀律更賺錢。紀律逼你繼續去做你已經不在乎的事；好奇心讓你著迷於找出下一層。',
+        insight: '很多老闆「逼自己」每天 PO 文，三個月後內容開始空洞——這就是紀律過頭、好奇心耗光。Dan Koe 的解法：讓「好奇心」決定下一篇要寫什麼。今天有沒有客人問你一個讓你想了想的問題？把那個答案寫出來，比強迫自己「擠一篇」有用十倍。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-01',
+      },
+      {
+        id: 'w19-03',
+        original: `"Reading is the highest-leverage activity I do. But scrolling Twitter, podcasts, YouTube — that's not reading. That's consuming. Reading is when an idea forces you to stop and rewire how you see something."`,
+        translation: '閱讀是我做的槓桿最高的事。但滑 Twitter、聽 podcast、看 YouTube 不是閱讀，是消費。閱讀是當一個想法逼你停下來、重新接線你看事情的方式。',
+        insight: '多數老闆說「我每天都在學行銷」，實際是在滑短影片消費觀點。真正改變生意的，是讀完一篇文章、合上書、自己想 30 分鐘——這個動作每週做一次，比每天看 20 個 Reels 有用。下次學行銷時問自己：我是在閱讀，還是在消費？',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-02',
+      },
+      {
+        id: 'w19-04',
+        original: `"Become an idea factory, not a content factory. Content is what you produce. Ideas are what you produce content with. Most creators have it backwards: they produce 10x the content with 0.1x the ideas."`,
+        translation: '成為點子工廠，不是內容工廠。內容是你生產的東西，點子是用來生產內容的東西。多數創作者搞反了——產出 10 倍的內容、0.1 倍的想法。',
+        insight: '對中小店家的啟示：先建立你的「核心觀點」（為什麼你做這件事不一樣），再從這個觀點生 10 篇貼文。不要每天硬擠 1 篇沒有觀點的貼文。adlo 自己也是這樣——一篇深度文章拆成 10 篇 Threads、5 個 IG、3 段月報重點。一個想法養一個月的內容，比每天找新題材容易很多。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-03',
+      },
+      {
+        id: 'w19-05',
+        original: `"Slow content beats fast content. The thing that takes you 8 hours to think through and 1 hour to write will outlive the daily posts you spend 15 minutes on. Time matters. Trust matters. Both compound."`,
+        translation: '慢內容勝過快內容。一個你花 8 小時想透、1 小時寫出來的東西，會比你每天花 15 分鐘 PO 的活得更久。時間累積、信任累積，兩者都是複利。',
+        insight: '台灣老闆常見：每天硬發 GBP、Threads、IG。建議改成：每週只花一個下午寫一篇深度文章，把那篇拆成 5 天分發（GBP 三天 + Threads 兩天 + IG carousel 一次）。半年後回頭看，深度文章帶來的客戶會比每天的碎片貼文多——而且寫得人更不疲憊。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-04',
+      },
+      {
+        id: 'w19-06',
+        original: `"Consumption is cheap. Creation is expensive. Most people pay the cheap price every day and wonder why their life feels empty. The expensive payment compounds into a sense of identity, mastery, and meaning."`,
+        translation: '消費很便宜，創造很貴。多數人每天付便宜的價格，然後納悶為什麼生活感覺空虛。昂貴的付出會複利成身份感、精通感、意義感。',
+        insight: '套用到生意：每天瀏覽競爭對手 IG 是消費（便宜），每週寫一篇自己對行業的觀察是創造（貴）。一年後回頭看，創造的人成為「在地有觀點的店」，消費的人還在抱怨「市場太競爭」。creation 跟 consumption 的差別不是時間多寡，是輸出有沒有屬於自己的觀點。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-05',
+      },
+      {
+        id: 'w19-07',
+        original: `"If you don't know what to write, you don't have a niche. You have a category. A category is 'fitness'. A niche is 'how busy parents stay strong without eating bland food'. The first gets ignored. The second gets shared."`,
+        translation: '如果你不知道要寫什麼，你沒有利基，你只有一個類別。「健身」是類別。「忙碌父母怎麼在不吃水煮餐的情況下保持強壯」才是利基。前者被忽略，後者被分享。',
+        insight: '很多台灣老闆的「定位」太大：「平價美食」「優質剪髮」——沒人會被打中。能打到的定位長這樣：「30 分鐘剪好頭、不推銷洗髮精」「上班族午休 12 分鐘吃完的健康便當」。寫不出 1 句話定位，所有內容都不會被分享。打磨那一句話的時間，比寫 50 篇貼文更值得。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-06',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {

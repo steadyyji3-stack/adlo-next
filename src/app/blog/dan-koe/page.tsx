@@ -3,8 +3,47 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { getAllIssues } from '@/lib/dankoe';
-import { ArrowRight, Rss, ExternalLink } from 'lucide-react';
+import { ArrowRight, Rss, ExternalLink, Video, Mic, BookOpen, MessageSquare } from 'lucide-react';
 import AboutDanKoe from '@/components/dankoe/AboutDanKoe';
+
+interface PublicResource {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  href: string;
+  cta: string;
+}
+
+const PUBLIC_RESOURCES: PublicResource[] = [
+  {
+    icon: Video,
+    title: 'YouTube 影片',
+    desc: '深度長影片講寫作、創業思維、AI 時代的一人事業。每週更新。',
+    href: 'https://www.youtube.com/@thedankoe',
+    cta: '看頻道',
+  },
+  {
+    icon: Mic,
+    title: 'Podcast',
+    desc: '一人對著麥克風講透一個觀念的長 podcast 集。適合通勤聽。',
+    href: 'https://thedankoe.com/',
+    cta: '聽 Podcast',
+  },
+  {
+    icon: BookOpen,
+    title: '部落格 + Newsletter',
+    desc: 'thedankoe.com 完整文章集，含 The Koe Letter 週訊，每週寄到信箱。',
+    href: 'https://thedankoe.com/',
+    cta: '看部落格',
+  },
+  {
+    icon: MessageSquare,
+    title: 'X 主動態（原文來源）',
+    desc: '本週報所有翻譯都來自他的 X 發文。260 萬追蹤，每天 3-5 條短文。',
+    href: 'https://x.com/thedankoe',
+    cta: '追蹤 X',
+  },
+];
 
 export const metadata: Metadata = {
   title: 'Dan Koe 週報 | adlo 在地行銷實戰筆記',
@@ -149,6 +188,67 @@ export default function DanKoeColumnPage() {
               <p className="text-sm text-slate-400">每週更新中，敬請期待⋯⋯</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Public Resources — Dan Koe 官方公開頻道 */}
+      <section
+        aria-labelledby="dankoe-public-resources"
+        className="py-14 px-6 md:px-8 bg-white border-t border-slate-100"
+      >
+        <div className="max-w-4xl mx-auto">
+          <header className="mb-8 text-center">
+            <p className="text-xs font-bold text-[#0F6E56] uppercase tracking-widest mb-2">
+              更多 Dan Koe
+            </p>
+            <h2
+              id="dankoe-public-resources"
+              className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-3"
+              style={{ fontFamily: 'var(--font-manrope)' }}
+            >
+              他的影片、Podcast、部落格——全部公開可看
+            </h2>
+            <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
+              週報是濃縮版。如果你想看 Dan Koe 完整講透一個觀念，這 4 個地方是他自己經營的官方頻道。
+            </p>
+          </header>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {PUBLIC_RESOURCES.map((r) => {
+              const Icon = r.icon;
+              return (
+                <a
+                  key={r.title}
+                  href={r.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-slate-50/50 hover:bg-white border border-slate-200 hover:border-[#1D9E75] hover:shadow-md rounded-2xl p-5 md:p-6 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 group-hover:border-[#1D9E75]/40 flex items-center justify-center shrink-0 transition-colors">
+                      <Icon className="w-5 h-5 text-slate-700 group-hover:text-[#1D9E75] transition-colors" aria-hidden />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-extrabold text-slate-900 mb-1.5">
+                        {r.title}
+                      </h3>
+                      <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                        {r.desc}
+                      </p>
+                      <span className="inline-flex items-center gap-1 text-xs font-bold text-[#1D9E75] group-hover:gap-2 transition-all">
+                        {r.cta}
+                        <ExternalLink className="w-3 h-3" aria-hidden />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+
+          <p className="mt-6 text-xs text-slate-400 text-center">
+            連結會在新分頁開啟。adlo 與 Dan Koe 無任何商業合作關係，純粹是讀者導向。
+          </p>
         </div>
       </section>
 
