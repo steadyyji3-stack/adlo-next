@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings",
+  "_comment": "adlo.tw 專案級安全設定。依 ~/Desktop/CLAUDE.md 與 docs/security/access-audit-2026-05.md 落實分權機制。Agent 永遠不得執行 deny list 的指令。",
+  "permissions": {
+    "deny": [
+      "Bash(vercel --prod*)",
+      "Bash(vercel deploy --prod*)",
+      "Bash(vercel deploy *--prod*)",
+      "Bash(vercel env add * production*)",
+      "Bash(vercel env rm * production*)",
+      "Bash(vercel rm*)",
+      "Bash(vercel alias set*)",
+      "Bash(vercel alias rm*)",
+      "Bash(vercel project rm*)",
+      "Bash(vercel domains *)",
+
+      "Bash(git push --force*)",
+      "Bash(git push *--force*)",
+      "Bash(git push * main*)",
+      "Bash(git push origin main*)",
+      "Bash(git push * production*)",
+      "Bash(git reset --hard origin/main*)",
+      "Bash(git reset --hard origin/production*)",
+      "Bash(git filter-branch*)",
+      "Bash(git filter-repo*)",
+      "Bash(git branch -D main*)",
+      "Bash(git branch -D production*)",
+      "Bash(git tag -d *)",
+      "Bash(git push * --delete*)",
+
+      "Bash(rm -rf .git*)",
+      "Bash(rm -rf node_modules*)",
+      "Bash(rm -rf .next*)",
+
+      "Bash(gh api * -X DELETE*)",
+      "Bash(gh repo delete*)",
+      "Bash(gh release delete*)",
+
+      "Bash(curl * -X DELETE *upstash*)",
+      "Bash(curl * -X DELETE *places.googleapis*)",
+
+      "Bash(stripe * --live*)",
+      "Bash(stripe events resend*)"
+    ],
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git checkout -b*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git push origin chore/*)",
+      "Bash(git push origin feat/*)",
+      "Bash(git push origin fix/*)",
+      "Bash(git push origin docs/*)",
+      "Bash(gh pr create*)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr checks*)"
+    ]
+  }
+}

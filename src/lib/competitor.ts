@@ -128,7 +128,7 @@ export async function fetchCompetitorReport(
 
   let yourSnap: GBPSnapshot;
   let yourStoreInResults = false;
-  let competitorsPool = [...places];
+  const competitorsPool = [...places];
 
   if (yourIdx >= 0) {
     // 找到了 — 你的店真的在這個 city 的前 10 名裡

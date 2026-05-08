@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  quality:
+    name: Lint · Typecheck · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build (no env required for static check)
+        run: npm run build
+        env:
+          # 提供 build 必要的 placeholder（runtime env 由 Vercel 注入）
+          UPSTASH_REDIS_REST_URL: 'https://placeholder.upstash.io'
+          UPSTASH_REDIS_REST_TOKEN: 'placeholder'
+          GOOGLE_PLACES_API_KEY: ''
+          GROQ_API_KEY: ''
+          ADMIN_SECRET: 'placeholder'
+
+  gitleaks:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
