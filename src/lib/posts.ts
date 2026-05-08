@@ -27,6 +27,166 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'naval-holistic-selfishness-2026',
+    title: '整體自私：Naval 重新定義「為自己」，多數人都理解錯了',
+    description: '多數人以為的自私其實是「短期自私」——一秒看像贏，十年看是把自己慢慢殺掉。Naval Ravikant 用「Holistic Selfishness（整體自私）」拉開時間軸，重新定義「為自己」這件事。一篇讀完三年累積後，重新整理的心得文章。',
+    publishedAt: '2026-05-08',
+    category: '思想筆記',
+    tags: ['Naval Ravikant', '思想筆記', '長期主義', '個人經營', '自我管理', 'holistic selfishness'],
+    author: 'adlo 編輯部',
+    readingTime: 9,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&auto=format&fit=crop&q=80',
+      alt: '海邊的日落，象徵把時間軸拉長後看到的世界',
+      credit: 'Eberhard Grossgasteiger',
+      creditUrl: 'https://unsplash.com/@eberhardgross',
+    },
+    content: `
+<p class="lead">你打開 Google 找「自私是不是壞事」，會看到兩種答案：「自私是人性，承認就好」、「自私就是傷害別人，要學會付出」。兩個都對一半。</p>
+
+<p>但 Naval Ravikant—— AngelList 創辦人、矽谷投資人、累積十年寫作的思想者——多年前提出一個更精準的詞：<strong>Holistic Selfishness（整體自私）</strong>。</p>
+
+<p>意思是：自私沒錯，但你得自私得「夠遠」「夠深」。多數人以為的自私，其實是<strong>短期自私</strong>。短期看像贏，十年看是把自己慢慢殺掉。</p>
+
+<p>這篇是讀 Naval 三年後，我重新理解的「為自己」這件事。沒有套用、沒有引申到工作場景的硬接，純粹的心得。</p>
+
+<h2>短期自私 vs 整體自私</h2>
+
+<p>短期自私長這樣：</p>
+<ul>
+  <li>跟同事搶一個小功勞，下個月 review 加一分</li>
+  <li>撒個小謊讓客戶簽單，反正合約已經到手</li>
+  <li>罵下屬讓他不敢頂嘴，當下舒服</li>
+  <li>推卸責任，老闆罵到別人頭上</li>
+</ul>
+
+<p>每一次短期自私，都帶來一個立即的小獲利。但 Naval 的觀點是：</p>
+
+<blockquote>
+  <p>"Long-term game = build value, be honest, sleep well at night.<br>
+  Short-term game = take from others, lie when convenient, lose sleep."</p>
+</blockquote>
+
+<p>這不是道德勸說，是<strong>算術</strong>。</p>
+
+<h2>為什麼是「算術」</h2>
+
+<p>Naval 的邏輯，拆開來看是這樣：</p>
+
+<ol>
+  <li>你對人是怎樣，會在你不知道的時候在他們之間流通。</li>
+  <li>你今天踩的人，會在你五年後最需要他幫忙時記得你。</li>
+  <li>名聲（reputation）是非常慢累積、但一次毀滅就極快的資產。</li>
+  <li>在資訊時代，世界縮小、流通快——名聲的複利效果比歷史上任何時期都強。</li>
+</ol>
+
+<p>換句話說：<strong>短期自私的「獲利」是局部最佳解。整體自私的「自律」才是全局最佳解。</strong></p>
+
+<p>你不是因為「應該善良」才不踩別人，你是因為<em>數學算過來，踩了不划算</em>。這是 Naval 最有力的角度——他把一個傳統上的「德行」問題，重新框成「機率與時間軸」問題。</p>
+
+<h2>整體自私的三個錨點</h2>
+
+<p>Naval 散落在不同訪談、不同年份的觀點，整理起來大概鎖在三件事。</p>
+
+<h3>① 誠實（哪怕代價很高）</h3>
+
+<blockquote>
+  <p>"Honesty is at the heart of who I am. I will not say a thing about you behind your back that I won't say to your face."</p>
+</blockquote>
+
+<p>整體自私意味著：<strong>我選擇誠實，不是因為別人會發現。是因為「不誠實的我」會慢慢變成另一個版本的人，而那個版本的我，未來不能信任自己。</strong></p>
+
+<p>對外不誠實的代價是名聲。對內不誠實的代價更深——你開始模糊「我到底是誰」。</p>
+
+<p>很多 50 歲的人迷失，不是因為他們失敗，是因為他們花了 30 年累積一個自己都不認識的版本。每一次「為了今天順利所以小謊一下」，都是把那個陌生版本的自己再餵大一點。</p>
+
+<h3>② 長期主義（時間軸拉到 10 年以上）</h3>
+
+<blockquote>
+  <p>"The longer the time horizon, the more cooperative the game becomes."</p>
+</blockquote>
+
+<p>時間維度愈短，世界看起來愈像零和。<br>
+時間維度愈長，世界看起來愈像合作。</p>
+
+<p>舉個例：</p>
+<ul>
+  <li>一週的視角：「這個客戶搞我」</li>
+  <li>一年的視角：「我跟這個客戶有摩擦但教會我談判」</li>
+  <li>十年的視角：「我從這次學到的，幫我接下來成功」</li>
+</ul>
+
+<p>整體自私的人選 10 年的視角。不是因為他們有耐心，是因為他們算過——10 年視角的自私決策，跟 1 週視角的決策，在 99% 場景下會給出<strong>完全相反的答案</strong>。</p>
+
+<p>而你的人生只能照其中一個答案活。</p>
+
+<h3>③ 複利人脈（不是利用，是建設）</h3>
+
+<blockquote>
+  <p>"If you can't see yourself working with someone for life, don't work with them for a day."</p>
+</blockquote>
+
+<p>短期自私者跟人是：「我這次需要你」。<br>
+整體自私者跟人是：「我希望 20 年後我們還在彼此身邊」。</p>
+
+<p>差別在哪？</p>
+
+<ul>
+  <li>短期視角：談判要贏對方</li>
+  <li>長期視角：找對的人，不需要每次談判都贏</li>
+</ul>
+
+<p>「對的人」會在意你過去 10 個合作怎麼處理對手——而不是你跟他這一次的合約細節。當你篩出對的人之後，每一次互動都不再需要「贏」。</p>
+
+<h2>為什麼多數人停在短期自私</h2>
+
+<p>Naval 沒明講，但讀完三年累積，我自己歸納成三個原因：</p>
+
+<p><strong>1. 短期自私的回饋很即時</strong>——這個月 KPI 達標、這次衝突贏了、這次 deal 多賺了 50K。多巴胺直接給。</p>
+
+<p><strong>2. 整體自私的回饋很慢</strong>——可能 3 年後，某個你當年放手的客戶介紹了五個新客戶給你；可能 5 年後你沒去搶的功勞，讓你被某個高層記得是個「不爭」的人。回報來的時候你甚至不會知道是當年的選擇所致。</p>
+
+<p><strong>3. 大腦演化適合應對短期</strong>—— 10 萬年前我們需要為今天的食物搶資源。今天的世界跑的是長期賽局，但大腦還沒升級。整體自私是一個「<strong>反演化本能但符合長期數學</strong>」的選擇。</p>
+
+<p>所以難。所以稀少。所以做到的人擁有複利優勢。</p>
+
+<h2>讀三年後最有感的一句</h2>
+
+<p>Naval 說過很多話。讀久了，最常回頭看的是這句：</p>
+
+<blockquote>
+  <p>"Take care of yourself first, but understand that 'yourself' includes your family, your community, the world."</p>
+</blockquote>
+
+<p>「自己」這個詞，在不同時間維度有不同邊界：</p>
+
+<ul>
+  <li>一天的視角：自己 = 身體</li>
+  <li>一年的視角：自己 = 身體 + 家人</li>
+  <li>十年的視角：自己 = 身體 + 家人 + 你經常合作的人</li>
+  <li>一輩子的視角：自己 = 身體 + 家人 + 你所在的社群 + 你影響到的世界</li>
+</ul>
+
+<p>當「自己」被定義得夠寬，「自私」與「利他」會在 10 年的時間軸上重合。這時候做事就不需要在「為自己 vs 為他人」之間糾結——它們是同一件事。</p>
+
+<p>這也許就是 Naval 為什麼能在 40 歲後還那麼平靜。他不需要在每個決策中道德掙扎，因為他的「自己」夠大，已經把多數人會掙扎的東西包進去了。</p>
+
+<h2>一個能帶回去就用的問題</h2>
+
+<p>如果這篇你只能帶走一個東西，我建議是這個練習：</p>
+
+<p><strong>下次你要做一個有衝突的決策時，問自己一句：</strong></p>
+
+<p><em>「如果我把時間軸拉到 10 年——我這次的選擇，會讓 10 年後的我感謝現在的我，還是後悔現在的我？」</em></p>
+
+<p>只問這一題。不需要記住「整體自私」這四個字、不需要背 Naval 的引言。</p>
+
+<p>但這一題會慢慢把你的決策從「短期最佳」搬到「整體最佳」。</p>
+
+<p>那就是 Naval 講的整體自私。</p>
+`,
+  },
+  {
     slug: 'local-brand-momentum-formula-taiwan-2026',
     title: '「品牌爆紅公式」不存在，但「在地名店公式」是有的（2026 台灣版）',
     description: '搜尋「品牌爆紅公式」會給你 100 篇套路文。adlo 拆了 12 家真的「被在地人記得」的小店後發現：他們都不是爆紅，是 6 個月把 5 件事做對。一篇給中小店家可複製的在地品牌成長路線圖。',
