@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run lint && npm run typecheck && npm run build",
+    "prepare": "git config core.hooksPath scripts/git-hooks 2>/dev/null || true"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

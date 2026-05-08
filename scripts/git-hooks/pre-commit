@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# adlo.tw pre-commit hook
+# 依 CLAUDE.md §4.2 + §5：commit 前必須 lint + typecheck + gitleaks 掃描
+# 安裝方式：自動（package.json prepare 會 set core.hooksPath 指到此目錄）
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+echo "${BLUE}▶ pre-commit: lint + typecheck + gitleaks${NC}"
+
+# ── 1. gitleaks（本機 warn-only；CI 為強制 gate）───
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "  · gitleaks scan staged files…"
+  if ! gitleaks protect --staged --no-banner --redact 2>&1; then
+    echo "${RED}✗ gitleaks 偵測到可能的密鑰／憑證。${NC}"
+    echo "  請檢視上方輸出，移除敏感資料後再 commit。"
+    echo "  若是誤判，請更新 .gitleaks.toml 的 allowlist。"
+    exit 1
+  fi
+else
+  echo "${YELLOW}⚠ gitleaks 未安裝（本機跳過；CI 仍會強制掃描）${NC}"
+  echo "  建議安裝：${YELLOW}brew install gitleaks${NC}（macOS）"
+fi
+
+# ── 2. lint（只跑修改的 .ts/.tsx）─────────────────
+STAGED_TS=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx)$' || true)
+if [ -n "$STAGED_TS" ]; then
+  echo "  · eslint on staged files…"
+  if ! npx eslint $STAGED_TS --max-warnings=0 2>&1; then
+    echo "${RED}✗ ESLint 失敗。${NC}"
+    exit 1
+  fi
+fi
+
+# ── 注意：typecheck + build 留給 CI 跑（pre-commit 只做最快的 staged file 檢查）
+# CI 在 .github/workflows/ci.yml 是強制 gate，PR 不過就 merge 不了。
+
+echo "${GREEN}✓ pre-commit 全綠${NC}"

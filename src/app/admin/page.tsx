@@ -37,8 +37,10 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    load();
-    const timer = setInterval(load, 30000);
+    // 第一次掛載先抓資料 + 30 秒輪詢；setState in async load 是預期行為
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void load();
+    const timer = setInterval(() => void load(), 30000);
     return () => clearInterval(timer);
   }, [load]);
 

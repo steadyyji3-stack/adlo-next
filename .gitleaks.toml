@@ -1,0 +1,64 @@
+# adlo.tw gitleaks config
+# 沿用 default rule set，補幾條 adlo 自家用 token pattern + allowlist。
+# 參考：https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml
+
+title = "adlo.tw gitleaks"
+
+# Use built-in defaults (AWS/GCP/Stripe/Slack/Generic API keys 全套)
+[extend]
+useDefault = true
+
+# ── 自訂規則：adlo 用到的 token 形態 ─────────────────────────
+[[rules]]
+id = "groq-api-key"
+description = "Groq API Key"
+regex = '''gsk_[a-zA-Z0-9]{40,}'''
+keywords = ["gsk_"]
+
+[[rules]]
+id = "google-cloud-api-key"
+description = "Google Cloud / Maps API Key"
+regex = '''AIza[0-9A-Za-z_-]{35}'''
+keywords = ["AIza"]
+
+[[rules]]
+id = "google-oauth-client-secret"
+description = "Google OAuth Client Secret"
+regex = '''GOCSPX-[a-zA-Z0-9_-]{20,}'''
+keywords = ["GOCSPX-"]
+
+[[rules]]
+id = "upstash-rest-token"
+description = "Upstash Redis REST Token"
+regex = '''(?i)(upstash[_-]?redis[_-]?rest[_-]?token)\s*[:=]\s*['"]?([A-Za-z0-9_-]{40,})['"]?'''
+keywords = ["UPSTASH_REDIS_REST_TOKEN"]
+
+[[rules]]
+id = "resend-api-key"
+description = "Resend API Key"
+regex = '''re_[a-zA-Z0-9_]{30,}'''
+keywords = ["re_"]
+
+[[rules]]
+id = "vercel-token"
+description = "Vercel Personal Access Token"
+regex = '''(?i)vercel[_-]?(token|api[_-]?key)\s*[:=]\s*['"]?([A-Za-z0-9]{24,})['"]?'''
+keywords = ["VERCEL_TOKEN"]
+
+# ── Allowlist：避免誤判 ─────────────────────────
+[allowlist]
+description = "誤判排除"
+paths = [
+  '''(.*?)(jpg|jpeg|gif|png|tif|tiff|svg|webp|ico|woff|woff2|ttf|eot)''',
+  '''node_modules/.*''',
+  '''\.next/.*''',
+  '''package-lock\.json''',
+  '''pnpm-lock\.yaml''',
+  '''docs/security/access-audit.*\.md''',  # audit doc 會列舉曾外流的 token 類型（已 redact 為說明字串）
+]
+regexes = [
+  '''__PASTE_[A-Z_]+__''',           # .env.example 占位符
+  '''placeholder''',                  # CI workflow 的 placeholder
+  '''AIzaSy[A-Za-z0-9_-]{0,5}\.\.\.''',  # docs 中縮寫範例
+  '''gsk_[A-Za-z0-9]{0,8}\.\.\.''',
+]

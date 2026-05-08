@@ -1,0 +1,24 @@
+{
+  "_comment": "PR merge 後一鍵設定 main branch protection。指令：gh api repos/steadyyji3-stack/adlo-next/branches/main/protection -X PUT --input scripts/security/branch-protection.json",
+  "required_status_checks": {
+    "strict": true,
+    "contexts": [
+      "Lint · Typecheck · Build",
+      "Secret Scan"
+    ]
+  },
+  "enforce_admins": false,
+  "required_pull_request_reviews": {
+    "required_approving_review_count": 0,
+    "dismiss_stale_reviews": true,
+    "require_code_owner_reviews": false
+  },
+  "restrictions": null,
+  "required_linear_history": true,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "block_creations": false,
+  "required_conversation_resolution": false,
+  "lock_branch": false,
+  "allow_fork_syncing": false
+}
