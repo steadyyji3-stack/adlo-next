@@ -86,8 +86,7 @@ const tools: Tool[] = [
     description:
       '輸入一組台灣關鍵字，一次看到每個月有多少人搜、SEO 多難做、跑廣告一次點擊多少錢。決策用。',
     icon: Search,
-    status: 'soon',
-    eta: 'Week 4',
+    status: 'live',
     replaces: 'Growth 方案「10 關鍵字佈局」研究',
   },
   {
