@@ -2,9 +2,13 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, RefreshCw, Info } from 'lucide-react';
+import { ArrowRight, RefreshCw, ExternalLink, Info } from 'lucide-react';
 import Link from 'next/link';
 import {
+  VOLUME_LABEL,
+  VOLUME_TONE,
+  CPC_LABEL,
+  CPC_TONE,
   RECOMMENDATION_LABEL,
   RECOMMENDATION_TONE,
   type KeywordResult,
@@ -34,11 +38,7 @@ function DifficultyBar({ value }: { value: number }) {
   );
 }
 
-function formatNumber(n: number): string {
-  if (n >= 10000) return `${(n / 1000).toFixed(0)}K`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
-  return String(n);
-}
+const KEYWORD_PLANNER_URL = 'https://ads.google.com/intl/zh-TW_tw/home/tools/keyword-planner/?utm_source=adlo';
 
 export default function KeywordResults({ results, onReset }: Props) {
   return (
@@ -52,118 +52,124 @@ export default function KeywordResults({ results, onReset }: Props) {
             這份報告告訴你
             <span className="text-[#1D9E75] mx-2">該打哪幾個</span>
           </h2>
+          <p className="text-sm text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            策略決策用——不是精準數據查詢。每組分析下方都附「為什麼這樣判斷」的依據。
+          </p>
         </header>
 
-        {/* 透明度提示 */}
-        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
-          <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden />
-          <p className="text-xs md:text-sm text-amber-800 leading-relaxed">
-            <strong>關於數據來源</strong>：本工具目前以 adlo 內部模型估算（基於關鍵字長尾度、商業意圖、產業 CPC 平均），供
-            <strong>方向性判斷</strong>用。正式上線 Google Ads Keyword Planner 串接後會顯示真實數據。
+        {/* 透明度提示（升級版） */}
+        <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4 md:p-5">
+          <div className="flex gap-3 mb-2">
+            <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden />
+            <p className="text-sm font-extrabold text-amber-900">
+              這是「策略判斷工具」，不是「Google Ads 數據查詢」
+            </p>
+          </div>
+          <p className="text-xs md:text-sm text-amber-800 leading-relaxed pl-8">
+            本工具用 adlo 的判斷邏輯告訴你「該不該打這個字」+「為什麼」。我們<strong>不顯示具體月搜尋量或 CPC 數字</strong>——因為那些只有 Google 自己最準。
+            <br />
+            想看真實搜尋量、CPC、競爭程度？請用：
+            <a
+              href="https://ads.google.com/intl/zh-TW_tw/home/tools/keyword-planner/?utm_source=adlo"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 mt-2 px-3 py-1.5 bg-white border border-amber-300 text-amber-900 rounded-md font-bold text-xs hover:bg-amber-100 transition-colors"
+            >
+              Google Ads Keyword Planner
+              <ExternalLink className="w-3 h-3" aria-hidden />
+            </a>
+            （Google 官方、免費，需 Google 帳號）
           </p>
         </div>
 
-        {/* Desktop 表格 */}
-        <div className="hidden md:block bg-white rounded-2xl border border-slate-200 overflow-hidden mb-8">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/50">
-                <th className="text-left p-4 font-bold text-slate-700">關鍵字</th>
-                <th className="text-right p-4 font-bold text-slate-700 w-24">月搜尋</th>
-                <th className="text-left p-4 font-bold text-slate-700 w-44">SEO 難度</th>
-                <th className="text-right p-4 font-bold text-slate-700 w-24">CPC</th>
-                <th className="text-left p-4 font-bold text-slate-700 w-44">建議</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((r) => (
-                <tr
-                  key={r.keyword}
-                  className="border-b border-slate-50 last:border-b-0 hover:bg-emerald-50/20 transition-colors"
-                >
-                  <td className="p-4 font-semibold text-slate-900">{r.keyword}</td>
-                  <td className="p-4 text-right font-bold tabular-nums text-slate-700">
-                    {formatNumber(r.monthlySearches)}
-                  </td>
-                  <td className="p-4">
-                    <DifficultyBar value={r.difficulty} />
-                  </td>
-                  <td className="p-4 text-right font-bold tabular-nums text-slate-700">
-                    NT$ {r.cpcNtd}
-                  </td>
-                  <td className="p-4">
-                    <span
-                      className={`inline-block px-2.5 py-1 rounded-md text-xs font-bold border ${RECOMMENDATION_TONE[r.recommendation]}`}
-                    >
-                      {RECOMMENDATION_LABEL[r.recommendation]}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {/* Insight rows（每組 keyword 的詳細建議）*/}
-          <div className="border-t-2 border-slate-100 bg-slate-50/40 px-6 py-5">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">
-              逐字決策建議
-            </p>
-            <ul className="space-y-2.5">
-              {results.map((r) => (
-                <li key={`insight-${r.keyword}`} className="text-sm text-slate-700">
-                  <strong className="text-slate-900">{r.keyword}</strong>
-                  <span className="text-slate-400 mx-2">·</span>
-                  {r.insight}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Mobile 卡片版 */}
-        <div className="md:hidden space-y-4 mb-8">
+        {/* 結果卡片（取代原表格，因為現在是「等級 + 依據」更適合卡片） */}
+        <div className="space-y-4 mb-8">
           {results.map((r) => (
             <article
               key={r.keyword}
-              className="bg-white rounded-2xl border border-slate-200 p-5"
+              className="bg-white rounded-2xl border border-slate-200 p-5 md:p-6"
+              aria-label={`${r.keyword} 分析結果`}
             >
-              <header className="flex items-start justify-between gap-3 mb-4">
-                <h3 className="font-extrabold text-slate-900 text-base leading-snug">
+              <header className="flex items-start justify-between gap-3 mb-5 flex-wrap">
+                <h3 className="font-extrabold text-slate-900 text-lg md:text-xl leading-snug">
                   {r.keyword}
                 </h3>
                 <span
-                  className={`inline-block px-2 py-1 rounded-md text-[10px] font-bold border shrink-0 ${RECOMMENDATION_TONE[r.recommendation]}`}
+                  className={`inline-block px-3 py-1.5 rounded-md text-xs font-bold border shrink-0 ${RECOMMENDATION_TONE[r.recommendation]}`}
                 >
                   {RECOMMENDATION_LABEL[r.recommendation]}
                 </span>
               </header>
 
-              <div className="grid grid-cols-3 gap-3 mb-4">
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-0.5">月搜尋</p>
-                  <p className="text-base font-extrabold text-slate-900 tabular-nums">
-                    {formatNumber(r.monthlySearches)}
+              {/* 3 個等級 chip */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                <div className="bg-slate-50/60 rounded-xl p-4">
+                  <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-2">
+                    搜尋量
                   </p>
+                  <p
+                    className={`inline-block px-2.5 py-1 rounded-md text-sm font-extrabold ${VOLUME_TONE[r.searchVolumeBand]} mb-2`}
+                  >
+                    {VOLUME_LABEL[r.searchVolumeBand]}
+                  </p>
+                  <ul className="text-xs text-slate-600 leading-relaxed space-y-0.5">
+                    {r.searchVolumeReasons.map((reason, i) => (
+                      <li key={i}>· {reason}</li>
+                    ))}
+                  </ul>
                 </div>
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-0.5">難度</p>
-                  <p className="text-base font-extrabold text-slate-900 tabular-nums">
-                    {r.difficulty}
+
+                <div className="bg-slate-50/60 rounded-xl p-4">
+                  <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-2">
+                    SEO 難度
                   </p>
+                  <DifficultyBar value={r.difficulty} />
+                  <ul className="text-xs text-slate-600 leading-relaxed space-y-0.5 mt-2">
+                    {r.difficultyReasons.map((reason, i) => (
+                      <li key={i}>· {reason}</li>
+                    ))}
+                  </ul>
                 </div>
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-0.5">CPC</p>
-                  <p className="text-base font-extrabold text-slate-900 tabular-nums">
-                    NT${r.cpcNtd}
+
+                <div className="bg-slate-50/60 rounded-xl p-4">
+                  <p className="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest mb-2">
+                    CPC 級距
                   </p>
+                  <p
+                    className={`inline-block px-2.5 py-1 rounded-md text-sm font-extrabold ${CPC_TONE[r.cpcBand]} mb-2`}
+                  >
+                    {CPC_LABEL[r.cpcBand]}
+                  </p>
+                  <ul className="text-xs text-slate-600 leading-relaxed space-y-0.5">
+                    {r.cpcReasons.map((reason, i) => (
+                      <li key={i}>· {reason}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              <DifficultyBar value={r.difficulty} />
+              {/* 決策建議文字 */}
+              <div className="bg-emerald-50/60 border-l-4 border-[#1D9E75] pl-4 py-2.5 mb-4">
+                <p className="text-sm text-slate-700 leading-relaxed">
+                  <strong className="text-slate-900">建議：</strong>
+                  {r.insight}
+                </p>
+              </div>
 
-              <p className="mt-4 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                {r.insight}
-              </p>
+              {/* 查真實數據 */}
+              <div className="flex items-center justify-end">
+                <a
+                  href={KEYWORD_PLANNER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#1D9E75] transition-colors"
+                  data-gtm-event="keyword_to_google_planner"
+                  aria-label={`用 Google Ads Keyword Planner 查「${r.keyword}」的真實數據`}
+                >
+                  查這個字的 Google 真實數字
+                  <ExternalLink className="w-3 h-3" aria-hidden />
+                </a>
+              </div>
             </article>
           ))}
         </div>

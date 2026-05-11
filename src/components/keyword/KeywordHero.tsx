@@ -69,9 +69,10 @@ export default function KeywordHero({ onSubmit, errorMsg }: Props) {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            一次輸入 10 個台灣關鍵字。
-            <br className="hidden md:block" />
-            告訴你每組的搜尋量、SEO 難度、廣告 CPC，加上「該 SEO、跑廣告、還是跳過」的決策建議。
+            一次輸入 10 個台灣關鍵字。告訴你每組的<strong className="text-slate-900">搜尋熱度級距、SEO 難度、廣告 CPC 級距</strong>，加上「該 SEO、跑廣告、還是跳過」的決策建議。
+          </p>
+          <p className="text-xs sm:text-sm text-slate-500 mt-3 max-w-xl mx-auto">
+            ⚠️ 這是策略判斷工具，不顯示精準數字。要查真實搜尋量請用 Google Ads Keyword Planner（結果頁附直連）。
           </p>
         </div>
 
