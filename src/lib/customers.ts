@@ -44,7 +44,7 @@ export interface OnboardingSubmission {
   id: string;
   customer_id: string;
   status: 'pending_review' | 'approved' | 'needs_revision' | 'rejected';
-  gbp_oauth_token: string | null;
+  gbp_oauth_ciphertext: string | null;
   ga4_property_id: string | null;
   meta_page_id: string | null;
   meta_admin_status: 'invited' | 'accepted' | null;
