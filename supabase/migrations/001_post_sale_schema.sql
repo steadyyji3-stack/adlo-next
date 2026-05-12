@@ -66,7 +66,7 @@ create table onboarding_submissions (
   customer_id uuid not null references customers(id) on delete cascade,
   status text not null default 'pending_review'
     check (status in ('pending_review', 'approved', 'needs_revision', 'rejected')),
-  gbp_oauth_token text,
+  gbp_oauth_ciphertext text,
   ga4_property_id text,
   meta_page_id text,
   meta_admin_status text check (meta_admin_status is null or meta_admin_status in ('invited', 'accepted')),
