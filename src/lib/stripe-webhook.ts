@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import type Stripe from 'stripe';
 import { apiError } from '@/lib/api-response';
-import { upsertCheckoutCustomer, upsertSubscription, type PlanId, type SubscriptionStatus } from '@/lib/customers';
+import {
+  syncExistingSubscription,
+  upsertCheckoutCustomer,
+  upsertSubscription,
+  type PlanId,
+  type SubscriptionStatus,
+} from '@/lib/customers';
 import { getStripe } from '@/lib/stripe';
 import { writeAuditLog } from '@/lib/audit-log';
 
@@ -58,10 +64,22 @@ function normalizeSubscriptionStatus(status: Stripe.Subscription.Status): Subscr
 }
 
 function normalizePlanId(planId: string | undefined): PlanId {
-  if (planId === 'local-seo' || planId === 'ads-managed' || planId === 'starter' || planId === 'growth' || planId === 'dominate') {
+  return parsePlanId(planId) ?? 'gbp-auto';
+}
+
+function parsePlanId(planId: string | undefined): PlanId | undefined {
+  if (planId === 'gbp-auto' || planId === 'local-seo' || planId === 'ads-managed' || planId === 'starter' || planId === 'growth' || planId === 'dominate') {
     return planId;
   }
-  return 'gbp-auto';
+  return undefined;
+}
+
+function getSubscriptionPlanId(subscription: Stripe.Subscription): PlanId | undefined {
+  const metadataPlanId = parsePlanId(subscription.metadata?.planId);
+  if (metadataPlanId) return metadataPlanId;
+
+  const firstItemPlanId = subscription.items.data[0]?.price.metadata?.planId;
+  return parsePlanId(firstItemPlanId);
 }
 
 function getSubscriptionPeriod(subscription: Stripe.Subscription) {
@@ -73,6 +91,22 @@ function getSubscriptionPeriod(subscription: Stripe.Subscription) {
   return {
     currentPeriodStart: periodSource.current_period_start,
     currentPeriodEnd: periodSource.current_period_end,
+  };
+}
+
+function subscriptionSyncInput(subscription: Stripe.Subscription) {
+  const fallbackStart = new Date();
+  const fallbackEnd = new Date(fallbackStart.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const period = getSubscriptionPeriod(subscription);
+
+  return {
+    stripeSubscriptionId: subscription.id,
+    planId: getSubscriptionPlanId(subscription),
+    status: normalizeSubscriptionStatus(subscription.status),
+    currentPeriodStart: toIsoFromUnix(period.currentPeriodStart, fallbackStart),
+    currentPeriodEnd: toIsoFromUnix(period.currentPeriodEnd, fallbackEnd),
+    trialEnd: subscription.trial_end ? toIsoFromUnix(subscription.trial_end, fallbackEnd) : null,
+    cancelledAt: subscription.canceled_at ? toIsoFromUnix(subscription.canceled_at, fallbackEnd) : null,
   };
 }
 
@@ -148,13 +182,67 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const syncedSubscription = await syncExistingSubscription({
+    ...subscriptionSyncInput(subscription),
+    status: 'cancelled',
+    cancelledAt: subscription.canceled_at ? toIsoFromUnix(subscription.canceled_at, new Date()) : new Date().toISOString(),
+  });
+
   await writeAuditLog({
     actor: 'system:stripe',
     action: 'stripe.subscription.deleted',
     targetType: 'subscription',
+    targetId: syncedSubscription?.id ?? null,
     payload: {
       stripe_subscription_id: subscription.id,
       status: 'cancelled',
+      local_subscription_found: Boolean(syncedSubscription),
+    },
+  });
+}
+
+async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+  const syncedSubscription = await syncExistingSubscription(subscriptionSyncInput(subscription));
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.subscription.updated',
+    targetType: 'subscription',
+    targetId: syncedSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: subscription.id,
+      status: normalizeSubscriptionStatus(subscription.status),
+      local_subscription_found: Boolean(syncedSubscription),
+    },
+  });
+}
+
+function getInvoiceSubscriptionId(invoice: Stripe.Invoice) {
+  const source = invoice as Stripe.Invoice & {
+    subscription?: string | { id?: string } | null;
+  };
+  if (typeof source.subscription === 'string') return source.subscription;
+  return source.subscription?.id ?? null;
+}
+
+async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
+  const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
+  const localSubscription = stripeSubscriptionId
+    ? await syncExistingSubscription({
+      stripeSubscriptionId,
+      status: 'past_due',
+    })
+    : null;
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.invoice.payment_failed',
+    targetType: 'subscription',
+    targetId: localSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: stripeSubscriptionId,
+      invoice_id: invoice.id,
+      local_subscription_found: Boolean(localSubscription),
     },
   });
 }
@@ -181,13 +269,10 @@ export async function handleStripeWebhook(req: NextRequest) {
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
         break;
       case 'customer.subscription.updated':
+        await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+        break;
       case 'invoice.payment_failed':
-        await writeAuditLog({
-          actor: 'system:stripe',
-          action: `stripe.${event.type}`,
-          targetType: 'subscription',
-          payload: { event_id: event.id, event_type: event.type },
-        });
+        await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
         break;
       default:
         break;
