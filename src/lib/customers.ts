@@ -59,6 +59,8 @@ export interface CustomerDetail extends Customer {
   onboarding_submissions: OnboardingSubmission[];
 }
 
+export type OnboardingReviewDecision = 'approved' | 'needs_revision' | 'rejected';
+
 export async function upsertCheckoutCustomer(input: {
   stripeCustomerId: string;
   email: string;
@@ -185,6 +187,14 @@ export async function createOnboardingSubmission(input: {
 }
 
 export async function approveCustomerOnboarding(customerId: string, reviewer: string) {
+  return reviewCustomerOnboarding(customerId, reviewer, 'approved');
+}
+
+export async function reviewCustomerOnboarding(
+  customerId: string,
+  reviewer: string,
+  decision: OnboardingReviewDecision,
+) {
   const [submission] = await selectRows<OnboardingSubmission>(
     'onboarding_submissions',
     { customer_id: customerId, status: 'pending_review' },
@@ -196,7 +206,7 @@ export async function approveCustomerOnboarding(customerId: string, reviewer: st
       'onboarding_submissions',
       { id: submission.id },
       {
-        status: 'approved',
+        status: decision,
         reviewed_by: reviewer,
         reviewed_at: new Date().toISOString(),
       },
@@ -204,7 +214,13 @@ export async function approveCustomerOnboarding(customerId: string, reviewer: st
   }
 
   return updateCustomer(customerId, {
-    onboarding_status: 'approved',
-    service_status: 'active',
+    onboarding_status: decision,
+    service_status: serviceStatusForOnboardingDecision(decision),
   });
+}
+
+function serviceStatusForOnboardingDecision(decision: OnboardingReviewDecision): ServiceStatus {
+  if (decision === 'approved') return 'active';
+  if (decision === 'needs_revision') return 'pending_onboarding';
+  return 'paused';
 }
