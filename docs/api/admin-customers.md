@@ -58,6 +58,32 @@ Behavior:
 - Sets customer `service_status` to `active`.
 - Writes `audit_log` action `onboarding.approve`.
 
+Kept for compatibility. The admin detail UI uses the broader review endpoint below.
+
+## POST /api/admin/customers/[id]/review
+
+Requires the existing `admin_token` cookie.
+
+Request:
+
+```json
+{ "decision": "approved", "note": "optional internal note" }
+```
+
+Allowed `decision` values:
+
+- `approved`: marks onboarding approved and activates service.
+- `needs_revision`: marks onboarding as needing revision and moves service back to pending onboarding.
+- `rejected`: marks onboarding rejected and pauses service.
+
+Behavior:
+
+- Marks latest pending onboarding submission with the review decision.
+- Sets `reviewed_by = lorenzo` and `reviewed_at`.
+- Updates the customer `onboarding_status` and `service_status`.
+- Writes one of `onboarding.approve`, `onboarding.request_revision`, or `onboarding.reject`.
+- Audit payload records status changes and whether a review note was present, but does not store the note body.
+
 Errors use the shared structured shape:
 
 ```json
