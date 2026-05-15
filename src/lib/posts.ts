@@ -36,10 +36,10 @@ export const posts: Post[] = [
     author: 'adlo 編輯部',
     readingTime: 9,
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1604754742629-3e0498ed68fa?w=1200&auto=format&fit=crop&q=80',
-      alt: '空蕩的超市賣場過道，象徵熱潮退去後的反思時刻',
-      credit: 'Bruno Kelzer',
-      creditUrl: 'https://unsplash.com/@brunokelzer',
+      url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&auto=format&fit=crop&q=80',
+      alt: '霧裡的山與光，象徵品牌神壇隕落後的反思時刻',
+      credit: 'Eberhard Grossgasteiger',
+      creditUrl: 'https://unsplash.com/@eberhardgross',
     },
     content: `
 <p class="lead">很多人以為 lopia 在台灣爆紅是因為「日本超市」「肉便宜」「黑毛和牛買一送一」。錯。真正讓它從一家普通日系超市變成 Threads 神物的，是<strong>日本社長自己親手在 Threads 回網友</strong>。</p>
