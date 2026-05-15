@@ -393,6 +393,95 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+  /* ─────────────────────────────────────────────────────────────
+     Issue #6  |  2026-W20  |  AI 把內容變便宜了——但你的觀點，從來沒有
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w20',
+    issueNumber: 6,
+    theme: 'AI 把內容變便宜了——但你的觀點，從來沒有',
+    publishedAt: '2026-05-15',
+    summary:
+      '本期聚焦 Dan Koe 四月到五月最新觀點：在 AI 讓內容生產成本趨近於零的時代，什麼才是真正不可被取代的？以及台灣在地商家如何把「人的觀點」變成最強的差異化行銷武器。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&auto=format&fit=crop&q=80',
+      alt: '安靜書桌與開著的筆記本，象徵思考與深度寫作',
+      credit: 'Unsplash',
+      creditUrl: 'https://unsplash.com',
+    },
+    posts: [
+      {
+        id: 'w20-01',
+        original: `"Social media has specific mechanics and levers, like a video game. If you understand those, you can predictably control your growth. Most people think it's luck. It's not. It's pattern recognition applied consistently."`,
+        translation:
+          '社群媒體有特定的機制和槓桿，就像電玩遊戲一樣。如果你搞懂這些，你可以可預測地掌控自己的成長。多數人以為這靠運氣——不是的，是持續運用的規律識別。',
+        insight:
+          '台灣老闆常說「我不懂演算法」，但電玩也有規則。Threads 的規則是對話帶動觸及；GBP 的規則是更新頻率決定搜尋排名。這不是玄學，是要花時間搞懂的技術。第一步：GBP 每月固定更新 2 篇，連續 6 個月，再來告訴我排名變了沒有。',
+        xUrl: 'https://letters.thedankoe.com/p/growing-on-social-media-is-easy-actually',
+        postedAt: '2026-05-07',
+      },
+      {
+        id: 'w20-02',
+        original: `"I'm begging you to write more essays. Not threads. Not carousels. Essays. An essay is an act of thinking. A thread is an act of packaging. The former builds wisdom, the latter builds reach. Only one of them makes people trust you with their money."`,
+        translation:
+          '我求你多寫散文。不是串文，不是輪播圖——是散文。散文是思考的動作，串文是包裝的動作。前者建立智慧，後者建立觸及。兩者之中，只有一個讓人願意把錢交給你。',
+        insight:
+          '對台灣中小店家的翻譯：你的 IG 貼文讓人點讚，但讓人決定預約的是那篇「為什麼我們的料理用這種方式烹調」的深度文章。觸及讓人看見你，信任讓人掏錢。別把所有力氣放在吸睛格式，留一半給能建立信任的深度內容。',
+        xUrl: 'https://letters.thedankoe.com/p/im-begging-you-to-write-more-essays',
+        postedAt: '2026-04-02',
+      },
+      {
+        id: 'w20-03',
+        original: `"Wisdom is not algorithmic. You can't prompt your way to it. It comes from doing, failing, reflecting, and writing about it honestly. That's what AI can't replicate — the scars behind the insight."`,
+        translation:
+          '智慧不是演算法可以生成的。你沒辦法靠輸入指令獲得智慧——它來自於做、失敗、反思，以及誠實地把這一切寫出來。那正是 AI 無法複製的：洞察背後的傷痕。',
+        insight:
+          '你花了十年學會怎麼讀客人的臉色、怎麼在旺季撐過缺貨、怎麼和挑剔廠商周旋——這些是 AI 沒有的資料。把這些寫出來，哪怕寫得不漂亮，那篇文章比任何 AI 生成的介紹都更讓人信任你。',
+        xUrl: 'https://letters.thedankoe.com/p/im-begging-you-to-write-more-essays',
+        postedAt: '2026-04-02',
+      },
+      {
+        id: 'w20-04',
+        original: `"Trust is the moat in the age of AI. Not your product. Not your price. Not your features. Anyone can copy those now. No one can copy a decade of showing up, thinking clearly, and caring about the right people."`,
+        translation:
+          '在 AI 時代，信任才是護城河。不是你的產品、你的價格、你的功能——這些現在都可以被複製。沒有人能複製十年的堅持出現、清晰的思考，以及真正在乎對的人。',
+        insight:
+          '台灣在地店家的護城河不是最新設備，是「這家老闆認識我、知道我喜歡什麼」的感受。你的評論回覆、你的店家貼文、你對客人問題的回答——這些在累積信任，不只是在做 SEO。信任複利，最終把你跟連鎖品牌拉開距離。',
+        xUrl: 'https://letters.thedankoe.com/p/how-to-start-a-one-person-business',
+        postedAt: '2026-03-11',
+      },
+      {
+        id: 'w20-05',
+        original: `"The person directing the AI is where the magic lies. Anyone can use ChatGPT. The person who wins uses it to amplify a perspective that only they have — a perspective built from years of doing the thing."`,
+        translation:
+          '指揮 AI 的人，才是魔法所在。任何人都可以用 ChatGPT。贏的人用它放大一個只有自己才有的觀點——一個建立在多年實際操作之上的觀點。',
+        insight:
+          '叫 AI「幫我寫一篇咖啡店介紹」，和先說「我做咖啡 12 年，有個關於萃取時間的執念是客人都不知道的——把這個故事寫出來」——兩篇的說服力差十倍。AI 是你觀點的放大器，不是替代品。你的任務是先有那個觀點。',
+        xUrl: 'https://letters.thedankoe.com/p/how-to-start-a-one-person-business',
+        postedAt: '2026-03-11',
+      },
+      {
+        id: 'w20-06',
+        original: `"Information becomes less valuable the longer it is around. It becomes common knowledge. What doesn't expire is your interpretation of information — filtered through your experience and applied to a specific person's problem."`,
+        translation:
+          '資訊流通越久就越廉價，最終變成常識。不會過期的，是你對資訊的詮釋——透過你的經驗過濾，應用在特定人的特定問題上。',
+        insight:
+          '「如何增加 Google 評論」這個答案，Google 一下就有。但「一家台中七期診所用 4 個月從 20 則評論變 150 則的過程」，只有你知道。你做生意的每一個真實案例，都是資訊加上你的經驗——那才是有市場價值的內容。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-30',
+      },
+      {
+        id: 'w20-07',
+        original: `"The internet is about to be flooded with AI slop at scale. The people who survive this are the ones whose content feels like it was written by someone who has lived something. Presence is the new premium."`,
+        translation:
+          '網路即將被 AI 垃圾內容以規模淹沒。能撐過去的人，是那些內容讓人感覺「有人真正活過這件事」的創作者。存在感，是新時代的溢價。',
+        insight:
+          'AI 工具普及後，每家店的介紹文字開始長得一樣——同樣的流利、同樣的空洞。這正是你用真實故事突圍的視窗期。那個脾氣不好的客人讓你學到的事、那個失敗訂單讓你改變的流程——這些不完美的細節，反而是 2026 年最有說服力的行銷內容。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-10',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
