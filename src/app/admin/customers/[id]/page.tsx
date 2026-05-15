@@ -47,6 +47,9 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
             <Badge variant="outline" className={statusClasses[customer.service_status]}>
               {customer.service_status}
             </Badge>
+            <Link href={`/admin/reports/${customer.id}/preview`} className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              月報預覽
+            </Link>
             <ApproveButton customerId={customer.id} disabled={customer.service_status !== 'pending_review'} />
           </div>
         </div>
