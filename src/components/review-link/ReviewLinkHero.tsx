@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -25,29 +27,31 @@ interface Props {
   onSubmit: (value: ReviewFormValue) => void;
 }
 
-const INDUSTRIES = [
-  // 餐飲類（依場景細分，前面加總稱方便搜尋）
-  '餐飲',
-  '餐廳 / 正餐',
-  '小吃 / 便當',
-  '咖啡 / 飲料店',
-  '甜點 / 烘焙',
-  '麵包店',
-  // 美容美髮類
-  '美髮 / 美容',
-  '美甲 / 美睫',
-  'SPA / 按摩',
-  // 健康類
-  '健身 / 瑜伽',
-  '牙醫 / 診所',
-  '醫美',
-  '寵物服務',
-  // 商業 / 服務類
-  '零售 / 服飾',
-  '住宿 / 民宿',
-  '律師 / 會計',
-  '補習 / 家教',
-  '其他',
+/** 產業分組（影響模板措辭與下拉選單分區顯示） */
+const INDUSTRY_GROUPS: { label: string; items: string[] }[] = [
+  {
+    label: '餐飲',
+    items: [
+      '餐飲',
+      '餐廳 / 正餐',
+      '小吃 / 便當',
+      '咖啡 / 飲料店',
+      '甜點 / 烘焙',
+      '麵包店',
+    ],
+  },
+  {
+    label: '美容 / 美髮',
+    items: ['美髮 / 美容', '美甲 / 美睫', 'SPA / 按摩'],
+  },
+  {
+    label: '健康 / 醫療',
+    items: ['健身 / 瑜伽', '牙醫 / 診所', '醫美', '寵物服務'],
+  },
+  {
+    label: '其他服務',
+    items: ['零售 / 服飾', '住宿 / 民宿', '律師 / 會計', '補習 / 家教', '其他'],
+  },
 ];
 
 export default function ReviewLinkHero({ onSubmit }: Props) {
@@ -129,9 +133,19 @@ export default function ReviewLinkHero({ onSubmit }: Props) {
                 <SelectTrigger id="industry" className="h-12 text-base">
                   <SelectValue placeholder="選一個（不選會用「本店」這類通用詞）" />
                 </SelectTrigger>
-                <SelectContent>
-                  {INDUSTRIES.map((it) => (
-                    <SelectItem key={it} value={it}>{it}</SelectItem>
+                <SelectContent className="max-h-[60vh]">
+                  {INDUSTRY_GROUPS.map((group, idx) => (
+                    <SelectGroup key={group.label}>
+                      {idx > 0 && <div className="h-px bg-slate-200 my-1 mx-2" aria-hidden />}
+                      <SelectLabel className="text-[11px] font-extrabold uppercase tracking-widest text-slate-500 px-3 py-2">
+                        {group.label}
+                      </SelectLabel>
+                      {group.items.map((it) => (
+                        <SelectItem key={it} value={it}>
+                          {it}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   ))}
                 </SelectContent>
               </Select>
