@@ -108,8 +108,7 @@ const tools: Tool[] = [
     description:
       '填基本資料，幫你產出專屬 Google 評論短連結、QRCode，再加一套讓客人願意寫的訊息模板（LINE / 卡片 / email 三版本）。',
     icon: Link2,
-    status: 'soon',
-    eta: 'Week 6',
+    status: 'live',
     replaces: '月訂閱「評論管理策略建議」',
   },
   {
