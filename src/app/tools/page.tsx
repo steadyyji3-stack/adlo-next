@@ -97,8 +97,7 @@ const tools: Tool[] = [
     description:
       '貼你的部落格文章網址，adlo 抓 H1、字數、關鍵字密度、圖 alt、meta、連結結構，算出 SEO 分數和最該先改的 3 件事。',
     icon: FileCheck2,
-    status: 'soon',
-    eta: 'Week 5',
+    status: 'live',
     replaces: 'Pro 方案「無限 SEO 文章」的審稿流程',
   },
   {
