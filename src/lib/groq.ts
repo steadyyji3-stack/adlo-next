@@ -313,7 +313,7 @@ export async function generatePostsViaGroq(
   let parsed: unknown;
   try {
     parsed = JSON.parse(content);
-  } catch (err) {
+  } catch {
     // 試著從 markdown code fence 中救出 JSON
     const m = content.match(/\{[\s\S]*\}/);
     if (!m) throw new Error(`Groq 回應非 JSON：${content.slice(0, 100)}`);
@@ -340,4 +340,155 @@ export async function generatePostsViaGroq(
     (data.usage?.prompt_tokens ?? 0) + (data.usage?.completion_tokens ?? 0);
 
   return { posts, bannedHits, tokensUsed };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Name Generator  (Tool #7)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface NameGeneratorInput {
+  industry: string;
+  style: string;
+  target: string;
+  keywords?: string;
+}
+
+export interface GeneratedName {
+  name: string;
+  category: string;
+  reason: string;
+}
+
+export interface GeneratedSlogan {
+  slogan: string;
+  tone: string;
+  reason: string;
+}
+
+export interface NameGeneratorResult {
+  names: GeneratedName[];
+  slogans: GeneratedSlogan[];
+}
+
+const NAME_SYSTEM_PROMPT = `你是台灣品牌命名顧問，專精中小店家店名與 slogan 創作。
+你寫的是「台灣老闆會點頭」的風格——在地、有溫度、不像大企業公關稿、不翻譯腔。
+
+【絕對禁止詞（出現任何一個就 fail）】
+賦能、打造、優質、極致、致力、品牌升級、卓越、典範、業界領先、煥新、共創
+
+【names 欄位規範（15 個）】
+- name: 店名，2–6字，繁體中文或中英混合，符合台灣命名習慣
+- category: 命名法（「地方感」「職人感」「感官記憶」「人物化」「概念法」「音韻法」擇一）
+- reason: 一句話說「為什麼這個名字能被客人記住」，不超過 20 字
+
+【slogans 欄位規範（10 個）】
+- slogan: 6–15 字，繁中，好說好記，有一點情緒溫度
+- tone: 語氣（「溫馨」「專業」「趣味」「直白」擇一）
+- reason: 最適合用在哪裡（「招牌副標」「IG 簡介」「名片」「Google 商家簡介」擇一）
+
+【正確範例】
+names: [{"name":"根室日常","category":"地方感","reason":"讓客人想到一個有儀式感的日常空間"}]
+slogans: [{"slogan":"來這裡，先把手機放下","tone":"直白","reason":"IG 簡介"}]
+
+回傳純 JSON：{ "names": [...15個...], "slogans": [...10個...] }
+禁止前後文字、禁止 markdown code fence、禁止任何說明文字。`;
+
+function buildNamePrompt(input: NameGeneratorInput): string {
+  const lines = [
+    `產業：${input.industry}`,
+    `品牌風格：${input.style}`,
+    `主要客群：${input.target}`,
+  ];
+  if (input.keywords?.trim()) {
+    lines.push(`想包含的概念或文字：${input.keywords.trim()}`);
+  }
+  lines.push('');
+  lines.push('請產生 15 組店名 + 10 組 slogan，回傳 { "names": [...], "slogans": [...] }。');
+  return lines.join('\n');
+}
+
+/**
+ * Call Groq Llama 3.3 70B, return name + slogan suggestions.
+ * Throws on failure (caller should surface user-friendly error).
+ */
+export async function generateNamesViaGroq(
+  input: NameGeneratorInput,
+): Promise<{ result: NameGeneratorResult; tokensUsed: number }> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY 未設定');
+
+  const messages: GroqMessage[] = [
+    { role: 'system', content: NAME_SYSTEM_PROMPT },
+    { role: 'user', content: buildNamePrompt(input) },
+  ];
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+
+  let res: Response;
+  try {
+    res = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages,
+        temperature: 0.8,
+        max_tokens: 3000,
+        response_format: { type: 'json_object' },
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Groq API HTTP ${res.status}: ${body.slice(0, 200)}`);
+  }
+
+  const data = (await res.json()) as GroqResponse;
+  if (data.error) throw new Error(`Groq error: ${data.error.message}`);
+
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error('Groq 回應為空');
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(content);
+  } catch {
+    const m = content.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error(`Groq 回應非 JSON：${content.slice(0, 100)}`);
+    parsed = JSON.parse(m[0]);
+  }
+
+  const raw = parsed as { names?: unknown; slogans?: unknown };
+
+  if (!Array.isArray(raw.names) || raw.names.length < 5) {
+    throw new Error(`names 欄位異常，數量：${Array.isArray(raw.names) ? raw.names.length : '非array'}`);
+  }
+  if (!Array.isArray(raw.slogans) || raw.slogans.length < 3) {
+    throw new Error(`slogans 欄位異常，數量：${Array.isArray(raw.slogans) ? raw.slogans.length : '非array'}`);
+  }
+
+  const names: GeneratedName[] = (raw.names as Record<string, unknown>[]).map((n) => ({
+    name: String(n.name ?? '').trim(),
+    category: String(n.category ?? '').trim(),
+    reason: String(n.reason ?? '').trim(),
+  })).filter((n) => n.name.length >= 2);
+
+  const slogans: GeneratedSlogan[] = (raw.slogans as Record<string, unknown>[]).map((s) => ({
+    slogan: String(s.slogan ?? '').trim(),
+    tone: String(s.tone ?? '').trim(),
+    reason: String(s.reason ?? '').trim(),
+  })).filter((s) => s.slogan.length >= 4);
+
+  const tokensUsed =
+    (data.usage?.prompt_tokens ?? 0) + (data.usage?.completion_tokens ?? 0);
+
+  return { result: { names, slogans }, tokensUsed };
 }
