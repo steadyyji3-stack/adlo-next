@@ -52,6 +52,9 @@ export default async function AdminCustomersPage({
           <Link href="/admin/posts" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
             GBP 文案庫
           </Link>
+          <Link href="/admin/reviews?unanswered=true" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+            待回覆評論
+          </Link>
         </div>
 
         <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
