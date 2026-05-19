@@ -46,7 +46,7 @@ const PUBLIC_RESOURCES: PublicResource[] = [
 ];
 
 export const metadata: Metadata = {
-  title: 'Dan Koe 週報 | adlo 在地行銷實戰筆記',
+  title: { absolute: 'Dan Koe 週報 | adlo 在地行銷實戰筆記' },
   description: '每週精選 Dan Koe 最新 X 發文，附中文翻譯與台灣在地行銷視角深度解析。一人事業、內容創作、AI 思維，寫給認真做生意的台灣老闆。',
   alternates: { canonical: 'https://adlo.tw/blog/dan-koe' },
   openGraph: {

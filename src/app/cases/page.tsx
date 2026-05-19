@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '客戶成效案例 | adlo 台灣在地 SEO 行銷',
+  title: { absolute: '客戶成效案例 | adlo 台灣在地 SEO 行銷' },
   description: '真實數據說話：醫美診所年度新用戶 17 萬、電商品牌新會員成長 374%、當鋪廣告受眾停留時間提升 20 倍。',
   alternates: { canonical: 'https://adlo.tw/cases' },
 };

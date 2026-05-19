@@ -4,7 +4,7 @@ import { CheckCircle2, ArrowRight, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: '付款成功 | adlo',
+  title: '付款成功',
   description: '感謝你訂閱 adlo 在地行銷服務，我們將在 1–2 個工作天內主動聯繫你。',
   robots: { index: false },
 };

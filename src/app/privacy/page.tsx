@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: '隱私政策 | adlo 數位行銷',
+  title: { absolute: '隱私政策 | adlo 數位行銷' },
   description: 'adlo 數位行銷隱私政策，說明我們如何收集、使用和保護您的個人資料。',
 }
 

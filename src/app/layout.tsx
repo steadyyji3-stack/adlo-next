@@ -156,7 +156,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <body className={`${inter.variable} ${manrope.variable} ${playfair.variable} font-body antialiased`}>
         <SiteNav />
-        <main className="pt-24">{children}</main>
+        <main className="pt-16">{children}</main>
         <SiteFooter />
         {GTM_ID && <ClickTracker />}
       </body>

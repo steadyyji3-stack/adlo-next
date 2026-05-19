@@ -6,7 +6,7 @@ import { getAllCities } from '@/lib/cities';
 import { MapPin, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '城市在地行銷服務 | adlo',
+  title: '城市在地行銷服務',
   description: 'adlo 提供台北、台中、高雄城市專屬在地 SEO 與廣告服務。根據各城市競爭結構與消費特性，制定最有效的在地行銷策略。',
   alternates: { canonical: 'https://adlo.tw/cities' },
   openGraph: {

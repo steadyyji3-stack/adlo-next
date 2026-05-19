@@ -4,11 +4,12 @@ import { Separator } from '@/components/ui/separator';
 
 const footerLinks = [
   { href: '/', label: '首頁' },
-  { href: '/services', label: '服務方案' },
-  { href: '/pricing', label: '定價方案' },
-  { href: '/trends', label: '趨勢分析' },
-  { href: '/process', label: '接單流程' },
+  { href: '/tools', label: '免費工具箱' },
+  { href: '/diagnostic', label: '深度診斷' },
+  { href: '/subscribe', label: '月訂閱' },
   { href: '/blog', label: 'SEO 專欄' },
+  { href: '/cases', label: '成效案例' },
+  { href: '/about', label: '關於我們' },
   { href: '/contact', label: '立即諮詢' },
 ];
 

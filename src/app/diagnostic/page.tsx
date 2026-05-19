@@ -23,7 +23,7 @@ import {
 import DiagnosticFAQ from '@/components/diagnostic/DiagnosticFAQ';
 
 export const metadata: Metadata = {
-  title: 'Google Ads + GBP 健檢診斷 | adlo',
+  title: 'Google Ads + GBP 健檢診斷',
   description:
     '專人進你的帳戶做完整分析，3 個工作天交付 PDF 報告。找出現在在燒錢的關鍵字、GBP 缺口、競爭對手廣告策略。目前開放免費預約諮詢。',
   alternates: { canonical: 'https://adlo.tw/diagnostic' },
