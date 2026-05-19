@@ -10,10 +10,9 @@ import {
   CheckCircle, Frown, TrendingDown, HelpCircle, Clock,
   Bot, BarChart2, ArrowRight,
 } from 'lucide-react';
-import { getAllNewServices } from '@/lib/new-services';
 
 export const metadata: Metadata = {
-  title: '服務方案 | adlo 台灣在地 SEO 行銷',
+  title: { absolute: '服務方案 | adlo 台灣在地 SEO 行銷' },
   description: '六大服務模組：Google 商家優化、在地 SEO、內容行銷、精準廣告、AI 代管協助、產品數位市調。適合所有有在地顧客需求的生意。',
   alternates: { canonical: 'https://adlo.tw/services' },
 };
