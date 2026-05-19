@@ -119,8 +119,7 @@ const tools: Tool[] = [
     description:
       '輸入產業、風格、客群，AI 一次給你 30 組店名 + 20 組 slogan，每組附上「為什麼這個名字能被記住」的解釋。',
     icon: Sparkles,
-    status: 'soon',
-    eta: 'Week 7',
+    status: 'live',
     replaces: '品牌諮詢 NT$6,000 的快速版',
   },
 ];
