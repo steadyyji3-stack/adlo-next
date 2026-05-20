@@ -46,18 +46,23 @@ export default async function AdminCustomersPage({
             <h1 className="text-2xl font-extrabold text-slate-900 md:text-3xl">客戶管理</h1>
             <p className="mt-1 text-sm text-slate-500">Stripe 成交後客戶、onboarding 狀態與服務狀態。</p>
           </div>
-          <Link href="/admin" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
-            回後台首頁
-          </Link>
-          <Link href="/admin/posts" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
-            GBP 文案庫
-          </Link>
-          <Link href="/admin/reviews?unanswered=true" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
-            待回覆評論
-          </Link>
-          <Link href="/admin/rankings" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
-            排名追蹤
-          </Link>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link href="/admin/copy-library" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              文案庫
+            </Link>
+            <Link href="/admin" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              回後台首頁
+            </Link>
+            <Link href="/admin/posts" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              GBP 文案庫
+            </Link>
+            <Link href="/admin/reviews?unanswered=true" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              待回覆評論
+            </Link>
+            <Link href="/admin/rankings" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              排名追蹤
+            </Link>
+          </div>
         </div>
 
         <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
