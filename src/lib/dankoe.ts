@@ -482,6 +482,96 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #7  |  2026-W21  |  不要說服，去紀錄
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w21',
+    issueNumber: 7,
+    theme: '不要說服，去紀錄——把行銷拆回最原始的形式',
+    publishedAt: '2026-05-20',
+    summary:
+      '本期聚焦 Dan Koe 5 月反覆談的「documenting beats convincing」——為什麼用力說服客人反而越推越遠？以及台灣中小店家如何用「紀錄你在做什麼」取代「告訴客人你多好」，效率高 10 倍。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1638518574290-3c6a92466369?w=1200&auto=format&fit=crop&q=80',
+      alt: '翻開的筆記本與筆，象徵「持續紀錄」勝過「努力說服」',
+      credit: 'Finde Zukunft',
+      creditUrl: 'https://unsplash.com/@findezukunft',
+    },
+    posts: [
+      {
+        id: 'w21-01',
+        original: `"Stop trying to convince. Start documenting. Convincing exhausts you and everyone watching. Documenting just shows what you're doing. Over time, the second one builds more trust than the first ever could."`,
+        translation:
+          '不要再試圖說服別人。開始紀錄就好。說服會耗光你跟每個看的人。紀錄只是把你在做的事呈現出來。長遠看，後者建立的信任比前者多很多。',
+        insight:
+          '台灣中小店家最常見的行銷錯誤：每篇貼文都在「說服客人來」——強調「最便宜」「品質最好」「保證滿意」。這種推銷感反而會被滑掉。改成紀錄：「今天揉麵糰時想到一件事」「上週客人問了一個我答不出來的問題」——客人是在你「沒在推銷的時刻」決定信任你的。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-12',
+      },
+      {
+        id: 'w21-02',
+        original: `"Most marketing is just public memory. Show up, do the work, leave a trace. The trace compounds. After 100 traces, you don't need to advertise anymore."`,
+        translation:
+          '大多數行銷只是「公開的記憶」。出現、做事、留痕跡。痕跡會累積。累積到 100 個之後，你不再需要打廣告。',
+        insight:
+          '一個 GBP 貼文是一個痕跡。一張客戶回應截圖是一個痕跡。一篇 blog 是一個痕跡。台灣老闆容易把行銷想成「我要寫一篇爆款文」——但真正有效的是「我連續 100 篇都寫完」。adlo 的 GBP 健診工具會告訴你目前累積了幾個痕跡，這比追單篇 viral 更有意義。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-13',
+      },
+      {
+        id: 'w21-03',
+        original: `"Your job isn't to persuade. It's to attract. Persuasion pushes. Attraction pulls. Pushing requires energy. Pulling requires presence."`,
+        translation:
+          '你的工作不是說服，是吸引。說服在推，吸引在拉。推需要能量，拉需要存在感。',
+        insight:
+          '推銷型行銷是「我推你來」——成本高、轉換率低、客人來了沒留下。吸引型行銷是「我留在這裡好好做事，對的人自然會來」。對中小店家：與其每天追熱點打貼文，不如把店裡的招牌品做到極致+持續紀錄製程，半年後對的客人會自己找到你。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-14',
+      },
+      {
+        id: 'w21-04',
+        original: `"Documenting beats branding for one simple reason: branding pretends to know what you'll be in 5 years. Documenting just shows what you are today. Customers smell the difference."`,
+        translation:
+          '紀錄勝過品牌包裝，原因很單純：品牌包裝假裝你知道五年後是什麼樣子。紀錄只是呈現你今天是什麼樣子。客人聞得出差別。',
+        insight:
+          '小店家不需要請設計公司做完整 BI。客人不需要看到「2030 年願景」——他們需要看到你今天到底在做什麼、怎麼想事情、對什麼有堅持。把 BI 預算的 1/10 拿來持續紀錄「店裡每天發生的事」，會更有用。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-15',
+      },
+      {
+        id: 'w21-05',
+        original: `"The best content has zero CTAs. No 'click here', no 'follow for more', no 'comment below'. Just substance. The CTA becomes implicit: if you liked this, you'll want more from this person."`,
+        translation:
+          '最好的內容沒有任何 CTA。沒有「點這裡」、沒有「追蹤看更多」、沒有「留言告訴我」。只有實質內容。CTA 變成隱性：如果你喜歡這個，你會自然想看這個人寫的更多。',
+        insight:
+          '台灣老闆寫 GBP 貼文／Threads 容易塞「歡迎追蹤」「快來預約」這種推銷尾巴。Dan Koe 的反直覺建議是：拿掉這些，反而會留住更深的客人。客人不喜歡「被要求做事」——他們喜歡「自己決定做事」。觀察一下你最近最有共鳴的 IG 帖子，幾乎都沒有 CTA。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-16',
+      },
+      {
+        id: 'w21-06',
+        original: `"Build a record, not a pitch. A pitch needs to win once. A record proves itself over time. Records are why old creators get more valuable while new ones get cheaper."`,
+        translation:
+          '累積一份「紀錄」，不是寫一份「提案」。提案只需要贏一次。紀錄會在時間裡證明自己。這就是為什麼老創作者越來越值錢、新創作者越來越便宜的原因。',
+        insight:
+          '一個 5 年的 Google 評論累積、5 年的 blog 文章存量、5 年的 Threads 內容——這些是「紀錄」，新進市場的對手再有錢也買不到時間。對台灣中小店家：每多撐一年沒收掉，就累積到一年的紀錄優勢。adlo 競爭對手雷達工具會幫你算同區對手的紀錄深度，看你領先還是落後。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-17',
+      },
+      {
+        id: 'w21-07',
+        original: `"You don't have a marketing problem. You have a documentation problem. You're doing good work — you're just not showing it. Cameras, notes, screenshots. Build the habit."`,
+        translation:
+          '你沒有行銷問題，你有紀錄問題。你做的事情是好的——你只是沒呈現出來。相機、筆記、截圖。養成這個習慣。',
+        insight:
+          '90% 的中小店家其實「在做對的事」——選好的食材、用心服務、誠實定價。但客人看不到。解法不是再多花一倍時間做行銷，是把你「本來就在做的事」順手拍下來、寫下來、貼出來。一張凌晨備料的照片＋一句話說明，比花 NT$3,000 做廣告有用 10 倍。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-18',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
