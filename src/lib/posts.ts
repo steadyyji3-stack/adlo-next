@@ -27,6 +27,156 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'adlo-lab-launch-2026',
+    title: 'adlo Lab 開幕：廢話少說，從今天起 60 天行銷實測公開',
+    description: '所有人都在說 GBP 該怎麼做、Threads 該怎麼寫。沒人實際追蹤過 60 天會發生什麼。從今天起，我們不再寫教學文——直接拿 adlo.tw 自家流量做實驗對象，公開 60 天的數據變化、預測、學到的事。第一篇是規則、預測與承諾。',
+    publishedAt: '2026-05-20',
+    category: 'adlo Lab',
+    tags: ['adlo Lab', '行銷實測', 'documenting', 'GBP 優化', 'Threads 行銷', '透明度行銷'],
+    author: 'adlo 編輯部',
+    readingTime: 7,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=1200&auto=format&fit=crop&q=80',
+      alt: '實驗室中拿著移液器與試管的研究員，象徵 adlo Lab 系列的實測精神',
+      credit: 'Julia Koblitz',
+      creditUrl: 'https://unsplash.com/@jkoblitz',
+    },
+    content: `
+<p class="lead">所有人都在說「你應該做 GBP」「你應該寫長尾字」「你應該 Threads 日更」。但很少人實際追蹤過——做了 60 天會發生什麼？哪些建議真的有效？哪些是行銷部落格抄來抄去的廢話？</p>
+
+<p>從今天起 adlo 不再寫教學文。我們開一個新系列：</p>
+
+<h2>adlo Lab — 行銷現場實測</h2>
+
+<p>規則很簡單：</p>
+
+<ul>
+  <li>選一個假設 / 做法 / 工具</li>
+  <li>定一個時間軸（30 天 / 60 天 / 90 天）</li>
+  <li>定可量化的指標</li>
+  <li><strong>真的去執行</strong>，每 10 天一篇進度報告</li>
+  <li>結尾誠實寫「有效的事 / 沒效的事 / 推翻原本預測的事」</li>
+</ul>
+
+<p>不是寫給你看「我們很厲害」，是寫給你看「我們真的做了，這是真實的數據跟學到的東西」。</p>
+
+<h2>為什麼現在開始</h2>
+
+<p>過去三篇文章鋪陳了同一個底層觀念：</p>
+
+<table>
+  <thead><tr><th>文章</th><th>觀念</th></tr></thead>
+  <tbody>
+    <tr><td>Dan Koe W21</td><td>不要說服，去紀錄</td></tr>
+    <tr><td>整體自私</td><td>先把自己擺正，東西才能給別人</td></tr>
+    <tr><td>中國供應鏈衝擊</td><td>純資訊差中間商會死，剩下的是「真實做過的人」</td></tr>
+  </tbody>
+</table>
+
+<p>三篇都指向同一件事：<strong>市場已經受夠「我告訴你怎麼做」這種內容</strong>。客人要看的是「你做了什麼、發生了什麼」。</p>
+
+<p>adlo 不能繼續寫「教你做 SEO」這種文章，自己又沒拿出實測證據。這篇是改變的起點。</p>
+
+<h2>第一個實驗：60 天 adlo.tw 流量公開追蹤</h2>
+
+<h3>實驗對象</h3>
+<p>adlo.tw 自家網站。包含：</p>
+<ul>
+  <li>免費工具頁面（/check、/tools/post-writer、/tools/competitor、/tools/keyword、/tools/seo-scorer、/tools/review-link）</li>
+  <li>部落格（這個系列上線之後的內容）</li>
+  <li>主要 landing page（首頁、/diagnostic、/subscribe）</li>
+</ul>
+
+<h3>不會做的事</h3>
+<ul>
+  <li>❌ 跑 Meta / Google 廣告</li>
+  <li>❌ 找 KOL 業配</li>
+  <li>❌ 買關鍵字</li>
+  <li>❌ 改任何網站架構（測 baseline，不改實驗條件）</li>
+</ul>
+
+<h3>會做的事</h3>
+<ul>
+  <li>✅ 持續寫 blog（每週 1-2 篇 SEO 文章 + Dan Koe 週報 + adlo Lab 系列）</li>
+  <li>✅ 持續上新工具（如 W7 /tools/name）</li>
+  <li>✅ 持續優化既有工具 UX（依用戶反饋）</li>
+  <li>✅ Threads 與 X 適度 documenting（不衝量）</li>
+</ul>
+
+<h3>追蹤的指標</h3>
+<table>
+  <thead><tr><th>類別</th><th>指標</th></tr></thead>
+  <tbody>
+    <tr><td>流量</td><td>每週 UV / Sessions / Bounce rate</td></tr>
+    <tr><td>工具使用</td><td>各工具被點開 / 完成一次分析次數</td></tr>
+    <tr><td>留資</td><td>email gate 解鎖數、/diagnostic 預約數、/subscribe waitlist 人數</td></tr>
+    <tr><td>SEO</td><td>新文章在 Google 排名的進化（前 10 / 前 3 / 第 1）</td></tr>
+    <tr><td>來源</td><td>Direct / Organic / Threads / X / Referral 分佈變化</td></tr>
+  </tbody>
+</table>
+
+<h3>Day 0 起始狀態</h3>
+<p>這篇是「開幕宣言」。完整的 Day 0 數據截圖（GA / Search Console / Vercel Analytics）會在下一篇文章公開。包含：</p>
+<ul>
+  <li>過去 7 天每日 UV 截圖</li>
+  <li>各工具使用次數對比</li>
+  <li>當前 Google 排名前 10 的關鍵字清單</li>
+  <li>來源分布百分比</li>
+</ul>
+
+<p>之後每 10 天一篇進度報告，連續 6 篇，60 天總結。</p>
+
+<h2>3 個公開預測</h2>
+
+<p>為了 60 天後驗證或推翻自己，先把預測寫下來：</p>
+
+<h3>預測 1：流量 60 天內成長 < 30%</h3>
+<p>多數人會預測「不寫廣告流量會起飛」是不切實際的。實際上 SEO 內容的複利曲線在第 1-2 個月幾乎看不到變化，要 3-6 個月才會出現。所以 60 天內預測流量成長 10-30%（不是 100%）。</p>
+
+<h3>預測 2：免費工具是流量主入口，不是部落格</h3>
+<p>多數行銷人會說「寫 blog 帶 SEO 流量」。但 adlo 的結構特殊——免費工具會是用戶第一次接觸 adlo 的地方，blog 是回訪渠道。預測 60 天 inbound 主入口是 /tools/* 而不是 /blog/*。</p>
+
+<h3>預測 3：email gate 是最大的轉換瓶頸</h3>
+<p>客人查完 /check 分數會有「想看更多」的衝動，但要交 email 才能延伸額度——這個摩擦是最大的轉換漏斗點。預測 60 天 email 解鎖率 &lt; 20%（多數人寧可關掉視窗）。</p>
+
+<p>三個預測，60 天後如果有任何一個被推翻，我們會誠實寫出來。</p>
+
+<h2>節奏承諾</h2>
+
+<table>
+  <thead><tr><th>時間</th><th>產出</th></tr></thead>
+  <tbody>
+    <tr><td>今天</td><td>本篇開幕宣言</td></tr>
+    <tr><td>明天</td><td>Day 0 完整起始數據（GA / Search Console 截圖）</td></tr>
+    <tr><td>每 10 天</td><td>進度報告（流量變化 / 哪個工具暴衝 / 學到什麼）</td></tr>
+    <tr><td>Day 60</td><td>總結：3 個預測對了幾個？學到的 10 件事？下一個 60 天要試什麼？</td></tr>
+  </tbody>
+</table>
+
+<h2>給你的提醒</h2>
+
+<p>如果你也是台灣中小品牌主，adlo Lab 對你的價值不是「複製我們的做法」——是看到一個品牌<strong>真的去執行</strong>、真的拿出數據、真的承認哪些沒效。</p>
+
+<p>多數行銷顧問不會公開自己的失敗實驗。adlo 會。</p>
+
+<p>因為這是 Dan Koe 那條核心建議的最直接執行：</p>
+
+<blockquote>
+  <p>不要試圖說服客戶你有用。<br>
+  紀錄你正在做的選擇、思考、堅持。<br>
+  對的客人會自己找到你。</p>
+</blockquote>
+
+<p>從今天開始，adlo 真的去做這件事。</p>
+
+<h2>一個小邀請</h2>
+
+<p>如果你也想跟著做類似的實驗——拿你的店家 / 自家品牌做 60 天公開實測——歡迎到 <a href="/diagnostic">/diagnostic</a> 約 30 分鐘聊聊你的實驗主題。我們不會收費，純粹想看更多人加入「真的去做」的這條路。</p>
+
+<p>明天見，第一份真實數據。</p>
+`,
+  },
+  {
     slug: 'china-supply-chain-shift-brand-survival-2026',
     title: '中國新供應鏈把貿易商打到剩骨——台灣中小品牌活下去的 5 條路',
     description: '一件代發、柔性供應鏈、小單快反——全球貿易模式正在被重新寫。台灣貿易商最先被夾在中間，但中小品牌反而有逆轉空間。本文拆解什麼會死、什麼活得更好，以及 5 個今天就能開始的轉型動作。',
