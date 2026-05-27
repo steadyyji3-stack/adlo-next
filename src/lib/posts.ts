@@ -27,153 +27,242 @@ export interface Post {
 
 export const posts: Post[] = [
   {
-    slug: 'adlo-lab-launch-2026',
-    title: 'adlo Lab 開幕：廢話少說，從今天起 60 天行銷實測公開',
-    description: '所有人都在說 GBP 該怎麼做、Threads 該怎麼寫。沒人實際追蹤過 60 天會發生什麼。從今天起，我們不再寫教學文——直接拿 adlo.tw 自家流量做實驗對象，公開 60 天的數據變化、預測、學到的事。第一篇是規則、預測與承諾。',
+    slug: 'google-business-photo-algorithm-taiwan-2026',
+    title: 'Google 商家照片要怎麼拍 Google 才會推？演算法視角 + 12 種一定要有的照片清單（2026 台灣）',
+    description: '不是「拍照技巧」文。是用 Google 演算法視角拆解：哪些照片會被推、哪些會被降權、客人上傳為什麼比老闆自拍更值錢。12 種必有清單 + 6 個月維護節奏 + 5 個常見錯誤。',
     publishedAt: '2026-05-20',
-    category: 'adlo Lab',
-    tags: ['adlo Lab', '行銷實測', 'documenting', 'GBP 優化', 'Threads 行銷', '透明度行銷'],
+    category: '在地 SEO',
+    tags: ['Google 我的商家', 'GBP 優化', '商家照片', 'Local SEO', '台灣中小店家'],
     author: 'adlo 編輯部',
-    readingTime: 7,
+    readingTime: 10,
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=1200&auto=format&fit=crop&q=80',
-      alt: '實驗室中拿著移液器與試管的研究員，象徵 adlo Lab 系列的實測精神',
-      credit: 'Julia Koblitz',
-      creditUrl: 'https://unsplash.com/@jkoblitz',
+      url: 'https://images.unsplash.com/photo-1766758196181-49cf3f1ebd69?w=1200&auto=format&fit=crop&q=80',
+      alt: '台灣街邊小店外觀，掛燈籠、機車停在門口的典型在地店面',
+      credit: 'CHEN HENG',
+      creditUrl: 'https://unsplash.com/@fullheng',
     },
     content: `
-<p class="lead">所有人都在說「你應該做 GBP」「你應該寫長尾字」「你應該 Threads 日更」。但很少人實際追蹤過——做了 60 天會發生什麼？哪些建議真的有效？哪些是行銷部落格抄來抄去的廢話？</p>
+<p class="lead">大多數老闆「上傳照片」這件事都做反了——一次傳 30 張、全部用單眼修圖、全是空店面外觀。結果 Google 完全不推。</p>
 
-<p>從今天起 adlo 不再寫教學文。我們開一個新系列：</p>
+<p>真正讓 GBP 演算法把你推上去的照片，不長那樣。本文用 Google 演算法視角，拆解什麼照片會被推、什麼會被降權，最後給你 12 種必有照片清單 + 6 個月維護節奏。</p>
 
-<h2>adlo Lab — 行銷現場實測</h2>
+<h2>Google 看照片在意 3 件事</h2>
 
-<p>規則很簡單：</p>
+<h3>① 多元性 — 不是數量</h3>
+<p>很多老闆以為「照片越多越好」，於是傳 30 張一樣角度的食物照。Google 看在眼裡是「<strong>重複內容</strong>」。它要的是「<strong>場景多元</strong>」：外觀、內景、產品、人、細節、節慶——每個分類至少 2-3 張，比同類別猛傳更有效。</p>
 
-<ul>
-  <li>選一個假設 / 做法 / 工具</li>
-  <li>定一個時間軸（30 天 / 60 天 / 90 天）</li>
-  <li>定可量化的指標</li>
-  <li><strong>真的去執行</strong>，每 10 天一篇進度報告</li>
-  <li>結尾誠實寫「有效的事 / 沒效的事 / 推翻原本預測的事」</li>
-</ul>
+<h3>② 新鮮度 — 每月有沒有更新</h3>
+<p>Google 把「店家活躍訊號」當作重要排名因子。一年沒更新照片的店家，演算法會判斷「可能歇業」→ 降權。每月補 3-5 張，比一次傳 50 張然後消失更有效。</p>
 
-<p>不是寫給你看「我們很厲害」，是寫給你看「我們真的做了，這是真實的數據跟學到的東西」。</p>
+<h3>③ 用戶上傳 比 老闆上傳 更值錢</h3>
+<p>客人主動上傳的照片，在 GBP 演算法裡權重比商家上傳高 2-3 倍。原因：用戶上傳代表「真的有人去」「真的願意紀錄」——這是真實流量證據。所以最該做的事，不是猛拍照，是<strong>讓客人願意拍照</strong>（環境設計 / 視覺亮點 / 推 hashtag）。</p>
 
-<h2>為什麼現在開始</h2>
-
-<p>過去三篇文章鋪陳了同一個底層觀念：</p>
+<h2>12 種台灣中小店家必有的照片清單</h2>
 
 <table>
-  <thead><tr><th>文章</th><th>觀念</th></tr></thead>
+  <thead><tr><th>類別</th><th>必有的 3 種</th><th>數量</th></tr></thead>
   <tbody>
-    <tr><td>Dan Koe W21</td><td>不要說服，去紀錄</td></tr>
-    <tr><td>整體自私</td><td>先把自己擺正，東西才能給別人</td></tr>
-    <tr><td>中國供應鏈衝擊</td><td>純資訊差中間商會死，剩下的是「真實做過的人」</td></tr>
+    <tr><td><strong>外觀</strong></td><td>① 招牌正面（白天）<br>② 招牌正面（夜晚／開燈）<br>③ 從馬路看過去的店面整體</td><td>3</td></tr>
+    <tr><td><strong>內景</strong></td><td>④ 客人從門口進來看到的視角<br>⑤ 座位區整體（含人氣感）<br>⑥ 結帳台 / 點餐區</td><td>3</td></tr>
+    <tr><td><strong>產品</strong></td><td>⑦ 招牌品項特寫（45 度角）<br>⑧ 價格友善的中價位品項<br>⑨ 高單價／限定品</td><td>3</td></tr>
+    <tr><td><strong>人與細節</strong></td><td>⑩ 老闆 / 主廚 / 設計師工作中（手部特寫不露臉也行）<br>⑪ 客人滿意的場景（背影 / 手勢 / 餐桌氛圍）<br>⑫ 一個「值得被拍的細節」（牆面文案、餐具、包裝、小巧思）</td><td>3</td></tr>
   </tbody>
 </table>
 
-<p>三篇都指向同一件事：<strong>市場已經受夠「我告訴你怎麼做」這種內容</strong>。客人要看的是「你做了什麼、發生了什麼」。</p>
+<p>12 張全部到位是基本盤。超過 12 張屬「加分」，不到 12 張在 Google 排名上會被同區補滿的店家打過。</p>
 
-<p>adlo 不能繼續寫「教你做 SEO」這種文章，自己又沒拿出實測證據。這篇是改變的起點。</p>
+<h2>5 個多數老闆會犯的錯</h2>
 
-<h2>第一個實驗：60 天 adlo.tw 流量公開追蹤</h2>
+<h3>① 過度修圖</h3>
+<p>濾鏡拉到飽和、HDR 拉到極限、磨皮過頭——客人來現場看會落差大、留負評。<strong>原色 + 自然光 80% 比過度修圖更受 Google 跟客人歡迎</strong>。</p>
 
-<h3>實驗對象</h3>
-<p>adlo.tw 自家網站。包含：</p>
-<ul>
-  <li>免費工具頁面（/check、/tools/post-writer、/tools/competitor、/tools/keyword、/tools/seo-scorer、/tools/review-link）</li>
-  <li>部落格（這個系列上線之後的內容）</li>
-  <li>主要 landing page（首頁、/diagnostic、/subscribe）</li>
-</ul>
+<h3>② 大量上傳一次性 stock 圖</h3>
+<p>從網路抓圖、買 Shutterstock 圖、用 AI 生圖——Google 圖像比對能識別這些非原創照片，會降低權重。<strong>原創 6 張 &gt; 偷的 60 張</strong>。</p>
 
-<h3>不會做的事</h3>
-<ul>
-  <li>❌ 跑 Meta / Google 廣告</li>
-  <li>❌ 找 KOL 業配</li>
-  <li>❌ 買關鍵字</li>
-  <li>❌ 改任何網站架構（測 baseline，不改實驗條件）</li>
-</ul>
+<h3>③ 全部老闆自拍，沒有客人視角</h3>
+<p>商家上傳的照片有「修飾過」的嫌疑，演算法權重較低。一張客人上傳的真實照片 &gt; 三張老闆自拍。<strong>主動鼓勵客人拍 + 上傳</strong>（環境設計、IG hashtag 提示、結帳時提一句）。</p>
 
-<h3>會做的事</h3>
-<ul>
-  <li>✅ 持續寫 blog（每週 1-2 篇 SEO 文章 + Dan Koe 週報 + adlo Lab 系列）</li>
-  <li>✅ 持續上新工具（如 W7 /tools/name）</li>
-  <li>✅ 持續優化既有工具 UX（依用戶反饋）</li>
-  <li>✅ Threads 與 X 適度 documenting（不衝量）</li>
-</ul>
+<h3>④ 一次傳完然後消失</h3>
+<p>「我把該傳的都傳了」這個想法是錯的。Google 看的是「活躍訊號」——每月有沒有新照片進來。<strong>每月固定補 3-5 張</strong>勝過一次傳 50 張。</p>
 
-<h3>追蹤的指標</h3>
+<h3>⑤ 不標 alt / 不寫描述</h3>
+<p>GBP 後台上傳照片時可以寫一段描述。多數人空白。這個描述對 SEO 有幫助（Google 圖搜尋會抓到）。<strong>每張照片寫一行 = 寫不到 5 個字也比空白好</strong>。</p>
+
+<h2>6 個月維護節奏（不複雜）</h2>
+
 <table>
-  <thead><tr><th>類別</th><th>指標</th></tr></thead>
+  <thead><tr><th>月</th><th>該補什麼類別</th><th>數量</th></tr></thead>
   <tbody>
-    <tr><td>流量</td><td>每週 UV / Sessions / Bounce rate</td></tr>
-    <tr><td>工具使用</td><td>各工具被點開 / 完成一次分析次數</td></tr>
-    <tr><td>留資</td><td>email gate 解鎖數、/diagnostic 預約數、/subscribe waitlist 人數</td></tr>
-    <tr><td>SEO</td><td>新文章在 Google 排名的進化（前 10 / 前 3 / 第 1）</td></tr>
-    <tr><td>來源</td><td>Direct / Organic / Threads / X / Referral 分佈變化</td></tr>
+    <tr><td>M1</td><td>把 12 種必有清單一次補齊</td><td>12 張</td></tr>
+    <tr><td>M2</td><td>節慶照（情人節 / 母親節 / 父親節等當月主題）</td><td>3-5 張</td></tr>
+    <tr><td>M3</td><td>新品 / 限定品照</td><td>3-5 張</td></tr>
+    <tr><td>M4</td><td>客人滿意場景（背影 / 用餐氛圍）</td><td>3-5 張</td></tr>
+    <tr><td>M5</td><td>幕後 / 製程 / 員工視角</td><td>3-5 張</td></tr>
+    <tr><td>M6</td><td>盤點：哪些品項換了菜單、補新照</td><td>5-8 張</td></tr>
   </tbody>
 </table>
 
-<h3>Day 0 起始狀態</h3>
-<p>這篇是「開幕宣言」。完整的 Day 0 數據截圖（GA / Search Console / Vercel Analytics）會在下一篇文章公開。包含：</p>
+<p>6 個月後總共 ~40 張照片，類別齊全。第 7 個月開始進入「持續活躍」階段，每月補 3-5 張就好。</p>
+
+<h2>怎麼讓客人主動拍 + 上傳</h2>
+
+<p>記住前面的關鍵洞察：<strong>客人上傳的照片權重比老闆高 2-3 倍</strong>。所以下面這幾個小投資 ROI 極高：</p>
+
 <ul>
-  <li>過去 7 天每日 UV 截圖</li>
-  <li>各工具使用次數對比</li>
-  <li>當前 Google 排名前 10 的關鍵字清單</li>
-  <li>來源分布百分比</li>
+  <li>店裡設計一個「拍照點」（一面牆、一個招牌、一個視覺亮點）— 自然成為 IG 打卡熱點</li>
+  <li>結帳時禮貌提一句：「方便拍張照打卡標一下我們嗎？」（不強迫）</li>
+  <li>食物 / 商品擺盤時加 1-2 個「值得拍」的細節（顏色對比 / 高度層次 / 一句店家短語）</li>
+  <li>桌邊小立牌：「如果你拍了，記得也上傳 Google 地圖一張～」</li>
 </ul>
 
-<p>之後每 10 天一篇進度報告，連續 6 篇，60 天總結。</p>
+<p>這幾個動作做半年，客人上傳的照片數量會明顯成長。GBP 演算法看到「<strong>用戶生成內容持續累積</strong>」會把你推到同區前幾名。</p>
 
-<h2>3 個公開預測</h2>
+<h2>檢查你現在幾分</h2>
 
-<p>為了 60 天後驗證或推翻自己，先把預測寫下來：</p>
+<p>照片只是 GBP 六維度其中一項。其他五項：完整度、評論、回覆率、關鍵字、在地競爭也要同步看。</p>
 
-<h3>預測 1：流量 60 天內成長 < 30%</h3>
-<p>多數人會預測「不寫廣告流量會起飛」是不切實際的。實際上 SEO 內容的複利曲線在第 1-2 個月幾乎看不到變化，要 3-6 個月才會出現。所以 60 天內預測流量成長 10-30%（不是 100%）。</p>
+<p><a href="/check"><strong>免費做 30 秒 GBP 健檢，看你目前在哪一維度卡住 →</strong></a></p>
 
-<h3>預測 2：免費工具是流量主入口，不是部落格</h3>
-<p>多數行銷人會說「寫 blog 帶 SEO 流量」。但 adlo 的結構特殊——免費工具會是用戶第一次接觸 adlo 的地方，blog 是回訪渠道。預測 60 天 inbound 主入口是 /tools/* 而不是 /blog/*。</p>
+<h2>一句話總結</h2>
 
-<h3>預測 3：email gate 是最大的轉換瓶頸</h3>
-<p>客人查完 /check 分數會有「想看更多」的衝動，但要交 email 才能延伸額度——這個摩擦是最大的轉換漏斗點。預測 60 天 email 解鎖率 &lt; 20%（多數人寧可關掉視窗）。</p>
+<p><strong>Google 不在意你拍了多少張，在意「有沒有持續更新」、「分類夠不夠多元」、「客人有沒有主動上傳」。</strong></p>
 
-<p>三個預測，60 天後如果有任何一個被推翻，我們會誠實寫出來。</p>
+<p>下次拍照前，先看你的 GBP 後台。哪一類最少？補哪一類。比新拍 30 張同類照有用 10 倍。</p>
+`,
+  },
+  {
+    slug: 'google-review-deleted-recovery-2026',
+    title: 'Google 評論被刪除怎麼辦？5 個救回步驟 + 防止再被刪的 7 個檢查（2026 台灣）',
+    description: '評論一夜消失？先確認是真的被刪還是被排序壓下去。給你 5 個依嚴重度排序的救回步驟（從 GBP 後台到 Twitter escalate）+ 7 個防止再被刪的紅線檢查。',
+    publishedAt: '2026-05-20',
+    category: '在地 SEO',
+    tags: ['Google 我的商家', 'Google 評論', '評論管理', 'GBP 政策', '危機處理', '台灣中小店家'],
+    author: 'adlo 編輯部',
+    readingTime: 9,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1556745753-b2904692b3cd?w=1200&auto=format&fit=crop&q=80',
+      alt: '電腦螢幕上的工作介面，象徵處理評論危機的場景',
+      credit: 'Patrick Tomasso',
+      creditUrl: 'https://unsplash.com/@impatrickt',
+    },
+    content: `
+<p class="lead">你打開 Google 商家後台，發現上週客人寫的那則 5 星評論——消失了。或者一夜之間少了 8 則。或者客人傳訊息問：「我寫的評論你看得到嗎？我這邊看不到了。」</p>
 
-<h2>節奏承諾</h2>
+<p>這個情境每個月都有店家踩到。Google 不會主動告訴你「為什麼被刪」，但有跡可循。本文給你 5 個救回步驟 + 7 個防止再被刪的檢查。</p>
+
+<h2>第一步：先確認真的被刪</h2>
+
+<p>很多時候「評論不見」其實不是被刪，是被 Google 演算法排序壓下去。先做 3 件事確認：</p>
+
+<ol>
+  <li><strong>無痕模式打開 Google 地圖 → 搜你的店 → 看評論</strong>（避免你個人帳號被快取影響）</li>
+  <li><strong>用不同裝置看</strong>（手機 vs 電腦、用客人帳號登入看）</li>
+  <li><strong>到 GBP 後台 → 評論 → 看「等待中」分頁</strong>（有時 Google 把可疑評論放進審核佇列，沒刪只是暫停顯示）</li>
+</ol>
+
+<p>確認真的被刪後（在後台「已發布」清單裡找不到、客人那邊也消失），進入下面的救回流程。</p>
+
+<h2>為什麼會被刪：Google 政策 6 大紅線</h2>
+
+<p>Google 官方政策可以歸納成 6 大紅線。任何一條被偵測到，評論可能立刻消失：</p>
 
 <table>
-  <thead><tr><th>時間</th><th>產出</th></tr></thead>
+  <thead><tr><th>#</th><th>紅線</th><th>常見情境</th></tr></thead>
   <tbody>
-    <tr><td>今天</td><td>本篇開幕宣言</td></tr>
-    <tr><td>明天</td><td>Day 0 完整起始數據（GA / Search Console 截圖）</td></tr>
-    <tr><td>每 10 天</td><td>進度報告（流量變化 / 哪個工具暴衝 / 學到什麼）</td></tr>
-    <tr><td>Day 60</td><td>總結：3 個預測對了幾個？學到的 10 件事？下一個 60 天要試什麼？</td></tr>
+    <tr><td>1</td><td>利益交換寫評論</td><td>請客人寫評論換折扣 / 贈品 / 免費餐</td></tr>
+    <tr><td>2</td><td>同 IP 大量集中</td><td>店家活動讓現場客人「現場一起寫評論」</td></tr>
+    <tr><td>3</td><td>員工 / 家人 / 朋友寫</td><td>Google 從帳號社群關係偵測</td></tr>
+    <tr><td>4</td><td>評論內容含禁止資訊</td><td>個資、聯絡方式、外部連結、廣告</td></tr>
+    <tr><td>5</td><td>競爭對手檢舉</td><td>大量假負評被檢舉時，連帶刪到真評論</td></tr>
+    <tr><td>6</td><td>客人帳號被停權</td><td>客人 Google 帳號被認為可疑，所有評論連帶消失</td></tr>
   </tbody>
 </table>
 
-<h2>給你的提醒</h2>
+<p>多數店家被刪是因為紅線 1 跟 2。我們在「防止再被刪」章節會展開。</p>
 
-<p>如果你也是台灣中小品牌主，adlo Lab 對你的價值不是「複製我們的做法」——是看到一個品牌<strong>真的去執行</strong>、真的拿出數據、真的承認哪些沒效。</p>
+<h2>5 個救回步驟（依嚴重度遞增）</h2>
 
-<p>多數行銷顧問不會公開自己的失敗實驗。adlo 會。</p>
+<h3>步驟 1：GBP 後台「報告問題」</h3>
+<p>商家後台 → 評論 → 找到被刪的那則的「最後一次出現紀錄」（如果你有截圖）。沒紀錄就點該客人最近的其他互動 → <strong>「報告問題」</strong>。</p>
+<p>填寫：「這則評論是真實客人，無利益交換、無禁止內容，希望重新審核」。附上能證明的截圖（客戶來消費的訂單、結帳紀錄）。</p>
+<p><strong>適用：</strong>單則消失、有截圖證據。<strong>回覆時間：</strong>1-2 週。</p>
 
-<p>因為這是 Dan Koe 那條核心建議的最直接執行：</p>
+<h3>步驟 2：透過 Google Business Profile Community Forum</h3>
+<p>到 <a href="https://support.google.com/business/community" target="_blank" rel="noopener noreferrer">support.google.com/business/community</a> 發新主題。</p>
+<p>標題格式：「<strong>[Real Review Deleted] 商家名稱 - 客人為 [姓名首字] 的 5 星評論在 [日期] 被誤刪</strong>」<br>
+內文：時間軸 + 截圖 + 確認無違反政策。</p>
+<p><strong>適用：</strong>步驟 1 沒回應、或一次多則被刪。<strong>回覆時間：</strong>3-7 天。Google 員工會在論壇上回。</p>
 
-<blockquote>
-  <p>不要試圖說服客戶你有用。<br>
-  紀錄你正在做的選擇、思考、堅持。<br>
-  對的客人會自己找到你。</p>
-</blockquote>
+<h3>步驟 3：Twitter @GoogleMyBiz 公開申訴</h3>
+<p>在 X / Twitter 上 @GoogleMyBiz 發文：「真實客人的 5 星評論被誤刪，已透過 community forum 申訴 [日期]，求協助 escalate」</p>
+<p>附截圖。<strong>公開 escalate 通常 24-48 小時內會被 Google 員工回應</strong>。</p>
+<p><strong>適用：</strong>論壇 1 週沒回 + 確實是真實評論。</p>
 
-<p>從今天開始，adlo 真的去做這件事。</p>
+<h3>步驟 4：Google Local Guides 連絡</h3>
+<p>客人如果是 Google Local Guides Level 5+ 的用戶，建議客人自己也透過 Local Guides 後台申訴。同一則評論<strong>從客人端 + 商家端雙方申訴</strong>成功率最高。</p>
+<p><strong>適用：</strong>評論寫者是高等級 Local Guide。</p>
 
-<h2>一個小邀請</h2>
+<h3>步驟 5：寫正式申訴信件</h3>
+<p>透過 Google Business Profile → 後台「<strong>聯絡支援」</strong>→ 選「Reviews」分類 → 提交完整申訴文件：</p>
+<ul>
+  <li>商家名稱 + Place ID</li>
+  <li>被刪評論截圖（含時間戳）</li>
+  <li>客戶來消費的證明（POS / 訂位紀錄 / 收據）</li>
+  <li>確認無違反政策的聲明</li>
+  <li>希望的處理結果</li>
+</ul>
+<p><strong>適用：</strong>前 4 步都失敗、或一次被刪 10 則以上。<strong>回覆時間：</strong>2-4 週。</p>
 
-<p>如果你也想跟著做類似的實驗——拿你的店家 / 自家品牌做 60 天公開實測——歡迎到 <a href="/diagnostic">/diagnostic</a> 約 30 分鐘聊聊你的實驗主題。我們不會收費，純粹想看更多人加入「真的去做」的這條路。</p>
+<h2>救回成功率實況</h2>
 
-<p>明天見，第一份真實數據。</p>
+<p>誠實告訴你：依 Google 官方政策被刪的評論，<strong>救回成功率約 30%</strong>。多數情況下：</p>
+
+<ul>
+  <li>真的有利益交換 → 救不回（紅線 1）</li>
+  <li>同 IP 大量寫 → 救不回（紅線 2）</li>
+  <li>客人帳號被永久停權 → 救不回（紅線 6）</li>
+  <li><strong>純粹被誤判</strong> → 救得回（約 30% 場景）</li>
+</ul>
+
+<p>所以重點不是學救回技巧，是<strong>從一開始就不要踩紅線</strong>。</p>
+
+<h2>防止再被刪的 7 個檢查</h2>
+
+<h3>① 不要請員工 / 家人 / 朋友寫</h3>
+<p>Google 會從帳號社群關係（聯絡人、共用裝置、同 IP 歷史）偵測「相關帳號」。員工帳號寫的評論平均存活時間 &lt; 30 天。</p>
+
+<h3>② 不要在請求文案放「請給 5 星」</h3>
+<p>違反 Google 反向操縱政策。寫法：「<strong>願意花 30 秒寫個誠實的評論嗎</strong>」OK。「<strong>請給我們 5 顆星</strong>」會被檢舉。</p>
+
+<h3>③ 不要折扣 / 贈品 / 免費餐換評論</h3>
+<p>哪怕「不論幾星都給折扣」也違規。Google 政策禁止任何形式的「利益交換評論」。</p>
+
+<h3>④ 不要批量同 IP 寫</h3>
+<p>店家活動讓客人「現場一起拿出手機寫評論」= 同 IP 短時間 5 則以上 = 立刻被演算法標記為可疑。</p>
+<p>正確做法：客人離店後 30 分鐘 - 24 小時內，用自己的網路寫，分散時間。</p>
+
+<h3>⑤ 不要假帳號自誇</h3>
+<p>用假 Google 帳號寫好評是最快被偵測 + 帳號被封 + 商家被警告的方式。</p>
+
+<h3>⑥ 評論內容不能含個資 / 廣告 / 外部連結</h3>
+<p>提醒客人：寫評論時不要寫員工真實全名、不要寫聯絡電話、不要放其他網站連結——這些會觸發內容過濾被自動刪除。</p>
+
+<h3>⑦ 老闆回覆不要過度推銷</h3>
+<p>回覆評論時不要附「我們現在還有 OO 促銷」「歡迎再光臨並請朋友來」。Google 會把回覆視為廣告，連帶降低該則評論權重。專注感謝 + 提改善方向就好。</p>
+
+<h2>下次想合規收評論</h2>
+
+<p>從一開始就避開紅線。我們做了一個免費工具：</p>
+
+<p><a href="/tools/review-link"><strong>產出合規的評論收集連結 + 6 套訊息模板（不踩紅線版本）→</strong></a></p>
+
+<p>包含：Google 評論短連結、可印的 QR Code、LINE / 紙卡 / Email 三通路的訊息模板——全部避開「請給 5 星」「換折扣」等違規措辭。</p>
+
+<h2>一句話總結</h2>
+
+<p><strong>評論被刪救回的成本，是事先合規收集的 10 倍。</strong></p>
+
+<p>與其學申訴技巧，不如把收評論流程一開始就做對。</p>
 `,
   },
   {
