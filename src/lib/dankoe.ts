@@ -393,6 +393,185 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+  /* ─────────────────────────────────────────────────────────────
+     Issue #6  |  2026-W20  |  AI 把內容變便宜了——但你的觀點，從來沒有
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w20',
+    issueNumber: 6,
+    theme: 'AI 把內容變便宜了——但你的觀點，從來沒有',
+    publishedAt: '2026-05-15',
+    summary:
+      '本期聚焦 Dan Koe 四月到五月最新觀點：在 AI 讓內容生產成本趨近於零的時代，什麼才是真正不可被取代的？以及台灣在地商家如何把「人的觀點」變成最強的差異化行銷武器。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&auto=format&fit=crop&q=80',
+      alt: '安靜書桌與開著的筆記本，象徵思考與深度寫作',
+      credit: 'Unsplash',
+      creditUrl: 'https://unsplash.com',
+    },
+    posts: [
+      {
+        id: 'w20-01',
+        original: `"Social media has specific mechanics and levers, like a video game. If you understand those, you can predictably control your growth. Most people think it's luck. It's not. It's pattern recognition applied consistently."`,
+        translation:
+          '社群媒體有特定的機制和槓桿，就像電玩遊戲一樣。如果你搞懂這些，你可以可預測地掌控自己的成長。多數人以為這靠運氣——不是的，是持續運用的規律識別。',
+        insight:
+          '台灣老闆常說「我不懂演算法」，但電玩也有規則。Threads 的規則是對話帶動觸及；GBP 的規則是更新頻率決定搜尋排名。這不是玄學，是要花時間搞懂的技術。第一步：GBP 每月固定更新 2 篇，連續 6 個月，再來告訴我排名變了沒有。',
+        xUrl: 'https://letters.thedankoe.com/p/growing-on-social-media-is-easy-actually',
+        postedAt: '2026-05-07',
+      },
+      {
+        id: 'w20-02',
+        original: `"I'm begging you to write more essays. Not threads. Not carousels. Essays. An essay is an act of thinking. A thread is an act of packaging. The former builds wisdom, the latter builds reach. Only one of them makes people trust you with their money."`,
+        translation:
+          '我求你多寫散文。不是串文，不是輪播圖——是散文。散文是思考的動作，串文是包裝的動作。前者建立智慧，後者建立觸及。兩者之中，只有一個讓人願意把錢交給你。',
+        insight:
+          '對台灣中小店家的翻譯：你的 IG 貼文讓人點讚，但讓人決定預約的是那篇「為什麼我們的料理用這種方式烹調」的深度文章。觸及讓人看見你，信任讓人掏錢。別把所有力氣放在吸睛格式，留一半給能建立信任的深度內容。',
+        xUrl: 'https://letters.thedankoe.com/p/im-begging-you-to-write-more-essays',
+        postedAt: '2026-04-02',
+      },
+      {
+        id: 'w20-03',
+        original: `"Wisdom is not algorithmic. You can't prompt your way to it. It comes from doing, failing, reflecting, and writing about it honestly. That's what AI can't replicate — the scars behind the insight."`,
+        translation:
+          '智慧不是演算法可以生成的。你沒辦法靠輸入指令獲得智慧——它來自於做、失敗、反思，以及誠實地把這一切寫出來。那正是 AI 無法複製的：洞察背後的傷痕。',
+        insight:
+          '你花了十年學會怎麼讀客人的臉色、怎麼在旺季撐過缺貨、怎麼和挑剔廠商周旋——這些是 AI 沒有的資料。把這些寫出來，哪怕寫得不漂亮，那篇文章比任何 AI 生成的介紹都更讓人信任你。',
+        xUrl: 'https://letters.thedankoe.com/p/im-begging-you-to-write-more-essays',
+        postedAt: '2026-04-02',
+      },
+      {
+        id: 'w20-04',
+        original: `"Trust is the moat in the age of AI. Not your product. Not your price. Not your features. Anyone can copy those now. No one can copy a decade of showing up, thinking clearly, and caring about the right people."`,
+        translation:
+          '在 AI 時代，信任才是護城河。不是你的產品、你的價格、你的功能——這些現在都可以被複製。沒有人能複製十年的堅持出現、清晰的思考，以及真正在乎對的人。',
+        insight:
+          '台灣在地店家的護城河不是最新設備，是「這家老闆認識我、知道我喜歡什麼」的感受。你的評論回覆、你的店家貼文、你對客人問題的回答——這些在累積信任，不只是在做 SEO。信任複利，最終把你跟連鎖品牌拉開距離。',
+        xUrl: 'https://letters.thedankoe.com/p/how-to-start-a-one-person-business',
+        postedAt: '2026-03-11',
+      },
+      {
+        id: 'w20-05',
+        original: `"The person directing the AI is where the magic lies. Anyone can use ChatGPT. The person who wins uses it to amplify a perspective that only they have — a perspective built from years of doing the thing."`,
+        translation:
+          '指揮 AI 的人，才是魔法所在。任何人都可以用 ChatGPT。贏的人用它放大一個只有自己才有的觀點——一個建立在多年實際操作之上的觀點。',
+        insight:
+          '叫 AI「幫我寫一篇咖啡店介紹」，和先說「我做咖啡 12 年，有個關於萃取時間的執念是客人都不知道的——把這個故事寫出來」——兩篇的說服力差十倍。AI 是你觀點的放大器，不是替代品。你的任務是先有那個觀點。',
+        xUrl: 'https://letters.thedankoe.com/p/how-to-start-a-one-person-business',
+        postedAt: '2026-03-11',
+      },
+      {
+        id: 'w20-06',
+        original: `"Information becomes less valuable the longer it is around. It becomes common knowledge. What doesn't expire is your interpretation of information — filtered through your experience and applied to a specific person's problem."`,
+        translation:
+          '資訊流通越久就越廉價，最終變成常識。不會過期的，是你對資訊的詮釋——透過你的經驗過濾，應用在特定人的特定問題上。',
+        insight:
+          '「如何增加 Google 評論」這個答案，Google 一下就有。但「一家台中七期診所用 4 個月從 20 則評論變 150 則的過程」，只有你知道。你做生意的每一個真實案例，都是資訊加上你的經驗——那才是有市場價值的內容。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-04-30',
+      },
+      {
+        id: 'w20-07',
+        original: `"The internet is about to be flooded with AI slop at scale. The people who survive this are the ones whose content feels like it was written by someone who has lived something. Presence is the new premium."`,
+        translation:
+          '網路即將被 AI 垃圾內容以規模淹沒。能撐過去的人，是那些內容讓人感覺「有人真正活過這件事」的創作者。存在感，是新時代的溢價。',
+        insight:
+          'AI 工具普及後，每家店的介紹文字開始長得一樣——同樣的流利、同樣的空洞。這正是你用真實故事突圍的視窗期。那個脾氣不好的客人讓你學到的事、那個失敗訂單讓你改變的流程——這些不完美的細節，反而是 2026 年最有說服力的行銷內容。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-10',
+      },
+    ],
+  },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #7  |  2026-W21  |  不要說服，去紀錄
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w21',
+    issueNumber: 7,
+    theme: '不要說服，去紀錄——把行銷拆回最原始的形式',
+    publishedAt: '2026-05-20',
+    summary:
+      '本期聚焦 Dan Koe 5 月反覆談的「documenting beats convincing」——為什麼用力說服客人反而越推越遠？以及台灣中小店家如何用「紀錄你在做什麼」取代「告訴客人你多好」，效率高 10 倍。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1638518574290-3c6a92466369?w=1200&auto=format&fit=crop&q=80',
+      alt: '翻開的筆記本與筆，象徵「持續紀錄」勝過「努力說服」',
+      credit: 'Finde Zukunft',
+      creditUrl: 'https://unsplash.com/@findezukunft',
+    },
+    posts: [
+      {
+        id: 'w21-01',
+        original: `"Stop trying to convince. Start documenting. Convincing exhausts you and everyone watching. Documenting just shows what you're doing. Over time, the second one builds more trust than the first ever could."`,
+        translation:
+          '不要再試圖說服別人。開始紀錄就好。說服會耗光你跟每個看的人。紀錄只是把你在做的事呈現出來。長遠看，後者建立的信任比前者多很多。',
+        insight:
+          '台灣中小店家最常見的行銷錯誤：每篇貼文都在「說服客人來」——強調「最便宜」「品質最好」「保證滿意」。這種推銷感反而會被滑掉。改成紀錄：「今天揉麵糰時想到一件事」「上週客人問了一個我答不出來的問題」——客人是在你「沒在推銷的時刻」決定信任你的。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-12',
+      },
+      {
+        id: 'w21-02',
+        original: `"Most marketing is just public memory. Show up, do the work, leave a trace. The trace compounds. After 100 traces, you don't need to advertise anymore."`,
+        translation:
+          '大多數行銷只是「公開的記憶」。出現、做事、留痕跡。痕跡會累積。累積到 100 個之後，你不再需要打廣告。',
+        insight:
+          '一個 GBP 貼文是一個痕跡。一張客戶回應截圖是一個痕跡。一篇 blog 是一個痕跡。台灣老闆容易把行銷想成「我要寫一篇爆款文」——但真正有效的是「我連續 100 篇都寫完」。adlo 的 GBP 健診工具會告訴你目前累積了幾個痕跡，這比追單篇 viral 更有意義。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-13',
+      },
+      {
+        id: 'w21-03',
+        original: `"Your job isn't to persuade. It's to attract. Persuasion pushes. Attraction pulls. Pushing requires energy. Pulling requires presence."`,
+        translation:
+          '你的工作不是說服，是吸引。說服在推，吸引在拉。推需要能量，拉需要存在感。',
+        insight:
+          '推銷型行銷是「我推你來」——成本高、轉換率低、客人來了沒留下。吸引型行銷是「我留在這裡好好做事，對的人自然會來」。對中小店家：與其每天追熱點打貼文，不如把店裡的招牌品做到極致+持續紀錄製程，半年後對的客人會自己找到你。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-14',
+      },
+      {
+        id: 'w21-04',
+        original: `"Documenting beats branding for one simple reason: branding pretends to know what you'll be in 5 years. Documenting just shows what you are today. Customers smell the difference."`,
+        translation:
+          '紀錄勝過品牌包裝，原因很單純：品牌包裝假裝你知道五年後是什麼樣子。紀錄只是呈現你今天是什麼樣子。客人聞得出差別。',
+        insight:
+          '小店家不需要請設計公司做完整 BI。客人不需要看到「2030 年願景」——他們需要看到你今天到底在做什麼、怎麼想事情、對什麼有堅持。把 BI 預算的 1/10 拿來持續紀錄「店裡每天發生的事」，會更有用。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-15',
+      },
+      {
+        id: 'w21-05',
+        original: `"The best content has zero CTAs. No 'click here', no 'follow for more', no 'comment below'. Just substance. The CTA becomes implicit: if you liked this, you'll want more from this person."`,
+        translation:
+          '最好的內容沒有任何 CTA。沒有「點這裡」、沒有「追蹤看更多」、沒有「留言告訴我」。只有實質內容。CTA 變成隱性：如果你喜歡這個，你會自然想看這個人寫的更多。',
+        insight:
+          '台灣老闆寫 GBP 貼文／Threads 容易塞「歡迎追蹤」「快來預約」這種推銷尾巴。Dan Koe 的反直覺建議是：拿掉這些，反而會留住更深的客人。客人不喜歡「被要求做事」——他們喜歡「自己決定做事」。觀察一下你最近最有共鳴的 IG 帖子，幾乎都沒有 CTA。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-16',
+      },
+      {
+        id: 'w21-06',
+        original: `"Build a record, not a pitch. A pitch needs to win once. A record proves itself over time. Records are why old creators get more valuable while new ones get cheaper."`,
+        translation:
+          '累積一份「紀錄」，不是寫一份「提案」。提案只需要贏一次。紀錄會在時間裡證明自己。這就是為什麼老創作者越來越值錢、新創作者越來越便宜的原因。',
+        insight:
+          '一個 5 年的 Google 評論累積、5 年的 blog 文章存量、5 年的 Threads 內容——這些是「紀錄」，新進市場的對手再有錢也買不到時間。對台灣中小店家：每多撐一年沒收掉，就累積到一年的紀錄優勢。adlo 競爭對手雷達工具會幫你算同區對手的紀錄深度，看你領先還是落後。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-17',
+      },
+      {
+        id: 'w21-07',
+        original: `"You don't have a marketing problem. You have a documentation problem. You're doing good work — you're just not showing it. Cameras, notes, screenshots. Build the habit."`,
+        translation:
+          '你沒有行銷問題，你有紀錄問題。你做的事情是好的——你只是沒呈現出來。相機、筆記、截圖。養成這個習慣。',
+        insight:
+          '90% 的中小店家其實「在做對的事」——選好的食材、用心服務、誠實定價。但客人看不到。解法不是再多花一倍時間做行銷，是把你「本來就在做的事」順手拍下來、寫下來、貼出來。一張凌晨備料的照片＋一句話說明，比花 NT$3,000 做廣告有用 10 倍。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-18',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {

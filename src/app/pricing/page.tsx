@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import PageHeader from '@/components/layout/PageHeader';
-import { CheckCircle, X, Zap, CheckCircle2, Bot, BarChart2, ChevronRight } from 'lucide-react';
+import { Zap, CheckCircle2, Bot, BarChart2, ChevronRight } from 'lucide-react';
 import PricingToggle from '@/components/pricing/PricingToggle';
 
 export const metadata: Metadata = {
-  title: '定價方案 | adlo 台灣在地 SEO 行銷',
+  title: { absolute: '定價方案 | adlo 台灣在地 SEO 行銷' },
   description: '透明定價，六大服務方案。在地 SEO 方案 NT$8,800 起；數位市調 NT$15,000 起；AI 代管協助依工程評估報價。',
   alternates: { canonical: 'https://adlo.tw/pricing' },
   openGraph: {

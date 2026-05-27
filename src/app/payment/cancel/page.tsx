@@ -4,7 +4,7 @@ import { XCircle, ArrowLeft, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: '付款取消 | adlo',
+  title: '付款取消',
   description: '付款流程已取消，你可以隨時回到定價頁面重新訂閱。',
   robots: { index: false },
 };

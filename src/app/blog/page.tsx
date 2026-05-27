@@ -7,7 +7,7 @@ import { getAllIssues } from '@/lib/dankoe';
 import { Clock, ArrowRight, Rss } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: '在地行銷實戰筆記 | adlo',
+  title: '在地行銷實戰筆記',
   description: '每週解析 Local SEO、GEO、Google 演算法，讓台灣中小企業老闆的生意被更多人找到。',
   alternates: { canonical: 'https://adlo.tw/blog' },
   openGraph: {

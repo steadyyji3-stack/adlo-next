@@ -3,7 +3,7 @@ import PostWriterFlow from '@/components/post-writer/PostWriterFlow';
 import PostWriterFAQ from '@/components/post-writer/PostWriterFAQ';
 
 export const metadata: Metadata = {
-  title: '免費 GBP 貼文產生器｜下週 7 天 Google 商家貼文，3 秒搞定 | adlo',
+  title: '免費 GBP 貼文產生器｜下週 7 天 Google 商家貼文，3 秒搞定',
   description:
     '不用註冊。輸入店名 + 產業，AI 幫你寫一週 7 篇 Google 商家貼文初稿。節慶、教育、QA、幕後、促銷自動配。台灣中小店家專用。',
   alternates: { canonical: 'https://adlo.tw/tools/post-writer' },

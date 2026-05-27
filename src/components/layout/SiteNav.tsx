@@ -28,20 +28,20 @@ export default function SiteNav() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-24 bg-white/95 backdrop-blur-md border-b border-slate-200/60 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/60 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <Image src="/logo-final.png" alt="adlo" width={248} height={80} style={{ height: '72px', width: 'auto' }} className="object-contain" priority />
+        <Link href="/" className="flex items-center flex-shrink-0">
+          <Image src="/logo-final.png" alt="adlo" width={248} height={80} style={{ height: '52px', width: 'auto' }} className="object-contain" priority />
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-0.5">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`relative px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`relative px-3 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                 isActive(l.href)
                   ? 'text-[#1D9E75] bg-[#E1F5EE] font-semibold'
                   : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'

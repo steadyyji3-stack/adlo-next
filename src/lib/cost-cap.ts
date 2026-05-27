@@ -93,7 +93,7 @@ function isSuspiciousUA(ua: string): boolean {
 export async function checkCostCap(
   ip: string,
   userAgent: string,
-  tool: 'check' | 'post-writer' | 'competitor' = 'check',
+  tool: 'check' | 'post-writer' | 'competitor' | 'seo-scorer' = 'check',
 ): Promise<CostCapResult> {
   const normIp = normalizeIp(ip);
 
@@ -137,7 +137,8 @@ export async function checkCostCap(
 
   // 3. Global cost cap 套用範圍：/check 與 /competitor 都吃 Places API 付費
   // /post-writer 走 Groq free tier，不需要全站總量限制
-  if (tool === 'post-writer') {
+  // /post-writer (Groq free tier) 跟 /seo-scorer (純 fetch HTML, 無外部 API) 都不消耗 Places API 預算
+  if (tool === 'post-writer' || tool === 'seo-scorer') {
     return {
       allowed: true,
       stats: { burstCount, dailyCount: 0, monthlyCount: 0, monthlyLimit: 0 },

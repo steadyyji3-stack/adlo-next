@@ -97,8 +97,7 @@ const tools: Tool[] = [
     description:
       '貼你的部落格文章網址，adlo 抓 H1、字數、關鍵字密度、圖 alt、meta、連結結構，算出 SEO 分數和最該先改的 3 件事。',
     icon: FileCheck2,
-    status: 'soon',
-    eta: 'Week 5',
+    status: 'live',
     replaces: 'Pro 方案「無限 SEO 文章」的審稿流程',
   },
   {
@@ -109,8 +108,7 @@ const tools: Tool[] = [
     description:
       '填基本資料，幫你產出專屬 Google 評論短連結、QRCode，再加一套讓客人願意寫的訊息模板（LINE / 卡片 / email 三版本）。',
     icon: Link2,
-    status: 'soon',
-    eta: 'Week 6',
+    status: 'live',
     replaces: '月訂閱「評論管理策略建議」',
   },
   {
@@ -121,8 +119,7 @@ const tools: Tool[] = [
     description:
       '輸入產業、風格、客群，AI 一次給你 30 組店名 + 20 組 slogan，每組附上「為什麼這個名字能被記住」的解釋。',
     icon: Sparkles,
-    status: 'soon',
-    eta: 'Week 7',
+    status: 'live',
     replaces: '品牌諮詢 NT$6,000 的快速版',
   },
 ];

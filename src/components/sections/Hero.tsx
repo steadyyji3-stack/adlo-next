@@ -95,10 +95,10 @@ export default function Hero() {
                 size="lg"
                 className="cta-gradient text-white hover:opacity-90 shadow-lg shadow-green-900/20 font-bold text-base px-8"
               >
-                <Link href="/contact">免費諮詢，限量 5 名 →</Link>
+                <Link href="/tools">探索 7 支免費工具 →</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="font-bold text-base border-slate-200 hover:border-[#1D9E75] hover:text-[#1D9E75]">
-                <Link href="/services">查看服務方案</Link>
+                <Link href="/contact">立即免費諮詢</Link>
               </Button>
             </motion.div>
 
