@@ -572,6 +572,96 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #8  |  2026-W22  |  窄到變成必選——你不是缺客人，是定義太寬
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w22',
+    issueNumber: 8,
+    theme: '窄到變成必選——你不是缺客人，是定義太寬',
+    publishedAt: '2026-05-27',
+    summary:
+      '本期聚焦 Dan Koe 近期反覆談的一個反直覺命題：你的問題不是觸及不夠，是「定義太寬」。從 specificity beats reach、positioning > marketing budget、到 niches 的數學邏輯——拆解台灣中小店家為什麼「什麼都做」反而越做越累、越投廣告越虧。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1488998527040-85054a85150e?w=1200&auto=format&fit=crop&q=80',
+      alt: '一個人在筆記本上專注書寫，象徵把模糊的定位寫到剩下最精準的那一句',
+      credit: 'JESHOOTS.COM',
+      creditUrl: 'https://unsplash.com/@jeshoots',
+    },
+    posts: [
+      {
+        id: 'w22-01',
+        original: `"Specificity beats reach. A blurry message to 10,000 people converts worse than a sharp message to 100. Stop trying to reach more. Start trying to mean more to fewer."`,
+        translation:
+          '精準勝過廣度。對 10,000 人說一句模糊的話，轉換率輸給對 100 人說一句銳利的話。不要再追求觸及更多人，去對更少人「意義更深」。',
+        insight:
+          '台灣 GBP 描述最常見的寫法：「提供各式餐飲服務、品項齊全、歡迎洽詢」——這是講給 10,000 人聽的模糊話。改成「台中北區、給上班族的午餐便當、12:15 前一定送到」——這是對 100 人說的銳利話。後者的預約率高 5 倍。你不需要更多曝光，你需要更窄的訊息。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-19',
+      },
+      {
+        id: 'w22-02',
+        original: `"The biggest unlock for most people isn't doing more. It's doing less, with a clearer target. Subtraction is a strategy."`,
+        translation:
+          '多數人最大的解鎖不是做更多，是做更少、但目標更清楚。「減法」本身就是策略。',
+        insight:
+          '很多老闆說「我什麼都接，這樣機會比較多」——結果什麼都做、什麼都不精、客人感受不到差異化。試著把服務從 12 項砍到 3 項、把目標客群從「所有人」聚焦到一個族群——你會發現客單價上得去、回頭率上得去、行銷成本降下來。減法不是退讓，是聚焦。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-20',
+      },
+      {
+        id: 'w22-03',
+        original: `"You don't have a marketing problem. You have a positioning problem. Marketing is just amplifying your position. If the position is fuzzy, louder makes it worse."`,
+        translation:
+          '你沒有行銷問題，你有定位問題。行銷只是放大你的定位。如果定位模糊，講越大聲只會更糟。',
+        insight:
+          '花了 NT$10,000 廣告但成效差？多數時候不是廣告問題，是你的「我們是誰、為誰服務」沒講清楚。先把定位句子寫好（一句話：在哪個區、幫哪種客群、解決什麼問題），廣告投出去才有用。沒定位前投廣告 = 把錢往煙囪裡丟。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-21',
+      },
+      {
+        id: 'w22-04',
+        original: `"The riches are in the niches isn't a slogan. It's math. A narrow audience pays more because no one else is speaking to them. Wide audiences are crowded. Narrow ones are empty rooms with high ceilings."`,
+        translation:
+          '「利基才有錢賺」不是口號，是數學。窄眾願意付更多，因為沒人在跟他們說話。大眾市場永遠擁擠，利基市場則是天花板很高的空房間。',
+        insight:
+          '「服務全台灣的咖啡愛好者」——這個市場早被便利商店搶光，你只能拼價格。「給台中西區、需要可帶寵物用餐的咖啡愛好者」——這個市場小，但你是唯一選項，可以收溢價。利基不是限縮營收上限，是讓你變成「必選」而不是「之一」。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-22',
+      },
+      {
+        id: 'w22-05',
+        original: `"Try this: write down what you do in one sentence. Now cut it in half. Now cut it in half again. The remainder is what you should be known for."`,
+        translation:
+          '試試看：用一句話寫下你在做什麼。砍掉一半。再砍掉一半。剩下的就是你該被人記住的事。',
+        insight:
+          '很多 GBP「商家介紹」寫了 300 字還是沒人記得你做什麼。練習：寫一句、砍一半、再砍一半。剩下的可能是「給上班族的 15 分鐘午餐便當」「台中老屋改造、只接 30 年以上日式建築」——簡單、精準、會被記住。複雜不等於專業，精準才是。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-23',
+      },
+      {
+        id: 'w22-06',
+        original: `"Generalists struggle for clients. Specialists pick clients. The work is often the same — the difference is how you frame it."`,
+        translation:
+          '通才在搶客人，專才在挑客人。做的事可能一樣，差別在你怎麼定義自己。',
+        insight:
+          '一個會做網站的工程師（通才）vs 一個專做台灣小餐廳 GBP + 訂位網頁的工程師（專才）——技能可能相同，但後者的開價、選擇權、預約檔期完全不同。同樣的能力，講出「為誰、解決什麼」，定位就完成了。這對醫美、律師、設計師、餐飲都一樣。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-24',
+      },
+      {
+        id: 'w22-07',
+        original: `"Saying no to the wrong customer is how you say yes to the right one. Most businesses don't die from lack of customers. They die from too many of the wrong ones."`,
+        translation:
+          '對錯的客人說 NO，才是對對的客人說 YES。多數生意不是死於沒客人，是死於「太多錯的客人」。',
+        insight:
+          '什麼客人都接 → 什麼客人都服務不到位 → 評價兩極 → 對的客人不敢來。學會拒絕（婉拒不適合的詢問、提高入門門檻、明確標示服務範圍與不服務範圍），才能把資源留給真正讓你業績與口碑雙起的客人。你最近一次對客人說 NO 是什麼時候？',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-25',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
