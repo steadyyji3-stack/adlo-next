@@ -19,12 +19,26 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 
 ### `customer.subscription.deleted`
 
+- Finds the local subscription by `stripe_subscription_id`.
+- Sets local subscription status to `cancelled`.
+- Sets the related customer service status to `cancelled`.
 - Writes `audit_log` action `stripe.subscription.deleted`.
-- Full local subscription status sync is kept for the next billing PR.
 
 ### `customer.subscription.updated` and `invoice.payment_failed`
 
-- Writes sanitized audit entries for observability.
+`customer.subscription.updated`:
+
+- Finds the local subscription by `stripe_subscription_id`.
+- Syncs plan, Stripe status, current period, trial end, and cancellation timestamp.
+- Maps active/trialing to customer `service_status = active`; cancelled to `cancelled`; other non-good states to `paused`.
+- Writes `audit_log` action `stripe.subscription.updated`.
+
+`invoice.payment_failed`:
+
+- Finds the local subscription from the invoice subscription id when Stripe provides it.
+- Sets local subscription status to `past_due`.
+- Sets the related customer service status to `paused`.
+- Writes `audit_log` action `stripe.invoice.payment_failed`.
 
 ## Safety
 

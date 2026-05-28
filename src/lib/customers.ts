@@ -105,6 +105,53 @@ export async function upsertSubscription(input: {
   );
 }
 
+export async function getSubscriptionByStripeId(stripeSubscriptionId: string) {
+  const [subscription] = await selectRows<Subscription>(
+    'subscriptions',
+    { stripe_subscription_id: stripeSubscriptionId },
+    { limit: 1 },
+  );
+  return subscription ?? null;
+}
+
+export async function syncExistingSubscription(input: {
+  stripeSubscriptionId: string;
+  planId?: PlanId;
+  status: SubscriptionStatus;
+  currentPeriodStart?: string;
+  currentPeriodEnd?: string;
+  trialEnd?: string | null;
+  cancelledAt?: string | null;
+}) {
+  const existing = await getSubscriptionByStripeId(input.stripeSubscriptionId);
+  if (!existing) return null;
+
+  const [subscription] = await updateRows<Subscription>(
+    'subscriptions',
+    { stripe_subscription_id: input.stripeSubscriptionId },
+    {
+      plan_id: input.planId ?? existing.plan_id,
+      status: input.status,
+      current_period_start: input.currentPeriodStart ?? existing.current_period_start,
+      current_period_end: input.currentPeriodEnd ?? existing.current_period_end,
+      trial_end: 'trialEnd' in input ? input.trialEnd : existing.trial_end,
+      cancelled_at: 'cancelledAt' in input ? input.cancelledAt : existing.cancelled_at,
+    },
+  );
+
+  await updateCustomer(existing.customer_id, {
+    service_status: serviceStatusForSubscription(input.status),
+  });
+
+  return subscription ?? null;
+}
+
+function serviceStatusForSubscription(status: SubscriptionStatus): ServiceStatus {
+  if (status === 'active' || status === 'trialing') return 'active';
+  if (status === 'cancelled') return 'cancelled';
+  return 'paused';
+}
+
 export async function listCustomers(filters: { status?: string; plan?: string } = {}) {
   const customers = await selectRows<Customer>(
     'customers',
