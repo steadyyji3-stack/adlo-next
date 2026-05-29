@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 
 export default function LineBroadcastPage() {
   return (
-    <>
+    <main>
       <LineBroadcastFlow />
       <LineBroadcastFAQ />
-    </>
+    </main>
   );
 }

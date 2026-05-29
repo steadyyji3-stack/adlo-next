@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>adlo｜2026-05-27 驗收 — SEO Batch 1 上線</title>
+<style>
+  :root {
+    --emerald: #1D9E75;
+    --emerald-soft: #E1F5EE;
+    --slate-900: #0F172A;
+    --slate-600: #475569;
+    --slate-100: #F8FAFC;
+    --line: #E2E8F0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif;
+    color: var(--slate-900);
+    line-height: 1.7;
+    background: #fff;
+  }
+  .hero {
+    background: linear-gradient(180deg, var(--emerald-soft) 0%, #ffffff 60%, var(--emerald-soft) 100%);
+    padding: 64px 24px 56px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .badge {
+    display: inline-block;
+    background: var(--emerald);
+    color: #fff;
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+  }
+  h1 {
+    font-size: 32px;
+    margin: 16px 0 8px;
+    line-height: 1.3;
+  }
+  .sub {
+    color: var(--slate-600);
+    font-size: 16px;
+    margin: 0;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 48px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: 0; }
+  h2 {
+    font-size: 22px;
+    margin: 0 0 20px;
+    padding-left: 12px;
+    border-left: 4px solid var(--emerald);
+  }
+  h3 { font-size: 17px; margin: 24px 0 8px; }
+  p { margin: 8px 0; color: var(--slate-900); }
+  .muted { color: var(--slate-600); font-size: 14px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    background: var(--slate-100);
+    font-weight: 600;
+    color: var(--slate-600);
+  }
+  .card {
+    background: var(--slate-100);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 14px 0;
+  }
+  .card.green {
+    background: var(--emerald-soft);
+    border-color: var(--emerald);
+  }
+  .pill {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--emerald-soft);
+    color: var(--emerald);
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .pill.red { background: #FEE2E2; color: #B91C1C; }
+  .pill.gray { background: var(--slate-100); color: var(--slate-600); }
+  a { color: var(--emerald); text-decoration: none; word-break: break-all; }
+  a:hover { text-decoration: underline; }
+  ul { padding-left: 22px; }
+  li { margin: 4px 0; }
+  code {
+    background: var(--slate-100);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    color: #B91C1C;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) {
+    h1 { font-size: 26px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .hero { padding: 48px 20px; }
+  }
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    color: var(--slate-600);
+    font-size: 13px;
+    background: var(--slate-100);
+  }
+  .check { color: var(--emerald); font-weight: 700; }
+  .cross { color: #B91C1C; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="badge">Ada × Kael 驗收</span>
+  <h1>2026-05-27 SEO Batch 1 上線報告</h1>
+  <p class="sub">Lab 系列下架 · 2 篇在地 SEO 文章 production 上線 · CI 全綠</p>
+</header>
+
+<div class="container">
+
+  <section>
+    <h2>一句話總結</h2>
+    <div class="card green">
+      <p style="margin:0;"><strong>Lab 計畫取消（無社群基準）→ 改走 SEO 自然流量累積。</strong>今天第一批兩篇文章已 production 上線、舊 Lab 入口已 404、CI 通過 4/4。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>本次交付清單</h2>
+    <table>
+      <thead>
+        <tr><th style="width:30%;">項目</th><th>狀態</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>下架 Lab 文章<br><span class="muted">adlo-lab-launch-2026</span></td>
+          <td><span class="pill red">404 已生效</span> <a href="https://adlo.tw/blog/adlo-lab-launch-2026" target="_blank">驗證連結 →</a></td>
+        </tr>
+        <tr>
+          <td>新文章 A<br><span class="muted">Google 商家照片演算法</span></td>
+          <td><span class="pill">200 OK</span> <a href="https://adlo.tw/blog/google-business-photo-algorithm-taiwan-2026" target="_blank">線上閱讀 →</a></td>
+        </tr>
+        <tr>
+          <td>新文章 B<br><span class="muted">Google 評論被刪救回</span></td>
+          <td><span class="pill">200 OK</span> <a href="https://adlo.tw/blog/google-review-deleted-recovery-2026" target="_blank">線上閱讀 →</a></td>
+        </tr>
+        <tr>
+          <td>PR #40<br><span class="muted">content(blog): remove lab + 2 SEO articles</span></td>
+          <td><span class="pill">Squash merged</span> <a href="https://github.com/steadyyji3-stack/adlo-next/pull/40" target="_blank">PR 連結 →</a></td>
+        </tr>
+        <tr>
+          <td>CI Checks</td>
+          <td><span class="pill">4/4 pass</span> Lint·Typecheck·Build 53s / Secret Scan 11s / Vercel ✅ / Preview ✅</td>
+        </tr>
+        <tr>
+          <td>Build pages</td>
+          <td><span class="pill">62 static</span> 較前 +1 net（−1 Lab，+2 SEO）</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>文章 A｜Google 商家照片演算法</h2>
+    <p class="muted">分類：在地 SEO · 標籤：Google 我的商家、GBP 優化、商家照片、Local SEO · 閱讀時間：10 分鐘</p>
+
+    <h3>核心切角</h3>
+    <p>不是「拍照技巧」文，是<strong>用 Google 演算法視角拆解</strong>：哪些照片會被推、哪些會被降權、客人上傳為什麼比老闆自拍權重高 2-3 倍。</p>
+
+    <h3>文章骨架</h3>
+    <ul>
+      <li>Google 看照片在意的 3 件事（多元性 / 新鮮度 / 用戶上傳）</li>
+      <li>12 種台灣中小店家必有的照片清單（外觀 3 + 內景 3 + 產品 3 + 人與細節 3）</li>
+      <li>5 個多數老闆會犯的錯（過度修圖、stock 圖、全老闆自拍、一次傳完消失、不寫描述）</li>
+      <li>6 個月維護節奏表</li>
+      <li>怎麼讓客人主動拍 + 上傳</li>
+    </ul>
+
+    <h3>CTA 落點</h3>
+    <p>文末導流 <code>/check</code>（GBP 免費健檢）— 與站內現有工具串接。</p>
+
+    <h3>封面圖</h3>
+    <p class="muted">Unsplash photo-1766758196181 · 台灣街邊小店外觀 · CHEN HENG · HEAD 200 已驗證</p>
+  </section>
+
+  <section>
+    <h2>文章 B｜Google 評論被刪救回</h2>
+    <p class="muted">分類：在地 SEO · 標籤：Google 評論、評論管理、GBP 政策、危機處理 · 閱讀時間：9 分鐘</p>
+
+    <h3>核心切角</h3>
+    <p>評論一夜消失？先確認真的被刪還是被排序壓下去。給<strong>依嚴重度排序的 5 步驟救回</strong>（從 GBP 後台 → community forum → Twitter escalate → Local Guides → 正式申訴信）+ 防止再被刪的 7 個紅線檢查。</p>
+
+    <h3>文章骨架</h3>
+    <ul>
+      <li>第一步：先確認真的被刪（無痕模式、不同裝置、「等待中」分頁）</li>
+      <li>為什麼會被刪：Google 政策 6 大紅線</li>
+      <li>5 個救回步驟（依嚴重度遞增）</li>
+      <li>誠實標註：救回成功率約 30%</li>
+      <li>防止再被刪的 7 個檢查</li>
+    </ul>
+
+    <h3>CTA 落點</h3>
+    <p>文末導流 <code>/tools/review-link</code>（合規評論收集連結 + QR + 6 套訊息模板）。</p>
+
+    <h3>封面圖</h3>
+    <p class="muted">Unsplash photo-1556745753 · Patrick Tomasso · HEAD 200 已驗證</p>
+  </section>
+
+  <section>
+    <h2>策略 Pivot 紀錄</h2>
+    <div class="card">
+      <h3 style="margin-top:0;">為什麼取消 Lab 計畫？</h3>
+      <ul>
+        <li>原 Lab 計畫假設：用「真的去實驗」的內容主題作為與社群對話的素材</li>
+        <li>盲點：adlo.tw 目前<strong>無社群基準流量</strong>（Threads 未啟用、Meta App 仍在統編審核中）</li>
+        <li>Lab 內容沒有承接通路 → ROI 極低</li>
+        <li>Pivot：先用 SEO 文章累積<strong>自然搜尋流量</strong>，建立基準後再啟動 Lab 系列</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>剩餘 4 篇（分批寫，待排期）</h2>
+    <table>
+      <thead><tr><th style="width:8%;">#</th><th>主題</th><th>切角預設</th></tr></thead>
+      <tbody>
+        <tr><td>C</td><td>Threads 經營 30 天沒人看</td><td>5 個診斷問題（演算法 / 內容 / 頻率 / Hook / 互動）</td></tr>
+        <tr><td>D</td><td>2026 台灣 GBP 演算法</td><td>6 個我們觀察到的變化（照片權重 / 在地化 / 回覆速度 等）</td></tr>
+        <tr><td>E</td><td>LINE 廣告 vs Google 廣告</td><td>中小店家版本：預算、CPC、受眾、SOP</td></tr>
+        <tr><td>F</td><td>商家被檢舉 / 停權怎麼救</td><td>申訴流程 + 預防紅線</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">建議：A/B 上線 7 天後看 GSC 抓取情況再決定下批優先順序。</p>
+  </section>
+
+  <section>
+    <h2>規則遵守 Checklist</h2>
+    <div class="grid-2">
+      <div class="card">
+        <p style="margin:0;"><span class="check">✓</span> Feature branch（<code>content/remove-lab-launch-add-seo-articles</code>）</p>
+      </div>
+      <div class="card">
+        <p style="margin:0;"><span class="check">✓</span> 不直接 push main、走 PR + squash merge</p>
+      </div>
+      <div class="card">
+        <p style="margin:0;"><span class="check">✓</span> 封面圖 HEAD 驗證 200（NEVER GUESS）</p>
+      </div>
+      <div class="card">
+        <p style="margin:0;"><span class="check">✓</span> 未動 .env、middleware、auth、payment</p>
+      </div>
+      <div class="card">
+        <p style="margin:0;"><span class="check">✓</span> Pre-commit ESLint --max-warnings=0 通過</p>
+      </div>
+      <div class="card">
+        <p style="margin:0;"><span class="check">✓</span> 不踩 Track B（Stripe / 客戶 API / 客戶歷史）</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>等 Lorenzo 決定</h2>
+    <ul>
+      <li>下批要先寫哪一篇？（C / D / E / F 任意組合）</li>
+      <li>是否要 A/B 觀察 7 天 GSC 抓取再排下批？</li>
+      <li>需要為這 2 篇做 IG / Threads 推送嗎？（社群尚未啟用前可暫緩）</li>
+    </ul>
+  </section>
+
+</div>
+
+<div class="footer">
+  adlo · 2026-05-27 · Ada 交付 · 報告由 Claude 產出
+</div>
+
+</body>
+</html>

@@ -98,7 +98,7 @@ const industryFlavor: Record<
     craft: '日常工作',
     signature: '一份用心做的服務',
     verb: '體驗',
-    pain: '找不到合適的對象',
+    pain: '找不到合適的服務廠商',
   },
 };
 
@@ -134,7 +134,7 @@ export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcas
       day: '週二',
       category: '教育',
       title: '小知識 / 觀念釐清',
-      message: `多數人在「${f.verb}${f.signature}」這件事上，常踩到的一個坑——\n\n以為「越貴 = 越好」，但事實是「適合 = 最好」。\n\n${name} 想分享一個簡單判斷：先想清楚你「為什麼要這個」，再看價格。順序對了，預算就不會浪費。\n\n下次有空跟你拆得更細。${themeLine ? '\n\n' + themeLine : ''}`,
+      message: `多數人在「${f.verb}${f.signature}」這件事上，常踩到的一個坑——\n\n以為越貴就一定越好，但事實上「適合」才是真正的標準。\n\n${name} 想分享一個簡單判斷：先想清楚你「為什麼要這個」，再看價格。順序對了，預算就不會浪費。\n\n下次有空跟你拆得更細。${themeLine ? '\n\n' + themeLine : ''}`,
       bestTime: RECOMMENDED_TIMES.evening,
       emoji: '💡 📝',
     },
@@ -182,9 +182,11 @@ export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcas
     },
   ];
 
+  // LINE 推播字數：保留換行（LINE 編輯器計入）、扣除中英文間空格
+  // Array.from 確保 emoji / 中文都以 1 字符計
   return drafts.map((d) => ({
     ...d,
-    characterCount: d.message.replace(/\s/g, '').length,
+    characterCount: Array.from(d.message).length,
   }));
 }
 
@@ -198,7 +200,7 @@ export interface LineRedline {
 export const LINE_REDLINES: LineRedline[] = [
   {
     rule: '不要連續 3 天都推促銷',
-    why: '客人收到第 3 則「限時優惠」會直接封鎖。LINE 封鎖率是 OA 評分的核心指標。',
+    why: '客人收到第 3 則「限時優惠」會直接封鎖。封鎖率會影響後續推播觸及（業界普遍觀察，非 LINE 官方公開的單一指標）。',
     example: '❌ 連續 3 天「特價」「最後 1 天」「再不買沒了」\n✅ 教育 → 幕後 → 促銷，中間插非銷售內容',
   },
   {
@@ -208,7 +210,7 @@ export const LINE_REDLINES: LineRedline[] = [
   },
   {
     rule: '一週推播 ≤ 3 次',
-    why: 'LINE 官方建議每週 2-3 則推播。超過會被視為「過度行銷」。',
+    why: '台灣中小店家實務觀察：好友每週收到超過 3 則推播時，封鎖率明顯上升。LINE 並未公布官方上限，這是業界常見建議值。',
     example: '❌ 每天 1 則\n✅ 一週挑 2-3 個重點時段推',
   },
   {
@@ -228,21 +230,25 @@ export const LINE_REDLINES: LineRedline[] = [
   },
 ];
 
-/** LINE OA 推播額度提示（依方案）  */
+/**
+ * LINE OA 台灣 2026 推播方案
+ * 來源：LINE Biz-Solutions Taiwan 官方公開資訊（2026 新制）
+ * 注意：方案數值會隨 LINE 政策調整，使用者應以官方頁面為準。
+ */
 export const LINE_PLAN_HINTS = [
   {
-    plan: '免費',
+    plan: '輕用量（免費）',
     monthlyMessages: 200,
-    note: '200 則/月，超過就停推。適合好友 200 以下、低頻推播。',
-  },
-  {
-    plan: '輕用量',
-    monthlyMessages: 4000,
-    note: 'NT$1,150/月，4,000 則。好友 200-1,300 推 2-3 次/週很夠用。',
+    note: 'NT$0/月、200 則。超過會停推。適合好友 50 以下、每週 1 則以下。',
   },
   {
     plan: '中用量',
     monthlyMessages: 25000,
-    note: 'NT$5,000/月，25,000 則。好友 1,000+ 才需要。',
+    note: 'NT$1,600/月、25,000 則。超過每則 NT$0.2。好友 100-3,000、每週 2-3 則推播都夠用。',
+  },
+  {
+    plan: '高用量',
+    monthlyMessages: 200000,
+    note: 'NT$18,000+/月、200,000 則起跳，可加購。好友 5,000+ 才考慮。',
   },
 ];
