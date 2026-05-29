@@ -35,6 +35,13 @@ export interface LineBroadcastInput {
   storeName: string;
   industry: LineIndustry;
   weekTheme?: string;
+  /**
+   * 店家自建描述：本週發生的事、店家獨特賣點、想突出的觀點。
+   * 會被自然嵌入到「歡迎/教育/幕後/新品」四篇模板裡。
+   * 不是 AI 聊天輸入——只是給模板一個可植入的「你的素材」欄位。
+   * 建議 30-300 字。
+   */
+  customContext?: string;
 }
 
 export interface GeneratedBroadcast {
@@ -110,6 +117,21 @@ const RECOMMENDED_TIMES = {
 } as const;
 
 /**
+ * 把用戶自建描述拆成可植入的片段。
+ * - 第 1 句：用作「開場引語」（週一歡迎、週四幕後）
+ * - 整段：用作「教育/新品」的延伸補充
+ * - 不做 AI 改寫，原文直接嵌入引號中
+ */
+function splitContext(raw: string): { firstSentence: string; full: string } | null {
+  const trimmed = raw.trim();
+  if (trimmed.length < 8) return null;
+  // 取第一個句號/驚嘆號/問號之前；找不到就取前 40 字
+  const match = trimmed.match(/^[^。！？.!?\n]{1,80}/);
+  const firstSentence = (match?.[0] ?? trimmed.slice(0, 40)).trim();
+  return { firstSentence, full: trimmed };
+}
+
+/**
  * 產出 7 天 LINE 推播草稿。Deterministic — 同樣 input 同樣 output。
  */
 export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcast[] {
@@ -119,14 +141,19 @@ export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcas
 
   const themeLine = theme ? `本週主題：${theme}` : '';
 
+  // 自建描述：可選的店家素材。有的話會自然嵌入 4 篇模板。
+  const ctx = input.customContext ? splitContext(input.customContext) : null;
+
   const drafts: Omit<GeneratedBroadcast, 'characterCount'>[] = [
     {
       day: '週一',
       category: '歡迎',
       title: '一週開頭：軟性問候 + 本週預告',
-      message: theme
-        ? `週一早安☀️\n\n這週 ${name} 主要在做 ${theme}。\n會陸續分享一些幕後、實作細節，跟你說說我們在想什麼。\n\n不會每天都推播，挑重要的講。`
-        : `週一早安☀️\n\n${name} 這週主要在「${f.craft}」這件事上花時間。\n會挑 2-3 個重點跟你分享，不會每天都推播。\n\n如果有想看的內容，回 LINE 跟我們說。`,
+      message: ctx
+        ? `週一早安☀️\n\n${name} 本週想跟你說的一件事：\n「${ctx.firstSentence}」\n\n會陸續用 2-3 則 LINE 把這件事的脈絡跟你拆完。不會每天都推。`
+        : theme
+          ? `週一早安☀️\n\n這週 ${name} 主要在做 ${theme}。\n會陸續分享一些幕後、實作細節，跟你說說我們在想什麼。\n\n不會每天都推播，挑重要的講。`
+          : `週一早安☀️\n\n${name} 這週主要在「${f.craft}」這件事上花時間。\n會挑 2-3 個重點跟你分享，不會每天都推播。\n\n如果有想看的內容，回 LINE 跟我們說。`,
       bestTime: RECOMMENDED_TIMES.morning,
       emoji: '☀️ 📋',
     },
@@ -134,7 +161,9 @@ export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcas
       day: '週二',
       category: '教育',
       title: '小知識 / 觀念釐清',
-      message: `多數人在「${f.verb}${f.signature}」這件事上，常踩到的一個坑——\n\n以為越貴就一定越好，但事實上「適合」才是真正的標準。\n\n${name} 想分享一個簡單判斷：先想清楚你「為什麼要這個」，再看價格。順序對了，預算就不會浪費。\n\n下次有空跟你拆得更細。${themeLine ? '\n\n' + themeLine : ''}`,
+      message: ctx
+        ? `${name} 想多講一點上週一提到的：\n「${ctx.full}」\n\n換成讀者角度：在「${f.verb}${f.signature}」這件事上，要記得「適合 > 完美」這件事。\n\n下次有空再拆得更細。${themeLine ? '\n\n' + themeLine : ''}`
+        : `多數人在「${f.verb}${f.signature}」這件事上，常踩到的一個坑——\n\n以為越貴就一定越好，但事實上「適合」才是真正的標準。\n\n${name} 想分享一個簡單判斷：先想清楚你「為什麼要這個」，再看價格。順序對了，預算就不會浪費。\n\n下次有空跟你拆得更細。${themeLine ? '\n\n' + themeLine : ''}`,
       bestTime: RECOMMENDED_TIMES.evening,
       emoji: '💡 📝',
     },
@@ -150,7 +179,9 @@ export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcas
       day: '週四',
       category: '幕後',
       title: '營業日常 / 製程紀錄',
-      message: `這禮拜在「${f.craft}」時想到一件事——\n\n做久了會發現，最費時間的不是技術，是「跟客人講清楚我們在做什麼」。\n\n${name} 最近練習：少用專業詞、多用比喻。客人聽得懂，後續溝通成本反而降很多。\n\n你最近也遇到「想說但講不清楚」的場景嗎？回我們聊聊。`,
+      message: ctx
+        ? `這禮拜在「${f.craft}」時想起一件事——\n\n${ctx.firstSentence}\n\n${name} 最近學到的是：與其把這件事包裝成行銷話術，不如直接讓客人看到我們在想什麼。\n\n你最近也有「想說但講不清楚」的場景嗎？回我們聊聊。`
+        : `這禮拜在「${f.craft}」時想到一件事——\n\n做久了會發現，最費時間的不是技術，是「跟客人講清楚我們在做什麼」。\n\n${name} 最近練習：少用專業詞、多用比喻。客人聽得懂，後續溝通成本反而降很多。\n\n你最近也遇到「想說但講不清楚」的場景嗎？回我們聊聊。`,
       bestTime: RECOMMENDED_TIMES.evening,
       emoji: '🛠️ 🧠',
     },
@@ -158,9 +189,11 @@ export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcas
       day: '週五',
       category: '新品',
       title: '新品 / 新方案介紹',
-      message: theme
-        ? `${name} 這週推出跟「${theme}」相關的新內容/新方案 🎉\n\n為什麼做這個：我們發現很多客人在這個情境卡住，但市面上沒有合適的選項。\n\n細節已經放在我們的 LINE 圖文選單裡，週末可以慢慢看。\n\n有問題直接回，不用客氣。`
-        : `${name} 這禮拜更新了一個新東西 🎉\n\n簡單講：把以前要花 30 分鐘解釋的服務，做成「3 分鐘就能評估適不適合」的版本。\n\n細節在 LINE 圖文選單。週末有空可以看看，有問題直接回我們。`,
+      message: ctx
+        ? `${name} 這週端出來的東西，其實就是上週一提到的——\n\n「${ctx.firstSentence}」\n\n我們把它整理成 LINE 圖文選單裡的一個入口，週末可以慢慢看。\n\n有疑問直接回，不用客氣。${theme ? '\n\n相關主題：' + theme : ''}`
+        : theme
+          ? `${name} 這週推出跟「${theme}」相關的新內容/新方案 🎉\n\n為什麼做這個：我們發現很多客人在這個情境卡住，但市面上沒有合適的選項。\n\n細節已經放在我們的 LINE 圖文選單裡，週末可以慢慢看。\n\n有問題直接回，不用客氣。`
+          : `${name} 這禮拜更新了一個新東西 🎉\n\n簡單講：把以前要花 30 分鐘解釋的服務，做成「3 分鐘就能評估適不適合」的版本。\n\n細節在 LINE 圖文選單。週末有空可以看看，有問題直接回我們。`,
       bestTime: RECOMMENDED_TIMES.noon,
       emoji: '🎉 ✨',
     },

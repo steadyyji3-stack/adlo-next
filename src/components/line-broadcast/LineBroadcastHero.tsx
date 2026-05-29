@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -11,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MessageSquare, Shield, Clock, UserX } from 'lucide-react';
+import { MessageSquare, Shield, Clock, UserX, Wand2 } from 'lucide-react';
 import type { LineBroadcastInput, LineIndustry } from '@/lib/line-broadcast';
 
 interface Props {
@@ -33,7 +34,10 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
   const [storeName, setStoreName] = useState('');
   const [industry, setIndustry] = useState<LineIndustry | ''>('');
   const [weekTheme, setWeekTheme] = useState('');
+  const [customContext, setCustomContext] = useState('');
   const [error, setError] = useState('');
+
+  const CTX_MAX = 300;
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -50,11 +54,16 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
       setError('本週主題請在 60 字以內');
       return;
     }
+    if (customContext.trim().length > CTX_MAX) {
+      setError(`自建描述請在 ${CTX_MAX} 字以內`);
+      return;
+    }
     setError('');
     onSubmit({
       storeName: name,
       industry: industry as LineIndustry,
       weekTheme: weekTheme.trim() || undefined,
+      customContext: customContext.trim() || undefined,
     });
   }
 
@@ -81,6 +90,15 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
             <br className="hidden md:block" />
             每篇附建議推播時段、字數、emoji——複製就能排。
           </p>
+
+          <div className="mt-6 mx-auto max-w-xl flex items-start gap-3 text-left bg-white/70 backdrop-blur-sm border border-emerald-200 rounded-xl p-4">
+            <Wand2 className="w-4 h-4 text-emerald-700 mt-0.5 shrink-0" aria-hidden />
+            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <strong className="text-emerald-800">不是 AI 聊天工具。</strong>
+              你給 1 段店家描述，我們給 7 篇 ship-ready 初稿。
+              不用打字 30 分鐘、不用「請幫我修改一下語氣」、不用反覆 prompt。
+            </p>
+          </div>
         </div>
 
         <form
@@ -153,6 +171,42 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
               <p className="mt-1.5 text-xs text-slate-500">
                 有填的話，新品 / 節慶 / 歡迎 三篇會帶到這個主題。
               </p>
+            </div>
+
+            <div>
+              <Label
+                htmlFor="custom-context"
+                className="text-sm font-semibold text-slate-900 mb-2 block"
+              >
+                店家自建描述{' '}
+                <span className="text-slate-400 font-normal text-xs">
+                  （選填，{CTX_MAX} 字內）
+                </span>
+              </Label>
+              <Textarea
+                id="custom-context"
+                value={customContext}
+                onChange={(e) => setCustomContext(e.target.value)}
+                placeholder={`本週實際發生的事、店家獨特觀點、想多聊的細節。\n\n例：「上週客人問我，為什麼我們的便當比隔壁貴 20 元——我才意識到我從沒講過，我們是早上 5 點自己備料，沒用中央廚房。」`}
+                rows={5}
+                maxLength={CTX_MAX}
+                className="text-base resize-none"
+                aria-describedby="custom-context-help"
+              />
+              <div className="mt-1.5 flex items-start justify-between gap-3">
+                <p
+                  id="custom-context-help"
+                  className="text-xs text-slate-500 leading-relaxed"
+                >
+                  有填的話，會自然嵌入 <strong>歡迎 / 教育 / 幕後 / 新品</strong> 四篇——你的原文不會被改寫，只會被「裝進對的句型」。
+                </p>
+                <span
+                  className="text-xs text-slate-400 shrink-0 tabular-nums"
+                  aria-live="polite"
+                >
+                  {customContext.length} / {CTX_MAX}
+                </span>
+              </div>
             </div>
 
             <Button
