@@ -1,0 +1,190 @@
+'use client';
+
+import { useState, FormEvent } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { MessageSquare, Shield, Clock, UserX } from 'lucide-react';
+import type { LineBroadcastInput, LineIndustry } from '@/lib/line-broadcast';
+
+interface Props {
+  onSubmit: (input: LineBroadcastInput) => void;
+}
+
+const INDUSTRIES: LineIndustry[] = [
+  '餐飲',
+  '美髮美容',
+  '醫美',
+  '牙科',
+  '律師',
+  '補教',
+  '零售',
+  '其他',
+];
+
+export default function LineBroadcastHero({ onSubmit }: Props) {
+  const [storeName, setStoreName] = useState('');
+  const [industry, setIndustry] = useState<LineIndustry | ''>('');
+  const [weekTheme, setWeekTheme] = useState('');
+  const [error, setError] = useState('');
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    const name = storeName.trim();
+    if (name.length < 2 || name.length > 40) {
+      setError('店名請輸入 2–40 字');
+      return;
+    }
+    if (!industry) {
+      setError('請選一個產業類別');
+      return;
+    }
+    if (weekTheme.trim().length > 60) {
+      setError('本週主題請在 60 字以內');
+      return;
+    }
+    setError('');
+    onSubmit({
+      storeName: name,
+      industry: industry as LineIndustry,
+      weekTheme: weekTheme.trim() || undefined,
+    });
+  }
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 via-white to-emerald-50/40 py-16 sm:py-20 md:py-28">
+      <div className="max-w-5xl mx-auto px-6 md:px-8">
+        <div className="text-center mb-10 md:mb-14">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/60 px-4 py-1.5 text-xs font-medium text-emerald-800 backdrop-blur-sm mb-6">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            免費 · 不用註冊 · 立刻產出
+          </div>
+
+          <h1 className="text-[28px] sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+            下週 7 天 LINE 推播
+            <br className="md:hidden" />
+            <span className="text-[#1D9E75]">　3 秒寫完</span>
+          </h1>
+
+          <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            輸入店名 + 產業，<strong className="text-slate-900">3 秒產出</strong>歡迎、教育、QA、幕後、新品、促銷、節慶 7 篇 LINE OA 推播初稿。
+            <br className="hidden md:block" />
+            每篇附建議推播時段、字數、emoji——複製就能排。
+          </p>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl shadow-emerald-100/60 ring-1 ring-emerald-100 p-6 md:p-8"
+        >
+          <div className="space-y-5">
+            <div>
+              <Label
+                htmlFor="store-name"
+                className="text-sm font-semibold text-slate-900 mb-2 block"
+              >
+                店名 <span className="text-rose-500">*</span>
+              </Label>
+              <Input
+                id="store-name"
+                type="text"
+                value={storeName}
+                onChange={(e) => setStoreName(e.target.value)}
+                placeholder="例：好初早餐 信義店"
+                className="h-12 text-base"
+                aria-required="true"
+                maxLength={40}
+              />
+            </div>
+
+            <div>
+              <Label
+                htmlFor="industry"
+                className="text-sm font-semibold text-slate-900 mb-2 block"
+              >
+                產業類別 <span className="text-rose-500">*</span>
+              </Label>
+              <Select
+                value={industry}
+                onValueChange={(v) => setIndustry(v as LineIndustry)}
+              >
+                <SelectTrigger id="industry" className="h-12 text-base">
+                  <SelectValue placeholder="選一個（影響語感）" />
+                </SelectTrigger>
+                <SelectContent>
+                  {INDUSTRIES.map((it) => (
+                    <SelectItem key={it} value={it}>
+                      {it}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label
+                htmlFor="week-theme"
+                className="text-sm font-semibold text-slate-900 mb-2 block"
+              >
+                本週主題{' '}
+                <span className="text-slate-400 font-normal text-xs">
+                  （選填，60 字內）
+                </span>
+              </Label>
+              <Input
+                id="week-theme"
+                type="text"
+                value={weekTheme}
+                onChange={(e) => setWeekTheme(e.target.value)}
+                placeholder="例：母親節限定組合上市"
+                className="h-12 text-base"
+                maxLength={60}
+              />
+              <p className="mt-1.5 text-xs text-slate-500">
+                有填的話，新品 / 節慶 / 歡迎 三篇會帶到這個主題。
+              </p>
+            </div>
+
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-12 bg-[#1D9E75] hover:bg-[#168060] text-white font-semibold text-base focus-visible:ring-emerald-500"
+              data-gtm-event="line_broadcast_generate"
+            >
+              <MessageSquare className="w-4 h-4 mr-2" aria-hidden />
+              產出 7 天 LINE 推播
+            </Button>
+
+            {error && (
+              <p role="alert" className="text-sm text-rose-600 text-center">
+                {error}
+              </p>
+            )}
+          </div>
+        </form>
+
+        <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-500">
+          <li className="inline-flex items-center gap-2">
+            <UserX className="size-4 text-emerald-600" aria-hidden /> 不用註冊
+          </li>
+          <li className="inline-flex items-center gap-2">
+            <Shield className="size-4 text-emerald-600" aria-hidden /> 不存你的資料
+          </li>
+          <li className="inline-flex items-center gap-2">
+            <Clock className="size-4 text-emerald-600" aria-hidden /> 3 秒產出
+          </li>
+        </ul>
+      </div>
+    </section>
+  );
+}
