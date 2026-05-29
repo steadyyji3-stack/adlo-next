@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { getCustomerDetail } from '@/lib/customers';
-import { ApproveButton } from './ApproveButton';
+import { ReviewActions } from './ReviewActions';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,7 +47,6 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
             <Badge variant="outline" className={statusClasses[customer.service_status]}>
               {customer.service_status}
             </Badge>
-            <ApproveButton customerId={customer.id} disabled={customer.service_status !== 'pending_review'} />
           </div>
         </div>
 
@@ -76,6 +75,10 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
               ) : (
                 <p className="text-sm text-slate-500">尚未填寫</p>
               )}
+            </InfoCard>
+
+            <InfoCard title="Onboarding Review">
+              <ReviewActions customerId={customer.id} disabled={customer.onboarding_status !== 'pending_review'} />
             </InfoCard>
           </section>
 
