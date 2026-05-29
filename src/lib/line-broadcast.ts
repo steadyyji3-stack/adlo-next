@@ -36,13 +36,201 @@ export interface LineBroadcastInput {
   industry: LineIndustry;
   weekTheme?: string;
   /**
-   * 店家自建描述：本週發生的事、店家獨特賣點、想突出的觀點。
-   * 會被自然嵌入到「歡迎/教育/幕後/新品」四篇模板裡。
-   * 不是 AI 聊天輸入——只是給模板一個可植入的「你的素材」欄位。
-   * 建議 30-300 字。
+   * 用戶從 INDUSTRY_TAGS 勾選的標籤。建議 3-5 個。
+   * 標籤會依組別（產品 / 客群 / 訴求）拆開、嵌入到不同篇模板。
+   * 取代了 v2 的自由文字 customContext——標籤點選 ≠ AI 聊天。
    */
-  customContext?: string;
+  selectedTags?: string[];
 }
+
+/**
+ * 標籤組別。每個產業有 3 組標籤，每組 5-10 個。
+ * - product: 產品 / 服務 / 餐型 / 療程類型
+ * - audience: 客群 / 場景 / 預約方式
+ * - value: 訴求 / 風格 / 堅持點
+ */
+export type TagGroupKey = 'product' | 'audience' | 'value';
+
+export interface TagGroup {
+  key: TagGroupKey;
+  label: string;
+  description: string;
+  tags: string[];
+}
+
+/**
+ * 各產業可用的標籤池。用戶從中勾選，組合為模板的可植入素材。
+ * 每組標籤都從台灣中小店家視角設計，不堆 SaaS / 簡中常見詞。
+ */
+export const INDUSTRY_TAGS: Record<LineIndustry, TagGroup[]> = {
+  餐飲: [
+    {
+      key: 'product',
+      label: '餐型／品項',
+      description: '你提供什麼樣的餐？',
+      tags: ['早午餐', '便當簡餐', '麵食', '火鍋', '燒烤', '咖啡飲料', '甜點烘焙', '居酒屋', '異國料理', '無菜單料理'],
+    },
+    {
+      key: 'audience',
+      label: '客群／場景',
+      description: '誰常來、什麼場合來？',
+      tags: ['上班族午餐', '家庭聚餐', '學生平價', '約會晚餐', '宵夜場', '外帶外送族', '寵物友善', '親子座位'],
+    },
+    {
+      key: 'value',
+      label: '訴求／堅持',
+      description: '你跟別家最大的不同？',
+      tags: ['手作備料', '本土食材', '招牌品堅持', '季節限定', '不接外送', '不訂位先到先吃', '開放廚房', '當日新鮮'],
+    },
+  ],
+
+  美髮美容: [
+    {
+      key: 'product',
+      label: '服務類型',
+      description: '你主要做哪些？',
+      tags: ['剪髮', '染髮', '燙髮', '護髮', '頭皮 SPA', '燙染同次', '接髮', '婚禮造型', '男士剪髮'],
+    },
+    {
+      key: 'audience',
+      label: '客群／預約',
+      description: '誰常來？',
+      tags: ['上班族', '學生', '新手第一次', '媽媽族', '中性風', '熟客為主', '一對一不重疊', '可線上預約'],
+    },
+    {
+      key: 'value',
+      label: '訴求／風格',
+      description: '你的風格定位？',
+      tags: ['低敏染劑', '韓系日系', '自然修剪', '不傷髮質', '頭皮先養', '低限度燙', '不接趕單'],
+    },
+  ],
+
+  醫美: [
+    {
+      key: 'product',
+      label: '療程類型',
+      description: '你主推哪些？',
+      tags: ['肉毒', '玻尿酸', '雷射', '電音波', '痘疤治療', '美白點滴', '微針', '童顏針', '埋線'],
+    },
+    {
+      key: 'audience',
+      label: '客群／部位',
+      description: '主要客群與部位？',
+      tags: ['25-30 預防', '40+ 維持', '男性微整', '眼周', '輪廓', '法令紋', '頸部', '手部'],
+    },
+    {
+      key: 'value',
+      label: '訴求／溝通',
+      description: '你的服務風格？',
+      tags: ['自然不腫', '無術後恢復期', '漸進改善', '醫師親自操作', '不推銷追加', '面診不收費'],
+    },
+  ],
+
+  牙科: [
+    {
+      key: 'product',
+      label: '服務項目',
+      description: '主要看哪些？',
+      tags: ['洗牙', '補牙', '根管', '矯正', '植牙', '美白', '假牙', '兒童牙科', '齒顎矯正'],
+    },
+    {
+      key: 'audience',
+      label: '客群／場景',
+      description: '誰常來？',
+      tags: ['兒童', '長輩', '孕婦', '怕看牙者', '上班族下班看診', '假日門診'],
+    },
+    {
+      key: 'value',
+      label: '訴求／設備',
+      description: '你的特色？',
+      tags: ['健保給付', '自費透明', '舒眠麻醉', '3D 數位', '夜間門診', '預約準時不久候', '無痛麻醉'],
+    },
+  ],
+
+  律師: [
+    {
+      key: 'product',
+      label: '專業領域',
+      description: '主要承辦哪些案件？',
+      tags: ['合約審閱', '勞資糾紛', '家事繼承', '商標智財', '訴訟', '車禍', '商務', '不動產', '刑事辯護'],
+    },
+    {
+      key: 'audience',
+      label: '客群',
+      description: '主要服務誰？',
+      tags: ['個人', '家族企業', '新創公司', '中小企業', '外國人', '房東房客'],
+    },
+    {
+      key: 'value',
+      label: '服務風格',
+      description: '你的承辦風格？',
+      tags: ['線上諮詢', '固定費用', '案件式收費', '保密承諾', '不打沒贏面的官司', '先諮詢再委任'],
+    },
+  ],
+
+  補教: [
+    {
+      key: 'product',
+      label: '科目',
+      description: '主要教哪些？',
+      tags: ['數學', '英文', '自然', '國文', '社會', '程式', '美術', '音樂', '全科'],
+    },
+    {
+      key: 'audience',
+      label: '階段／班型',
+      description: '主要學員？',
+      tags: ['國小', '國中', '高中', '學測會考', '在職進修', '1對1', '小班', '線上課'],
+    },
+    {
+      key: 'value',
+      label: '訴求／方法',
+      description: '你的教學特色？',
+      tags: ['弱科加強', '進度追蹤', '適應期觀察', '不續報壓力', '考前衝刺', '家長同步報告'],
+    },
+  ],
+
+  零售: [
+    {
+      key: 'product',
+      label: '商品類別',
+      description: '主要賣什麼？',
+      tags: ['服飾', '3C', '文具', '生活雜貨', '寵物用品', '家電家具', '酒類', '咖啡豆茶葉', '美妝保養', '文創書籍', '食品乾貨'],
+    },
+    {
+      key: 'audience',
+      label: '客群／場景',
+      description: '誰常來？',
+      tags: ['自用收藏', '送禮', '商務禮品', '親子', '日常採購', '收藏家'],
+    },
+    {
+      key: 'value',
+      label: '訴求／服務',
+      description: '你跟連鎖的不同？',
+      tags: ['職人選品', '限量稀有', '二手寄售', '可訂製', '試用試穿', '在地小農', '可預訂', '包裝服務', '維修保固'],
+    },
+  ],
+
+  其他: [
+    {
+      key: 'product',
+      label: '服務型態',
+      description: '你提供什麼？',
+      tags: ['諮詢', '代辦', '代購', '設計', '修繕', '教學', '整理收納', '寵物服務', '攝影', '婚禮顧問'],
+    },
+    {
+      key: 'audience',
+      label: '客群',
+      description: '主要服務誰？',
+      tags: ['個人', '家庭', '中小企業', '在地店家', '新手', '熟客為主'],
+    },
+    {
+      key: 'value',
+      label: '訴求',
+      description: '你的特色？',
+      tags: ['彈性時間', '書面紀錄', '不限地點', '固定報價', '全程透明', '一次到位'],
+    },
+  ],
+};
 
 export interface GeneratedBroadcast {
   day: string;
@@ -78,6 +266,14 @@ const DAY_META: Array<{
   { day: '週日', category: '節慶', title: '週末總結 / 軟性節慶問候', bestTime: TIMES.evening, emoji: '🌙 💚' },
 ];
 
+/**
+ * 每篇模板拿到的 context。為了讓 8 產業 × 7 天既有模板不用改：
+ * 由 generateBroadcasts() 依「該天該嵌什麼」預先生 ctxFirst。
+ * - 週一：標籤組成的自然句（"本週主要在「威士忌、送禮」"）
+ * - 週二：訴求標籤包成括弧引語（"選酒推薦這件事"）
+ * - 週五：產品標籤直接當「新品名稱」
+ * - 週四：tags 不驅動（保留原本場景故事）
+ */
 interface BuildCtx {
   name: string;
   theme: string;
@@ -283,19 +479,66 @@ const INDUSTRY_TEMPLATES: Record<LineIndustry, DraftBuilder[]> = {
 };
 
 /**
- * 把用戶自建描述拆成可植入的片段。
- * - 第 1 句：用作「開場引語」
- * - 整段：保留供 v3 擴充
- * - 不做 AI 改寫，原文直接嵌入
+ * 把用戶勾選的標籤，依組別拆出第一個 hint。
+ * 找不到對應組就回空字串。
  */
-function splitContext(raw: string): { firstSentence: string; full: string } | null {
-  const trimmed = raw.trim();
-  if (trimmed.length < 8) return null;
-  const match = trimmed.match(/^[^。！？.!?\n]{1,80}/);
-  let firstSentence = (match?.[0] ?? trimmed.slice(0, 40)).trim();
-  // 移除末尾標點，因為會被嵌入到「：xxx。」這種句型
-  firstSentence = firstSentence.replace(/[。！？.!?,，、]+$/, '');
-  return { firstSentence, full: trimmed };
+function pickFirstTagInGroup(
+  selectedTags: string[],
+  groups: TagGroup[],
+  key: TagGroupKey,
+): string {
+  const g = groups.find((x) => x.key === key);
+  if (!g) return '';
+  return selectedTags.find((t) => g.tags.includes(t)) ?? '';
+}
+
+/**
+ * 依當日「在模板裡的角色」，為每篇預生 ctxFirst 字串。
+ * 模板既有的 `${ctxFirst ? ... : ''}` 三元判斷不用改，
+ * 由這個 helper 控制「該不該、要嵌什麼」。
+ *
+ * 設計：
+ * - 週一 歡迎：自然句（"本週主要在「威士忌、送禮」這幾個方向"）
+ * - 週二 教育：訴求/風格 tag（會被包進「（這禮拜想多聊：__）」）
+ * - 週三 QA：空（QA 不嵌個人化）
+ * - 週四 幕後：空（保留原本場景故事的真實感）
+ * - 週五 新品：產品 tag（會直接當「新品名稱」）
+ * - 週六 促銷：空
+ * - 週日 節慶：空
+ */
+function buildCtxByDay(
+  selectedTags: string[],
+  groups: TagGroup[],
+): string[] {
+  if (selectedTags.length === 0) return ['', '', '', '', '', '', ''];
+
+  const productHint = pickFirstTagInGroup(selectedTags, groups, 'product');
+  const audienceHint = pickFirstTagInGroup(selectedTags, groups, 'audience');
+  const valueHint = pickFirstTagInGroup(selectedTags, groups, 'value');
+
+  // 週一：用前 2 個 tag 組自然句（不論組別）
+  const monLead = selectedTags.slice(0, 2).join('、');
+  const monSentence =
+    selectedTags.length === 1
+      ? `這個月主要想多談「${selectedTags[0]}」這塊`
+      : `這禮拜想多聊「${monLead}」這幾個方向`;
+
+  // 週二：用 value tag 包成「__這件事」；沒勾就退用 audience；都沒就空
+  const tueAnchor = valueHint || audienceHint;
+  const tueSentence = tueAnchor ? `${tueAnchor}這件事` : '';
+
+  // 週五：用 product tag 當新品名稱；沒勾 product 就退用第一個 tag
+  const friProduct = productHint || selectedTags[0] || '';
+
+  return [
+    monSentence,    // 週一
+    tueSentence,    // 週二
+    '',             // 週三
+    '',             // 週四（保留場景故事）
+    friProduct,     // 週五
+    '',             // 週六
+    '',             // 週日
+  ];
 }
 
 /**
@@ -304,19 +547,23 @@ function splitContext(raw: string): { firstSentence: string; full: string } | nu
 export function generateBroadcasts(input: LineBroadcastInput): GeneratedBroadcast[] {
   const name = input.storeName.trim() || '我們';
   const theme = input.weekTheme?.trim() || '';
-  const ctx = input.customContext ? splitContext(input.customContext) : null;
+  const selectedTags = (input.selectedTags ?? [])
+    .map((t) => t.trim())
+    .filter(Boolean);
 
-  const buildCtx: BuildCtx = {
-    name,
-    theme,
-    ctxFirst: ctx?.firstSentence ?? '',
-    ctxFull: ctx?.full ?? '',
-  };
+  const groups = INDUSTRY_TAGS[input.industry] ?? INDUSTRY_TAGS['其他'];
+  const ctxByDay = buildCtxByDay(selectedTags, groups);
 
   const builders = INDUSTRY_TEMPLATES[input.industry] ?? INDUSTRY_TEMPLATES['其他'];
 
   return DAY_META.map((meta, idx) => {
-    const message = builders[idx](buildCtx);
+    const dayCtx: BuildCtx = {
+      name,
+      theme,
+      ctxFirst: ctxByDay[idx] ?? '',
+      ctxFull: '',
+    };
+    const message = builders[idx](dayCtx);
     return {
       ...meta,
       message,

@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -12,8 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MessageSquare, Shield, Clock, UserX, Wand2 } from 'lucide-react';
-import type { LineBroadcastInput, LineIndustry } from '@/lib/line-broadcast';
+import { MessageSquare, Shield, Clock, UserX, Wand2, Check } from 'lucide-react';
+import {
+  INDUSTRY_TAGS,
+  type LineBroadcastInput,
+  type LineIndustry,
+} from '@/lib/line-broadcast';
 
 interface Props {
   onSubmit: (input: LineBroadcastInput) => void;
@@ -30,14 +33,42 @@ const INDUSTRIES: LineIndustry[] = [
   '其他',
 ];
 
+const TAG_RECOMMENDED_MIN = 1;
+const TAG_RECOMMENDED_MAX = 5;
+const TAG_HARD_MAX = 8;
+
 export default function LineBroadcastHero({ onSubmit }: Props) {
   const [storeName, setStoreName] = useState('');
   const [industry, setIndustry] = useState<LineIndustry | ''>('');
   const [weekTheme, setWeekTheme] = useState('');
-  const [customContext, setCustomContext] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [error, setError] = useState('');
 
-  const CTX_MAX = 300;
+  const tagGroups = useMemo(
+    () => (industry ? INDUSTRY_TAGS[industry as LineIndustry] : []),
+    [industry],
+  );
+
+  function toggleTag(tag: string) {
+    setError('');
+    setSelectedTags((prev) => {
+      if (prev.includes(tag)) {
+        return prev.filter((t) => t !== tag);
+      }
+      if (prev.length >= TAG_HARD_MAX) {
+        setError(`最多勾 ${TAG_HARD_MAX} 個標籤，超過會稀釋每篇文案的聚焦度`);
+        return prev;
+      }
+      return [...prev, tag];
+    });
+  }
+
+  function handleIndustryChange(v: string) {
+    setIndustry(v as LineIndustry);
+    // 切產業時清掉舊產業的標籤
+    setSelectedTags([]);
+    setError('');
+  }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -54,16 +85,12 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
       setError('本週主題請在 60 字以內');
       return;
     }
-    if (customContext.trim().length > CTX_MAX) {
-      setError(`自建描述請在 ${CTX_MAX} 字以內`);
-      return;
-    }
     setError('');
     onSubmit({
       storeName: name,
       industry: industry as LineIndustry,
       weekTheme: weekTheme.trim() || undefined,
-      customContext: customContext.trim() || undefined,
+      selectedTags: selectedTags.length > 0 ? selectedTags : undefined,
     });
   }
 
@@ -86,17 +113,15 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            輸入店名 + 產業，<strong className="text-slate-900">3 秒產出</strong>歡迎、教育、QA、幕後、新品、促銷、節慶 7 篇 LINE OA 推播初稿。
-            <br className="hidden md:block" />
-            每篇附建議推播時段、字數、emoji——複製就能排。
+            選店名 + 產業 + 點幾個標籤，<strong className="text-slate-900">3 秒產出</strong>歡迎、教育、QA、幕後、新品、促銷、節慶 7 篇 LINE OA 推播初稿。
           </p>
 
           <div className="mt-6 mx-auto max-w-xl flex items-start gap-3 text-left bg-white/70 backdrop-blur-sm border border-emerald-200 rounded-xl p-4">
             <Wand2 className="w-4 h-4 text-emerald-700 mt-0.5 shrink-0" aria-hidden />
             <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
               <strong className="text-emerald-800">不是 AI 聊天工具。</strong>
-              你給 1 段店家描述，我們給 7 篇 ship-ready 初稿。
-              不用打字 30 分鐘、不用「請幫我修改一下語氣」、不用反覆 prompt。
+              選擇預設標籤、不用打字思考。標籤組合 → 7 篇 ship-ready 初稿。
+              不用反覆 prompt、不用「請幫我修改一下語氣」。
             </p>
           </div>
         </div>
@@ -118,7 +143,7 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
                 type="text"
                 value={storeName}
                 onChange={(e) => setStoreName(e.target.value)}
-                placeholder="例：好初早餐 信義店"
+                placeholder="例：榮芳商行"
                 className="h-12 text-base"
                 aria-required="true"
                 maxLength={40}
@@ -132,12 +157,9 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
               >
                 產業類別 <span className="text-rose-500">*</span>
               </Label>
-              <Select
-                value={industry}
-                onValueChange={(v) => setIndustry(v as LineIndustry)}
-              >
+              <Select value={industry} onValueChange={handleIndustryChange}>
                 <SelectTrigger id="industry" className="h-12 text-base">
-                  <SelectValue placeholder="選一個（影響語感）" />
+                  <SelectValue placeholder="選一個（影響可用的標籤池）" />
                 </SelectTrigger>
                 <SelectContent>
                   {INDUSTRIES.map((it) => (
@@ -147,6 +169,9 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
                   ))}
                 </SelectContent>
               </Select>
+              <p className="mt-1.5 text-xs text-slate-500">
+                選了之後下方會出現該產業的 3 組標籤池。例：選「零售」會看到「酒類」「文創書籍」「咖啡豆茶葉」等。
+              </p>
             </div>
 
             <div>
@@ -168,46 +193,68 @@ export default function LineBroadcastHero({ onSubmit }: Props) {
                 className="h-12 text-base"
                 maxLength={60}
               />
-              <p className="mt-1.5 text-xs text-slate-500">
-                有填的話，新品 / 節慶 / 歡迎 三篇會帶到這個主題。
-              </p>
             </div>
 
-            <div>
-              <Label
-                htmlFor="custom-context"
-                className="text-sm font-semibold text-slate-900 mb-2 block"
-              >
-                店家自建描述{' '}
-                <span className="text-slate-400 font-normal text-xs">
-                  （選填，{CTX_MAX} 字內）
-                </span>
-              </Label>
-              <Textarea
-                id="custom-context"
-                value={customContext}
-                onChange={(e) => setCustomContext(e.target.value)}
-                placeholder={`本週實際發生的事、店家獨特觀點、想多聊的細節。\n\n例：「上週客人問我，為什麼我們的便當比隔壁貴 20 元——我才意識到我從沒講過，我們是早上 5 點自己備料，沒用中央廚房。」`}
-                rows={5}
-                maxLength={CTX_MAX}
-                className="text-base resize-none"
-                aria-describedby="custom-context-help"
-              />
-              <div className="mt-1.5 flex items-start justify-between gap-3">
-                <p
-                  id="custom-context-help"
-                  className="text-xs text-slate-500 leading-relaxed"
-                >
-                  有填的話，會自然嵌入 <strong>歡迎 / 教育 / 幕後 / 新品</strong> 四篇——你的原文不會被改寫，只會被「裝進對的句型」。
+            {/* ─── 動態標籤池 ─── */}
+            {tagGroups.length > 0 && (
+              <div className="pt-2">
+                <div className="flex items-baseline justify-between gap-3 mb-3">
+                  <Label className="text-sm font-semibold text-slate-900">
+                    勾選相關標籤{' '}
+                    <span className="text-slate-400 font-normal text-xs">
+                      （建議 {TAG_RECOMMENDED_MIN}-{TAG_RECOMMENDED_MAX} 個）
+                    </span>
+                  </Label>
+                  <span
+                    className="text-xs text-slate-400 tabular-nums shrink-0"
+                    aria-live="polite"
+                  >
+                    已選 {selectedTags.length} 個
+                  </span>
+                </div>
+
+                <div className="space-y-5">
+                  {tagGroups.map((group) => (
+                    <fieldset key={group.key} className="space-y-2">
+                      <legend className="text-xs font-bold text-slate-700 mb-1.5">
+                        🏷️ {group.label}
+                        <span className="font-normal text-slate-400 ml-1.5">
+                          · {group.description}
+                        </span>
+                      </legend>
+                      <div className="flex flex-wrap gap-2">
+                        {group.tags.map((tag) => {
+                          const isOn = selectedTags.includes(tag);
+                          return (
+                            <button
+                              type="button"
+                              key={tag}
+                              onClick={() => toggleTag(tag)}
+                              aria-pressed={isOn}
+                              className={[
+                                'inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1',
+                                isOn
+                                  ? 'bg-[#1D9E75] text-white border-[#1D9E75] hover:bg-[#168060]'
+                                  : 'bg-white text-slate-700 border-slate-300 hover:border-emerald-400 hover:bg-emerald-50',
+                              ].join(' ')}
+                              data-gtm-event={`line_broadcast_tag_${group.key}`}
+                            >
+                              {isOn && <Check className="w-3 h-3" aria-hidden />}
+                              {tag}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </fieldset>
+                  ))}
+                </div>
+
+                <p className="mt-4 text-xs text-slate-500 leading-relaxed">
+                  勾的標籤會自然嵌入 <strong>歡迎 / 教育 / 新品</strong> 三篇——產出的文案直接用你選的關鍵詞當主軸。
+                  不勾也行（7 篇仍會產出，只是少了個性化錨點）。
                 </p>
-                <span
-                  className="text-xs text-slate-400 shrink-0 tabular-nums"
-                  aria-live="polite"
-                >
-                  {customContext.length} / {CTX_MAX}
-                </span>
               </div>
-            </div>
+            )}
 
             <Button
               type="submit"
