@@ -12,6 +12,7 @@ import {
   ArrowRight,
   ArrowDown,
   Bell,
+  MessageSquare,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -121,6 +122,17 @@ const tools: Tool[] = [
     icon: Sparkles,
     status: 'live',
     replaces: '品牌諮詢 NT$6,000 的快速版',
+  },
+  {
+    slug: 'line-broadcast',
+    href: '/tools/line-broadcast',
+    name: 'LINE 推播文案產生器',
+    tagline: '下週 7 天 LINE OA 推播，3 秒寫完',
+    description:
+      '輸入店名 + 產業，產出 7 篇 LINE OA 推播初稿（歡迎/教育/QA/幕後/新品/促銷/節慶），附建議時段、字數、6 個避免被封鎖的紅線。',
+    icon: MessageSquare,
+    status: 'live',
+    replaces: 'LINE OA 內容策略諮詢 NT$5,000',
   },
 ];
 
