@@ -27,6 +27,275 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: 'line-ads-vs-google-ads-taiwan-smb-2026',
+    title: 'LINE 廣告 vs Google 廣告，中小店家該投哪個？4 個情境決策表（2026 台灣）',
+    description: '不是「兩個都投」這種廢話。預算有限的店家，每月 NT$3,000-15,000 該丟 LINE 還是 Google？本文用 4 個常見情境（餐飲、醫美、服務業、電商）拆解決策邏輯，附上避免燒錢的 5 個檢查。',
+    publishedAt: '2026-05-27',
+    category: '中小店家行銷',
+    tags: ['LINE 廣告', 'Google 廣告', '預算規劃', '中小企業行銷', '台灣中小店家'],
+    author: 'adlo 編輯部',
+    readingTime: 10,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1534951009808-766178b47a4f?w=1200&auto=format&fit=crop&q=80',
+      alt: '桌上一疊金色硬幣，象徵中小店家有限的廣告預算要怎麼分配',
+      credit: 'Josh Appel',
+      creditUrl: 'https://unsplash.com/@joshappel',
+    },
+    content: `
+<p class="lead">「廣告預算每月只有 NT$5,000，到底要投 LINE 還是 Google？」這是台灣中小店家最常問的問題之一。「兩個都投」是廢話——預算不夠分散，會兩邊都沒效果。</p>
+
+<p>本文用 4 個常見情境拆解決策邏輯，10 分鐘決定該丟哪邊。</p>
+
+<h2>先理解兩個平台的本質差異</h2>
+
+<table>
+  <thead><tr><th></th><th>Google 廣告</th><th>LINE 廣告</th></tr></thead>
+  <tbody>
+    <tr><td>使用者狀態</td><td>「<strong>主動搜尋</strong>」中</td><td>「<strong>被動瀏覽</strong>」中</td></tr>
+    <tr><td>意圖強度</td><td>高（已有需求才搜）</td><td>低（被內容打動才有興趣）</td></tr>
+    <tr><td>典型 CPC（台灣）</td><td>NT$5-30（在地搜尋）</td><td>NT$2-15</td></tr>
+    <tr><td>適合的內容</td><td>產品/服務/在地關鍵字</td><td>促銷、視覺、情境</td></tr>
+    <tr><td>轉換週期</td><td>短（當下決定）</td><td>中-長（需要 LINE 加好友後溝通）</td></tr>
+    <tr><td>受眾規模</td><td>所有 Google 使用者</td><td>台灣 LINE 使用者（2,100 萬）</td></tr>
+  </tbody>
+</table>
+
+<p>關鍵差異在「<strong>使用者狀態</strong>」——Google 廣告打的是「<strong>正在搜尋你產業</strong>」的人，LINE 廣告打的是「<strong>滑著看到你的人</strong>」。</p>
+
+<h2>情境 1：餐飲（咖啡店、便當店、簡餐）</h2>
+
+<p><strong>建議：Google 廣告為主 80%，LINE 廣告為輔 20%</strong></p>
+
+<h3>為什麼</h3>
+<p>客人想吃飯時會 Google「<strong>台中西區 便當</strong>」「<strong>附近咖啡</strong>」——這是高意圖搜尋，命中率高。LINE 上滑到「我們的便當很好吃」訊息，9 成被滑過。</p>
+
+<h3>實作</h3>
+<ul>
+  <li>Google 廣告：投「在地搜尋」+ 「商家品牌名」（保護自家名字不被對手搶走）</li>
+  <li>LINE 廣告：只用於「<strong>促銷檔期</strong>」（母親節限定、週末 buy 1 get 1）</li>
+  <li>不要在 LINE 投「我們新開幕，歡迎光臨」這種訊息——沒人會 care</li>
+</ul>
+
+<h2>情境 2：醫美 / 牙醫 / 中醫</h2>
+
+<p><strong>建議：Google 廣告 60%，LINE 廣告 40%</strong></p>
+
+<h3>為什麼</h3>
+<p>醫療服務客戶決策週期長（評估 1-3 個月）。Google 搜尋抓到「想做」的客戶，但<strong>大部分人會猶豫</strong>。LINE 廣告 + 加 LINE 好友的設計可以「<strong>持續對話</strong>」，把猶豫客戶養到下決定。</p>
+
+<h3>實作</h3>
+<ul>
+  <li>Google 廣告：投「療程關鍵字」（北部 牙周治療 / 雙眼皮 / 中醫減重）</li>
+  <li>LINE 廣告：投「<strong>加 LINE 好友送諮詢</strong>」型，把名單收進 LINE OA</li>
+  <li>LINE OA 後續 nurture：每週 1-2 則衛教文，3 個月內轉換</li>
+</ul>
+
+<h2>情境 3：服務業（律師、會計、設計、修繕）</h2>
+
+<p><strong>建議：Google 廣告為主 90%，LINE 廣告 10%</strong></p>
+
+<h3>為什麼</h3>
+<p>需要服務的人都是「<strong>有急迫問題才找</strong>」（水管壞了、要報稅了、要申請案件）——只有 Google 搜尋打得到。LINE 廣告打 service B2B 的轉換率非常低。</p>
+
+<h3>實作</h3>
+<ul>
+  <li>Google 廣告：投「在地 + 服務」關鍵字（台中 律師 / 台北 報稅 / 高雄 水管修繕）</li>
+  <li>LINE 廣告：只用於「<strong>內容推廣</strong>」（你寫的 blog 文章），把潛在客戶帶進你的內容池，不是直接打廣告</li>
+</ul>
+
+<h2>情境 4：電商 / 實體+電商品牌</h2>
+
+<p><strong>建議：LINE 廣告為主 60%，Google 廣告 40%</strong></p>
+
+<h3>為什麼</h3>
+<p>電商商品多為「<strong>無迫切需求、視覺驅動</strong>」——保養品、服飾、家居、文創——客人不會主動搜「我想買 OO」。LINE 廣告 in-feed 視覺型廣告適合「種草」，Google 廣告適合「<strong>已有品牌認知</strong>」的搜尋者。</p>
+
+<h3>實作</h3>
+<ul>
+  <li>LINE 廣告：投「視覺型輪播」+「短影片」，主打情境與場景</li>
+  <li>Google 廣告：投「品牌名搜尋」+ 「<strong>shopping ads</strong>」（產品圖直接顯示在搜尋結果）</li>
+  <li>不要投無人在搜的關鍵字（例：「2026 新款日系毛衣」這種長尾，搜尋量不夠）</li>
+</ul>
+
+<h2>避免燒錢的 5 個檢查</h2>
+
+<h3>① 沒有 Landing Page 就不要投廣告</h3>
+<p>把廣告流量導到首頁 = 燒錢。流量需要進到「<strong>專屬 Landing Page</strong>」——只講一件事、一個 CTA。</p>
+
+<h3>② 沒有轉換追蹤就不要投</h3>
+<p>Google Ads Conversion Tracking、LINE 廣告事件追蹤——沒設定 = 你不知道哪個關鍵字 / 廣告組賺錢，等於蒙眼開車。</p>
+
+<h3>③ 預算低於 NT$3,000 / 月不要投</h3>
+<p>數據量不夠 = 演算法學不到 = 燒到第 3 週還在「冷啟動」階段。寧可前 3 個月先存到 NT$15,000 一次投入，比每月分散 NT$3,000 有效 3 倍。</p>
+
+<h3>④ 不要追每個熱門關鍵字</h3>
+<p>「<strong>台中咖啡</strong>」這種大詞 CPC 高、轉換率低（多數是路過搜尋）。長尾詞如「<strong>台中西區 寵物友善 咖啡</strong>」CPC 低 50%、轉換率高 3 倍。</p>
+
+<h3>⑤ 廣告組投 14 天就要看數據</h3>
+<p>每 14 天檢視：CPC、CTR、轉換率、CPA。第 14 天還在優化中可能正常；第 30 天還沒收斂就要砍掉換新方向。</p>
+
+<h2>不確定起手怎麼算？</h2>
+
+<p>廣告之前，先確保<strong>自然流量基礎打好</strong>——GBP 沒填好、評論不夠、店家描述太寬——投再多廣告也只是「<strong>把不到位的店面推出去</strong>」。</p>
+
+<p><a href="/check"><strong>免費 30 秒檢查你 GBP 6 個維度，補完再投廣告 ROI 更高 →</strong></a></p>
+
+<h2>一句話總結</h2>
+
+<p><strong>預算有限就投高意圖通路：</strong></p>
+<ul>
+  <li>實體服務 → Google 廣告（在地搜尋）</li>
+  <li>視覺/種草型商品 → LINE 廣告</li>
+  <li>「兩個都投」= 兩個都做不好</li>
+</ul>
+
+<p>先打對一個，再考慮加第二個。</p>
+`,
+  },
+  {
+    slug: 'google-business-profile-suspended-recovery-2026',
+    title: 'Google 商家被檢舉/停權怎麼救？5 階段救援流程 + 6 個高風險紅線（2026 台灣）',
+    description: '一夜之間商家從 Google 地圖消失？先確認被停權還是被隱藏。給你 5 階段救援流程（從後台申訴到 Twitter escalate）+ 6 個多數店家不知道的高風險紅線。',
+    publishedAt: '2026-05-27',
+    category: '在地 SEO',
+    tags: ['Google 我的商家', 'GBP', 'GBP 停權', '商家檢舉', '危機處理', '台灣中小店家'],
+    author: 'adlo 編輯部',
+    readingTime: 10,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1498811008858-d95a730b2ffc?w=1200&auto=format&fit=crop&q=80',
+      alt: '玻璃門上掛著「Sorry we are closed」的告示牌，象徵商家被停權的狀態',
+      credit: 'Tim Mossholder',
+      creditUrl: 'https://unsplash.com/@timmossholder',
+    },
+    content: `
+<p class="lead">早上開門前打開手機，發現 Google 地圖搜不到自己店家——商家後台跳出「<strong>暫停 / 已停權</strong>」紅字。這個情境在台灣每個月都有店家踩到，多數人第一反應是慌、亂申訴、踩到更多紅線。</p>
+
+<p>本文給你按嚴重度排序的 5 階段救援流程 + 6 個高風險紅線檢查。讀完再行動。</p>
+
+<h2>第一步：先確認狀態</h2>
+
+<p>「商家消失」可能是 4 種狀態之一，每種應對不同：</p>
+
+<table>
+  <thead><tr><th>狀態</th><th>後台顯示</th><th>嚴重度</th></tr></thead>
+  <tbody>
+    <tr><td><strong>暫時隱藏</strong></td><td>「需要重新驗證」</td><td>低（驗證即可）</td></tr>
+    <tr><td><strong>軟性停權</strong></td><td>「資訊不符」「暫停顯示」</td><td>中（補資料可救）</td></tr>
+    <tr><td><strong>硬性停權</strong></td><td>「違反政策已停權」</td><td>高（需正式申訴）</td></tr>
+    <tr><td><strong>永久移除</strong></td><td>後台無法登入或顯示「已移除」</td><td>極高（救回率 &lt; 10%）</td></tr>
+  </tbody>
+</table>
+
+<p>確認是哪種狀態後，進入對應階段。</p>
+
+<h2>5 階段救援流程（依嚴重度遞增）</h2>
+
+<h3>階段 1：暫時隱藏 → 重新驗證</h3>
+<p>多數情況是 Google 偵測到某些變動（地址、電話、營業時間異動）需要重新驗證身分。</p>
+<ul>
+  <li>後台 → 設定檔 → 點擊「驗證商家」</li>
+  <li>選擇驗證方式：明信片、電話、簡訊、視訊（Google 隨機指定）</li>
+  <li>驗證碼通常 5-14 天內到</li>
+</ul>
+<p><strong>救回時間：</strong>1-2 週。<strong>救回率：</strong>95%。</p>
+
+<h3>階段 2：軟性停權 → 補完整資料</h3>
+<p>後台顯示「資訊不符」或「暫停顯示」，通常是 Google 認為你 GBP 資料有問題（招牌與店名不符、營業時間矛盾、電話打不通）。</p>
+<ul>
+  <li>檢查「商家名稱」與店面招牌完全一致（包括標點符號）</li>
+  <li>電話必須能接通，且不能是 0800/04XX 之類分機號</li>
+  <li>營業時間更新到正確（包含特殊節日）</li>
+  <li>地址加上「<strong>樓層 / 室號</strong>」，越精準越好</li>
+  <li>修改完 → 後台「報告問題」→ 寫明「已補正資料，請重新審核」</li>
+</ul>
+<p><strong>救回時間：</strong>3-7 天。<strong>救回率：</strong>70%。</p>
+
+<h3>階段 3：硬性停權 → 後台正式申訴</h3>
+<p>後台顯示「違反政策已停權」。先<strong>確認違反哪條政策</strong>（後台會給簡短理由），然後寫正式申訴。</p>
+
+<p><strong>申訴信必要 6 項：</strong></p>
+<ol>
+  <li>商家名稱 + Place ID</li>
+  <li>實際營業證據（營業登記 / 統編 / 租賃合約）</li>
+  <li>店面外觀照片（含招牌、地址號碼可見）</li>
+  <li>內部照片（含店內擺設）</li>
+  <li>客戶活動證據（POS 紀錄 / 預約紀錄 / 收據）</li>
+  <li>明確聲明：未違反政策 + 願意修正任何被指控項目</li>
+</ol>
+
+<p>提交位置：後台 → 「聯絡支援」→ 選「Business Profile Suspension」→ 上傳資料。</p>
+
+<p><strong>救回時間：</strong>2-4 週。<strong>救回率：</strong>40-50%。</p>
+
+<h3>階段 4：Google Business Profile Community Forum 公開申訴</h3>
+<p>後台申訴超過 3 週沒回應，到 <a href="https://support.google.com/business/community" target="_blank" rel="noopener noreferrer">support.google.com/business/community</a> 發新主題。</p>
+<p>標題範例：「<strong>[Suspension Appeal] [商家名稱] - 已透過後台申訴 [日期] 仍無回應，求 escalate</strong>」</p>
+<p>內文：時間軸 + 完整證據 + 聲明。Google 員工或社群志工會在論壇上回。</p>
+<p><strong>適用：</strong>階段 3 無效。<strong>回覆時間：</strong>3-7 天。</p>
+
+<h3>階段 5：Twitter @GoogleMyBiz 公開 escalate</h3>
+<p>論壇也沒效時的最後手段。在 X / Twitter 上 @GoogleMyBiz 發文：「Suspended without clear reason, full documentation submitted [日期], please escalate.」+ 截圖。</p>
+<p>公開 escalate 通常 24-48 小時內被 Google 員工回應，但<strong>成功率仍取決於你是否真的合規</strong>。</p>
+
+<h2>救援成功率實況</h2>
+
+<p>誠實告訴你：</p>
+<ul>
+  <li>暫時隱藏 + 重新驗證 → 95% 救回</li>
+  <li>軟性停權 + 補資料 → 70% 救回</li>
+  <li>硬性停權 + 正式申訴 → 40-50% 救回</li>
+  <li>永久移除 → &lt; 10% 救回</li>
+</ul>
+
+<p>整體平均 < 50%。<strong>所以最該做的不是學救援，是事先不要踩紅線。</strong></p>
+
+<h2>6 個高風險紅線（多數店家不知道）</h2>
+
+<h3>① 商家名稱塞關鍵字</h3>
+<p>商家名稱寫「<strong>台中最棒咖啡店 - 寵物友善 - 24 小時</strong>」= 違規。Google 規定商家名稱「<strong>只能是品牌實際名稱</strong>」，加描述會被檢舉停權。</p>
+
+<h3>② 地址造假或共用</h3>
+<p>租虛擬辦公室、用住宅地址、跟其他店共用同地址 → Google 用街景比對會發現異常。</p>
+
+<h3>③ 同一個人開多家「同類型」商家</h3>
+<p>同個老闆開 3 家咖啡店、用 3 個 Gmail 註冊 → Google 用帳號關聯偵測，會懷疑「假帳號」。</p>
+
+<h3>④ 評論造假 / 利益交換</h3>
+<p>請員工寫、朋友寫、客人寫換折扣 → Google 從帳號社群關係偵測，被檢舉就被停權。</p>
+
+<h3>⑤ 業別與實際營業不符</h3>
+<p>登記「咖啡店」但實際做美甲沙龍、或「設計工作室」實際是不動產仲介 → 業別不符會被檢舉。</p>
+
+<h3>⑥ 競爭對手惡意檢舉</h3>
+<p>同區同業可能被惡意檢舉「歇業」「假商家」——Google 會先「<strong>軟性隱藏</strong>」再讓你申訴。<strong>所以平時就要把資料做齊全、有完整證據，被檢舉時才救得回來</strong>。</p>
+
+<h2>事前預防比事後救援重要 10 倍</h2>
+
+<p>救援平均成功率 < 50%、平均耗時 2-4 週。事前花 2 小時把資料補齊全 = 多數風險可以避免。</p>
+
+<p>核心檢查：</p>
+<ul>
+  <li>商家名稱 = 招牌名稱（不塞關鍵字）</li>
+  <li>地址、電話、營業時間真實且最新</li>
+  <li>有完整營業證據（合約、發票、POS）放手機備查</li>
+  <li>評論收集流程合規（不換折扣、不指定星數）</li>
+  <li>定期登入後台（每月至少一次，避免「不活躍」被自動隱藏）</li>
+</ul>
+
+<h2>不確定哪邊有風險？</h2>
+
+<p>多數老闆不知道自己 GBP 哪個部分踩到紅線。</p>
+
+<p><a href="/check"><strong>免費 30 秒 GBP 健檢，看你 6 個維度有沒有紅線 →</strong></a></p>
+
+<h2>一句話總結</h2>
+
+<p><strong>救援是賭機率，預防是控變數。</strong></p>
+
+<p>把名稱、地址、評論流程一開始就做對，遠比學申訴技巧有用。被停權當下能做的，已經不多了。</p>
+`,
+  },
+  {
     slug: 'threads-30-days-no-views-diagnosis-taiwan-2026',
     title: 'Threads 經營 30 天沒人看？5 個診斷問題 + 修正路徑（2026 台灣）',
     description: '不是「再多發一點就會好」這種廢話。發 30 天 0 觸及通常不是頻率問題，是 5 個診斷點裡有 1-2 個沒打中。本文給你 5 個問題清單 + 對應修正路徑，10 分鐘判斷自己卡在哪。',
