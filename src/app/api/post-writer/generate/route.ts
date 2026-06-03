@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generatePostsViaGroq } from '@/lib/groq';
-import { mockGeneratePosts, type Industry, type PostWriterInput } from '@/components/post-writer/mock-data';
+import {
+  generatePosts,
+  type Industry,
+  type PostWriterInput,
+} from '@/lib/gbp-post-writer';
 import {
   checkRateLimit,
   incrementRateLimit,
@@ -10,7 +13,6 @@ import { checkCostCap } from '@/lib/cost-cap';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 30; // Vercel function timeout (Hobby 上限為 60，留 buffer)
 
 const TOOL = 'post-writer';
 const VALID_INDUSTRIES: Industry[] = [
@@ -21,6 +23,7 @@ interface GenerateBody {
   storeName?: string;
   industry?: string;
   weekTheme?: string;
+  selectedTags?: string[];
 }
 
 export async function POST(req: NextRequest) {
@@ -35,6 +38,9 @@ export async function POST(req: NextRequest) {
     const storeName = (body.storeName ?? '').trim();
     const industryRaw = (body.industry ?? '').trim();
     const weekTheme = (body.weekTheme ?? '').trim();
+    const selectedTags = Array.isArray(body.selectedTags)
+      ? body.selectedTags.map((t) => String(t ?? '').trim()).filter(Boolean)
+      : [];
 
     if (storeName.length < 2 || storeName.length > 40) {
       return NextResponse.json(
@@ -51,17 +57,24 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
+    if (selectedTags.length > 8) {
+      return NextResponse.json(
+        { error: '標籤最多勾 8 個' },
+        { status: 400 },
+      );
+    }
 
     const input: PostWriterInput = {
       storeName,
       industry: industryRaw as Industry,
       weekTheme: weekTheme || undefined,
+      selectedTags: selectedTags.length > 0 ? selectedTags : undefined,
     };
 
     const ip = getClientIp(req.headers);
     const userAgent = req.headers.get('user-agent') ?? '';
 
-    // 0. Abuse defense — UA filter + IP burst (避免 Groq free tier 被刷爆)
+    // 0. 防濫用（UA filter + IP burst）— 純 deterministic 也需要擋自動化流量
     const cap = await checkCostCap(ip, userAgent, 'post-writer');
     if (!cap.allowed) {
       return NextResponse.json(
@@ -101,28 +114,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Groq 生成；任何失敗 → 降級 mock，不阻擋客人
-    let posts;
-    let source: 'groq' | 'mock' = 'mock';
-    let bannedHits: string[] = [];
-    let tokensUsed = 0;
+    // 2. Deterministic 生成（不打 AI API、不會失敗）
+    const posts = generatePosts(input);
 
-    try {
-      const result = await generatePostsViaGroq(input);
-      posts = result.posts;
-      bannedHits = result.bannedHits;
-      tokensUsed = result.tokensUsed;
-      source = 'groq';
-      if (bannedHits.length > 0) {
-        console.warn('[api/post-writer] Groq 命中禁用詞', bannedHits);
-      }
-    } catch (err) {
-      console.error('[api/post-writer] Groq 失敗，降級 mock', err);
-      posts = mockGeneratePosts(input);
-      source = 'mock';
-    }
-
-    // 3. 成功才遞增計數
+    // 3. 遞增計數
     try {
       await incrementRateLimit(ip, TOOL);
     } catch (err) {
@@ -131,9 +126,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       posts,
-      source,
-      tokensUsed,
-      bannedHits,
+      source: 'deterministic',
       quota: {
         count: rl.count + 1,
         limit: rl.limit,
