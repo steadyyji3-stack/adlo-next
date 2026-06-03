@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Shield, Clock, UserX } from 'lucide-react';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
 interface Props {
   onSubmit: (query: string) => void;
@@ -52,6 +53,12 @@ export default function CheckHero({ onSubmit, errorMsg }: Props) {
             <br className="hidden md:block" />
             給你一份看得懂、做得動的健檢報告。
           </p>
+
+          <NotAIChatBadge
+            flow="貼 GBP 連結 → 6 維度健檢分數"
+            detail="抓你的 Google 商家資料算分，不是 AI 猜。30 秒給你「最該先改的 3 件事」清單。"
+            className="mt-6"
+          />
         </div>
 
         {/* 輸入框 */}

@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { QrCode, Shield, Clock, UserX, ExternalLink } from 'lucide-react';
 import ReviewLinkIllustration from './ReviewLinkIllustration';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 import { HOW_TO_FIND_REVIEW_LINK } from '@/lib/review-link';
 
 export interface ReviewFormValue {
@@ -103,6 +104,12 @@ export default function ReviewLinkHero({ onSubmit }: Props) {
             從 Google 商家後台拿到評論連結後，<strong className="text-slate-900">3 秒產出</strong>能印 / 能傳 / 能寄的全套素材。
             客人少打 5 步驟就能寫評論。
           </p>
+
+          <NotAIChatBadge
+            flow="貼 GBP 連結 → QR Code + 6 套訊息模板"
+            detail="結構化模板，不是聊出來的。LINE / 紙卡 / Email 三通路全配齊，複製就能用。"
+            className="mt-6"
+          />
         </div>
 
         <form

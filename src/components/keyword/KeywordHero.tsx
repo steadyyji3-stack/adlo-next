@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Search, Shield, Clock, UserX } from 'lucide-react';
 import KeywordIllustration from './KeywordIllustration';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 import type { KeywordInput } from './mock-data';
 
 interface Props {
@@ -74,6 +75,12 @@ export default function KeywordHero({ onSubmit, errorMsg }: Props) {
           <p className="text-xs sm:text-sm text-slate-500 mt-3 max-w-xl mx-auto">
             ⚠️ 這是策略判斷工具，不顯示精準數字。要查真實搜尋量請用 Google Ads Keyword Planner（結果頁附直連）。
           </p>
+
+          <NotAIChatBadge
+            flow="輸入關鍵字 → 熱度級距 + SEO 難度 + CPC 區間"
+            detail="台灣在地數據，不用註冊、不用 prompt。直接給「該 SEO、跑廣告、還是跳過」的決策建議。"
+            className="mt-6"
+          />
         </div>
 
         <form

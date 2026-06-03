@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Search, Shield, Clock, UserX } from 'lucide-react';
 import SeoScorerIllustration from './SeoScorerIllustration';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
 interface Props {
   onSubmit: (url: string) => void;
@@ -57,6 +58,12 @@ export default function SeoScorerHero({ onSubmit, errorMsg }: Props) {
             我們真的抓你的網頁 HTML，<strong className="text-slate-900">10 維度給分數 + 3 個最該先改的</strong>。
             不是用 AI 猜，是讀你的 title、H1、meta、字數、圖片 alt、連結結構直接算。
           </p>
+
+          <NotAIChatBadge
+            flow="貼一個 URL → 10 維度 SEO 分數"
+            detail="抓你的 HTML 算分，不是 AI 解讀。10 秒給「最該先改的 3 件事」清單。"
+            className="mt-6"
+          />
         </div>
 
         <form

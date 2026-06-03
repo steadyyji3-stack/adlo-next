@@ -13,6 +13,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Radar, Shield, Clock, UserX } from 'lucide-react';
 import CompetitorIllustration from './CompetitorIllustration';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 import type { City, CompetitorInput } from './mock-data';
 
 interface Props {
@@ -67,6 +68,12 @@ export default function CompetitorHero({ onSubmit, errorMsg }: Props) {
             <strong className="text-slate-900">用 Google 地圖真實搜尋結果</strong>抓出同區同類前 3 家。
             做六維度比較，告訴你哪裡領先、哪裡落後。
           </p>
+
+          <NotAIChatBadge
+            flow="輸入店名 + 關鍵字 → 同區前 3 雷達圖"
+            detail="抓 Google 地圖真實搜尋結果，不是 AI 編。結構化評分 + 同類差距，3 秒拿到。"
+            className="mt-6"
+          />
         </div>
 
         <form

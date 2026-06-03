@@ -14,6 +14,7 @@ import {
   Bell,
   MessageSquare,
 } from 'lucide-react';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
 export const metadata: Metadata = {
   title: 'adlo 免費行銷工具箱｜台灣店家每週回頭的工具站',
@@ -162,6 +163,12 @@ export default function ToolsIndexPage() {
               現在貼一個連結 3 秒拿答案。為台灣中小店家做的工具箱。
             </p>
 
+            <NotAIChatBadge
+              flow={`${liveTools.length} 支工具，全部「結構化輸入 → 結構化輸出」`}
+              detail="不是另一個 ChatGPT。不用打字 30 分鐘 prompt、不用反覆「請幫我修改一下語氣」。每支工具都只做一件事，3 秒給你答案。"
+              className="mb-7 max-w-2xl"
+            />
+
             {/* Hero CTAs（A: 直接開始 + 滑到下方） */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-7">
               <Link
@@ -176,7 +183,7 @@ export default function ToolsIndexPage() {
                 className="inline-flex items-center gap-1.5 px-5 py-3.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
                 data-gtm-event="tools_hero_scroll"
               >
-                看 7 支工具完整清單 <ArrowDown className="w-3.5 h-3.5" />
+                看 {liveTools.length} 支工具完整清單 <ArrowDown className="w-3.5 h-3.5" />
               </a>
             </div>
 
