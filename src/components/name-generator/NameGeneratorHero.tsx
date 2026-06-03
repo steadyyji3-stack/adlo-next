@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Sparkles } from 'lucide-react';
+import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
 const INDUSTRY_GROUPS: { label: string; items: string[] }[] = [
   {
@@ -93,6 +94,12 @@ export default function NameGeneratorHero({ onSubmit, isLoading }: Props) {
             <strong className="text-slate-800"> 15 組店名 + 10 組 slogan</strong>，
             每組附上「為什麼這個名字能被記住」。
           </p>
+
+          <NotAIChatBadge
+            flow="勾產業 + 風格 + 客群 → 15 組店名 + 10 組 Slogan"
+            detail="用 AI、但不用打對話。結構化選 4 個欄位 → 一次給整批，附「為什麼能被記住」解釋。"
+            className="mt-6"
+          />
         </div>
 
         {/* Form */}
