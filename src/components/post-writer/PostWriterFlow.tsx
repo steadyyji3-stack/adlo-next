@@ -10,7 +10,7 @@ type Stage = 'idle' | 'loading' | 'done';
 
 interface GenerateApiResponse {
   posts?: GeneratedPost[];
-  source?: 'groq' | 'mock';
+  source?: 'deterministic';
   error?: string;
   message?: string;
   quota?: { count: number; limit: number; emailUnlocked: boolean };
