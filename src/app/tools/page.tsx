@@ -206,6 +206,41 @@ export default function ToolsIndexPage() {
         </div>
       </section>
 
+      {/* 精選：我的這週（黏著功能） */}
+      <section className="py-8 sm:py-10 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <Link
+            href="/my-week"
+            aria-label="前往「我的這週」：存一次店家檔案，每週素材自動備好"
+            className="group block rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 ring-1 ring-emerald-200 p-6 sm:p-8 hover:ring-emerald-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            data-gtm-event="tools_featured_my_week"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="size-12 rounded-xl bg-[#1D9E75] flex items-center justify-center shrink-0">
+                <Bell className="size-6 text-white" aria-hidden />
+              </div>
+              <div className="flex-1 min-w-0">
+                <Badge className="bg-[#E1F5EE] text-[#0F6E56] border-[#1D9E75]/30 text-[11px] font-bold mb-2">
+                  存一次，每週自動備好
+                </Badge>
+                <h2
+                  className="text-xl sm:text-2xl font-extrabold text-slate-900"
+                  style={{ fontFamily: 'var(--font-manrope)' }}
+                >
+                  我的這週：每週 14 篇 GBP + LINE 素材，不用重填
+                </h2>
+                <p className="mt-1.5 text-sm sm:text-base text-slate-600 leading-relaxed">
+                  設定一次店名 + 產業 + 標籤，之後每次進來素材都備好。檔案只存你的瀏覽器，不上傳。
+                </p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0F6E56] shrink-0 group-hover:gap-2.5 transition-all">
+                開始設定 <ArrowRight className="w-4 h-4" aria-hidden />
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
       {/* D: 組合使用流程（怎麼搭配用） */}
       <section className="py-12 sm:py-14 bg-white border-b border-slate-100">
         <div className="max-w-5xl mx-auto px-6">
