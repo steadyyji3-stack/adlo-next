@@ -14,7 +14,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Upserts `customers` by `stripe_customer_id`.
 - Retrieves the Stripe subscription and upserts `subscriptions`.
 - Sends onboarding email with `/onboarding?customer_token=...` when `CUSTOMER_LINK_SECRET` is configured.
-- Falls back to `/onboarding?customer_id=...` only when the link secret is missing in non-production setup.
+- Falls back to `/onboarding?customer_id=...` only when the link secret is missing in a setup that also explicitly enables `ALLOW_UNSIGNED_CUSTOMER_ID=true`.
 - Notifies Lorenzo by email.
 - Writes `audit_log` action `stripe.checkout.completed`.
 

@@ -35,6 +35,7 @@ export default async function CustomerBillingPage({
   const params = await searchParams;
   const customerId = getCustomerIdFromSearchParams(params);
   const snapshot = customerId ? await getCustomerSubscriptionSnapshot(customerId) : null;
+  const customerToken = params.customer_token ?? null;
 
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10">
@@ -82,7 +83,7 @@ export default async function CustomerBillingPage({
                 取消會在 Stripe Customer Portal 完成；Stripe webhook 回傳後，adlo 會同步更新訂閱狀態。服務會依 Stripe 訂閱週期維持到目前週期結束。
               </div>
 
-              <CancelSubscriptionButton customerId={snapshot.customer.id} />
+              <CancelSubscriptionButton customerId={snapshot.customer.id} customerToken={customerToken} />
             </CardContent>
           </Card>
         )}

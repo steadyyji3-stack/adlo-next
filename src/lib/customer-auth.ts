@@ -9,6 +9,8 @@ export function getCustomerIdFromRequest(request: NextRequest) {
   const verifiedToken = verifyCustomerLinkToken(token);
   if (verifiedToken) return verifiedToken.customerId;
 
+  if (!isUnsignedCustomerIdAllowed()) return null;
+
   const fromCookie = request.cookies.get('customer_id')?.value;
   const fromQuery = request.nextUrl.searchParams.get('customer_id');
   return normalizeCustomerId(fromCookie ?? fromQuery);
@@ -18,7 +20,24 @@ export function getCustomerIdFromSearchParams(searchParams: { customer_id?: stri
   const verifiedToken = verifyCustomerLinkToken(searchParams.customer_token);
   if (verifiedToken) return verifiedToken.customerId;
 
+  if (!isUnsignedCustomerIdAllowed()) return null;
+
   return normalizeCustomerId(searchParams.customer_id);
+}
+
+export function getCustomerIdFromTokenOrDevFallback(input: { customer_id?: string; customer_token?: string }) {
+  const verifiedToken = verifyCustomerLinkToken(input.customer_token);
+  if (verifiedToken) return verifiedToken.customerId;
+
+  if (!isUnsignedCustomerIdAllowed()) return null;
+
+  return normalizeCustomerId(input.customer_id);
+}
+
+export function isUnsignedCustomerIdAllowed() {
+  // DEV ONLY — never set in production.
+  const isProductionDeploy = process.env.VERCEL_ENV === 'production' || process.env.APP_ENV === 'production';
+  return process.env.ALLOW_UNSIGNED_CUSTOMER_ID === 'true' && !isProductionDeploy;
 }
 
 function normalizeCustomerId(value?: string | null) {

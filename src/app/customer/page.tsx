@@ -1,4 +1,6 @@
 import { redirect } from 'next/navigation';
+import { isUnsignedCustomerIdAllowed } from '@/lib/customer-auth';
+import { buildCustomerPathWithToken } from '@/lib/customer-link-token';
 
 export default async function CustomerIndexPage({
   searchParams,
@@ -6,10 +8,13 @@ export default async function CustomerIndexPage({
   searchParams: Promise<{ customer_id?: string; customer_token?: string }>;
 }) {
   const params = await searchParams;
-  const query = params.customer_token
-    ? `?customer_token=${encodeURIComponent(params.customer_token)}`
-    : params.customer_id
-      ? `?customer_id=${encodeURIComponent(params.customer_id)}`
-      : '';
-  redirect(`/customer/dashboard${query}`);
+  if (params.customer_token) {
+    redirect(buildCustomerPathWithToken('dashboard', params.customer_token));
+  }
+
+  if (params.customer_id && isUnsignedCustomerIdAllowed()) {
+    redirect(`/customer/dashboard?customer_id=${encodeURIComponent(params.customer_id)}`);
+  }
+
+  redirect('/customer/dashboard');
 }

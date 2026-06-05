@@ -6,7 +6,9 @@ Track B endpoint for customer onboarding form submissions.
 
 Public foundation flow, gated by the customer id resolved from the onboarding email link.
 
-Preferred page access is `/onboarding?customer_token=...`. The page still accepts `customer_id` during transition and passes the resolved customer id to the submit API.
+Preferred page access is `/onboarding?customer_token=...`. The page accepts raw `customer_id` only when `ALLOW_UNSIGNED_CUSTOMER_ID=true` for local or preview debugging.
+
+DEV ONLY — never set `ALLOW_UNSIGNED_CUSTOMER_ID` in production.
 
 ## Request
 

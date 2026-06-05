@@ -4,7 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getCustomerIdFromSearchParams } from '@/lib/customer-auth';
+import { getCustomerIdFromSearchParams, isUnsignedCustomerIdAllowed } from '@/lib/customer-auth';
+import { buildCustomerPathWithToken, createCustomerLinkToken } from '@/lib/customer-link-token';
 import { getCustomerDashboardData, type GbpPost, type GbpReview, type KeywordRanking, type MonthlyReport } from '@/lib/customer-dashboard';
 
 export const dynamic = 'force-dynamic';
@@ -58,15 +59,14 @@ export default async function CustomerDashboardPage({
   }
 
   const { customer, latestSubscription, posts, reviews, rankings, reports, kpis } = dashboard;
-  const query = params.customer_token
-    ? `customer_token=${encodeURIComponent(params.customer_token)}`
-    : `customer_id=${encodeURIComponent(customer.id)}`;
+  const dashboardPath = buildCustomerAccessPath('dashboard', customer.id, params.customer_token);
+  const onboardingPath = buildCustomerAccessPath('onboarding', customer.id, params.customer_token);
 
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-          <Link href={`/customer/dashboard?${query}`} className="text-xl font-extrabold tracking-tight text-slate-950">
+          <Link href={dashboardPath} className="text-xl font-extrabold tracking-tight text-slate-950">
             adlo
           </Link>
           <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ export default async function CustomerDashboardPage({
             </p>
           </div>
           <Button asChild variant="outline" className="font-bold">
-            <Link href={`/onboarding?${query}`}>更新 onboarding</Link>
+            <Link href={onboardingPath}>更新 onboarding</Link>
           </Button>
         </div>
 
@@ -114,6 +114,28 @@ export default async function CustomerDashboardPage({
       </main>
     </div>
   );
+}
+
+type DashboardLinkDestination = 'dashboard' | 'onboarding';
+
+const unsignedFallbackPaths: Record<DashboardLinkDestination, string> = {
+  dashboard: '/customer/dashboard',
+  onboarding: '/onboarding',
+};
+
+function buildCustomerAccessPath(destination: DashboardLinkDestination, customerId: string, currentToken?: string) {
+  try {
+    const { token } = createCustomerLinkToken({ customerId, expiresInDays: 30 });
+    return buildCustomerPathWithToken(destination, token);
+  } catch {
+    if (currentToken) {
+      return buildCustomerPathWithToken(destination, currentToken);
+    }
+    if (isUnsignedCustomerIdAllowed()) {
+      return `${unsignedFallbackPaths[destination]}?customer_id=${encodeURIComponent(customerId)}`;
+    }
+    return unsignedFallbackPaths[destination];
+  }
 }
 
 function CustomerGate({ title = '請從客戶連結進入', body = '請使用 adlo 提供的客戶後台 signed link；連結過期時請聯絡 adlo 重新產生。' }: { title?: string; body?: string }) {

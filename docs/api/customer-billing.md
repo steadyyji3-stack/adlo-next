@@ -9,11 +9,13 @@ Until the customer dashboard moves to full customer auth, these endpoints prefer
 - `customer_token` query param
 - `customer_token` cookie
 
-During transition, these endpoints still accept:
+Raw customer ids are disabled by default. They are accepted only when `ALLOW_UNSIGNED_CUSTOMER_ID=true`:
 
 - `customer_id` query param
 - `customer_id` cookie
 - `customer_id` JSON body for `POST /api/me/cancel`
+
+DEV ONLY — never set `ALLOW_UNSIGNED_CUSTOMER_ID` in production.
 
 ## `GET /api/me/subscription`
 
@@ -52,7 +54,7 @@ Body:
 
 ```json
 {
-  "customer_id": "00000000-0000-0000-0000-000000000000"
+  "customer_token": "..."
 }
 ```
 
@@ -81,3 +83,4 @@ Creates `billing.portal_session.create` in `audit_log`.
 - This PR does not store Stripe Customer Portal URLs in `audit_log`.
 - This PR does not log OAuth credentials, API keys, tokens, request headers, or payment method data.
 - Subscription state changes still come from Stripe webhooks.
+- `POST /api/me/cancel` no longer accepts raw `customer_id` in production.

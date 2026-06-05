@@ -5,7 +5,7 @@ import { getCustomerSubscriptionSnapshot } from '@/lib/customer-billing';
 
 export async function GET(request: NextRequest) {
   const customerId = getCustomerIdFromRequest(request);
-  if (!customerId) return apiError('UNAUTHORIZED', '缺少 customer_id，請從 onboarding email 連結進入', 401);
+  if (!customerId) return apiError('UNAUTHORIZED', '客戶連結無法驗證，請從 adlo email 連結進入', 401);
 
   try {
     const snapshot = await getCustomerSubscriptionSnapshot(customerId);

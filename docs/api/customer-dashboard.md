@@ -9,10 +9,12 @@ Sprint foundation now prefers a signed customer link token:
 - `customer_token` query string
 - `customer_token` cookie
 
-During transition, it still accepts `customer_id` from either:
+Raw customer ids are disabled by default. They are accepted only when `ALLOW_UNSIGNED_CUSTOMER_ID=true`:
 
 - `customer_id` query string
 - `customer_id` cookie
+
+DEV ONLY — never set `ALLOW_UNSIGNED_CUSTOMER_ID` in production.
 
 NextAuth magic-link sessions can replace this handoff in a later customer auth PR.
 
@@ -73,3 +75,4 @@ Returns recent rows from `monthly_reports`.
 - No OAuth token handling.
 - Customer tokens and OAuth credentials are not logged.
 - Missing or invalid customer access returns `UNAUTHORIZED`.
+- `?customer_id=<uuid>` does not grant production access because it has no HMAC signature.
