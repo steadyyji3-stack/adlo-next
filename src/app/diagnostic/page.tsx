@@ -21,6 +21,7 @@ import {
   Lock,
 } from 'lucide-react';
 import DiagnosticFAQ from '@/components/diagnostic/DiagnosticFAQ';
+import DiagnosticFlow from '@/components/diagnostic/DiagnosticFlow';
 
 export const metadata: Metadata = {
   title: 'Google Ads + GBP 健檢診斷',
@@ -221,6 +222,30 @@ export default function DiagnosticPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ==================== SEGMENT 2.5 — 3 天時間軸（流程動畫） ==================== */}
+      <section className="py-20 md:py-24 px-6 bg-emerald-50/40">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14 md:mb-16">
+            <Badge
+              variant="outline"
+              className="mb-4 text-[#0F6E56] border-[#1D9E75]/30 bg-[#E1F5EE] tracking-widest text-xs font-bold uppercase"
+            >
+              3 天時間軸
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+              你預約之後，
+              <br className="md:hidden" />
+              這 4 天會發生什麼
+            </h2>
+            <p className="mt-4 text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              不是黑盒子。每一步我們在做什麼、需要你做什麼，講清楚。
+            </p>
+          </div>
+
+          <DiagnosticFlow />
         </div>
       </section>
 
