@@ -4,12 +4,17 @@ Track B foundation for customer-facing post-sale data.
 
 ## Temporary auth model
 
-Sprint foundation accepts `customer_id` from either:
+Sprint foundation now prefers a signed customer link token:
+
+- `customer_token` query string
+- `customer_token` cookie
+
+During transition, it still accepts `customer_id` from either:
 
 - `customer_id` query string
 - `customer_id` cookie
 
-NextAuth magic-link sessions will replace this temporary handoff in a later customer auth PR.
+NextAuth magic-link sessions can replace this handoff in a later customer auth PR.
 
 ## GET /api/me
 
@@ -52,7 +57,7 @@ Returns recent rows from `monthly_reports`.
 
 ## Customer UI
 
-`/customer/dashboard?customer_id=...` renders the first customer dashboard:
+`/customer/dashboard?customer_token=...` renders the first customer dashboard:
 
 - service status and store identity
 - subscription summary
@@ -66,5 +71,5 @@ Returns recent rows from `monthly_reports`.
 
 - Read-only only; no customer mutation in this PR.
 - No OAuth token handling.
-- No customer token or OAuth credential is logged.
-- Missing `customer_id` returns `UNAUTHORIZED`.
+- Customer tokens and OAuth credentials are not logged.
+- Missing or invalid customer access returns `UNAUTHORIZED`.

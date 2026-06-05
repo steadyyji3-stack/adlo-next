@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCustomerIdFromSearchParams } from '@/lib/customer-auth';
 import { getCustomerSubscriptionSnapshot } from '@/lib/customer-billing';
 import { CancelSubscriptionButton } from './CancelSubscriptionButton';
 
@@ -29,9 +30,10 @@ const statusClasses: Record<string, string> = {
 export default async function CustomerBillingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ customer_id?: string }>;
+  searchParams: Promise<{ customer_id?: string; customer_token?: string }>;
 }) {
-  const { customer_id: customerId } = await searchParams;
+  const params = await searchParams;
+  const customerId = getCustomerIdFromSearchParams(params);
   const snapshot = customerId ? await getCustomerSubscriptionSnapshot(customerId) : null;
 
   return (
@@ -51,7 +53,7 @@ export default async function CustomerBillingPage({
         </div>
 
         {!customerId ? (
-          <Notice title="缺少 customer_id" body="請從 adlo 寄給你的客戶後台連結重新開啟訂閱管理頁。" />
+          <Notice title="連結無法驗證" body="請從 adlo 寄給你的客戶後台連結重新開啟訂閱管理頁。" />
         ) : !snapshot ? (
           <Notice title="找不到客戶資料" body="請確認連結是否正確，或聯絡 adlo 協助處理。" />
         ) : (

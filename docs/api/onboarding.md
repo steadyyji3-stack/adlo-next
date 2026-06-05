@@ -4,7 +4,9 @@ Track B endpoint for customer onboarding form submissions.
 
 ## Auth
 
-Public for Sprint 1, gated by `customerId` from the onboarding email link. Customer magic-link auth is planned for Sprint 3.
+Public foundation flow, gated by the customer id resolved from the onboarding email link.
+
+Preferred page access is `/onboarding?customer_token=...`. The page still accepts `customer_id` during transition and passes the resolved customer id to the submit API.
 
 ## Request
 

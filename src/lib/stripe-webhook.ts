@@ -9,6 +9,7 @@ import {
   type PlanId,
   type SubscriptionStatus,
 } from '@/lib/customers';
+import { buildCustomerPathWithToken, createCustomerLinkToken } from '@/lib/customer-link-token';
 import { getStripe } from '@/lib/stripe';
 import { writeAuditLog } from '@/lib/audit-log';
 
@@ -94,6 +95,15 @@ function getSubscriptionPeriod(subscription: Stripe.Subscription) {
   };
 }
 
+function buildOnboardingUrl(origin: string, customerId: string) {
+  try {
+    const { token } = createCustomerLinkToken({ customerId, expiresInDays: 30 });
+    return new URL(buildCustomerPathWithToken('onboarding', token), origin).toString();
+  } catch {
+    return `${origin}/onboarding?customer_id=${customerId}`;
+  }
+}
+
 function subscriptionSyncInput(subscription: Stripe.Subscription) {
   const fallbackStart = new Date();
   const fallbackEnd = new Date(fallbackStart.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -160,8 +170,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
     },
   });
 
-  const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
-  const onboardingUrl = `${origin}/onboarding?customer_id=${customer.id}`;
+  const origin = process.env.NEXT_PUBLIC_SITE_URL?.trim() || req.nextUrl.origin || 'https://adlo.tw';
+  const onboardingUrl = buildOnboardingUrl(origin, customer.id);
 
   await getResend().emails.send({
     from: 'adlo 系統通知 <hello@adlo.tw>',

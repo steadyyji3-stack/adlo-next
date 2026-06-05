@@ -4,7 +4,12 @@ Track B1 foundation for customer subscription self-service.
 
 ## Temporary Customer Access
 
-Until the customer dashboard moves to NextAuth, these endpoints accept the same temporary customer identifier pattern used by the current onboarding/customer foundation:
+Until the customer dashboard moves to full customer auth, these endpoints prefer signed customer links:
+
+- `customer_token` query param
+- `customer_token` cookie
+
+During transition, these endpoints still accept:
 
 - `customer_id` query param
 - `customer_id` cookie
@@ -17,7 +22,7 @@ Returns the customer subscription snapshot.
 Example:
 
 ```http
-GET /api/me/subscription?customer_id=00000000-0000-0000-0000-000000000000
+GET /api/me/subscription?customer_token=...
 ```
 
 Response:
@@ -64,7 +69,7 @@ Creates `billing.portal_session.create` in `audit_log`.
 
 ## Customer UI
 
-`/customer/billing?customer_id=:id`
+`/customer/billing?customer_token=...`
 
 - Shows the current subscription.
 - Opens Stripe Customer Portal for payment method management or cancellation.
