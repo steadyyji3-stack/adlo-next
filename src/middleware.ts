@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { auth } from '@/auth';
 
-export function middleware(request: NextRequest) {
+export default auth((request) => {
   if (isCustomerPath(request.nextUrl.pathname)) {
-    if (isCustomerLoginPath(request.nextUrl.pathname) || hasAuthSessionCookie(request)) {
+    if (isCustomerLoginPath(request.nextUrl.pathname) || request.auth?.user?.customerId) {
       return NextResponse.next();
     }
 
@@ -22,7 +23,7 @@ export function middleware(request: NextRequest) {
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ['/admin/:path*', '/customer/:path*', '/onboarding'],
@@ -34,13 +35,4 @@ function isCustomerPath(pathname: string) {
 
 function isCustomerLoginPath(pathname: string) {
   return pathname === '/customer/login' || pathname.startsWith('/customer/login/');
-}
-
-function hasAuthSessionCookie(request: NextRequest) {
-  return Boolean(
-    request.cookies.get('authjs.session-token')?.value
-    ?? request.cookies.get('__Secure-authjs.session-token')?.value
-    ?? request.cookies.get('next-auth.session-token')?.value
-    ?? request.cookies.get('__Secure-next-auth.session-token')?.value,
-  );
 }

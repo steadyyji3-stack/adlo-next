@@ -68,7 +68,7 @@ Login routes are excluded:
 - `/customer/login`
 - `/customer/login/check-email`
 
-The middleware checks for an Auth.js session cookie as a first gate. The pages and `/api/me/*` routes still resolve the actual customer id from `auth()` on the server, so a forged or stale cookie cannot load customer data.
+The middleware verifies the Auth.js session and only allows customer paths when `session.user.customerId` is present. The pages and `/api/me/*` routes still resolve the actual customer id from `auth()` on the server, so a forged or stale cookie cannot load customer data.
 
 ## Customer Identity
 
@@ -91,7 +91,7 @@ These are no longer trusted:
 
 Before this migration, `/customer/dashboard`, `/customer/billing`, `/onboarding`, `/api/onboarding`, and `/api/me/*` could resolve a customer from raw `customer_id` query/cookie/body values.
 
-After this migration, those values are ignored. A request with only `?customer_id=<uuid>` has no Auth.js session, so middleware redirects to `/customer/login`, and server routes return `UNAUTHORIZED`.
+After this migration, those values are ignored. A request with only `?customer_id=<uuid>` has no verified Auth.js session with `session.user.customerId`, so middleware redirects to `/customer/login`, and server routes return `UNAUTHORIZED`.
 
 ## Stripe Email Impact
 
