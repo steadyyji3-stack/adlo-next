@@ -662,6 +662,96 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #9  |  2026-W23  |  無聊的事做久了會變成複利
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w23',
+    issueNumber: 9,
+    theme: '無聊的事做久了會變成複利——撐過第 3 年，95% 的對手會自己消失',
+    publishedAt: '2026-06-04',
+    summary:
+      '本期聚焦 Dan Koe 5-6 月反覆談的「boring is bullish」論點：為什麼「興奮感」是換來換去的訊號，「無聊感」反而是做對事的訊號。給台灣中小店家：你今天還沒收掉，本身就是競爭優勢——3 年內 95% 的對手會自己消失。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1596098823457-74e360fcd023?w=1200&auto=format&fit=crop&q=80',
+      alt: '冒著熱氣的早晨咖啡杯——象徵每天重複的、看似無聊的日常',
+      credit: 'Tabitha Turner',
+      creditUrl: 'https://unsplash.com/@tabithaturnervisuals',
+    },
+    posts: [
+      {
+        id: 'w23-01',
+        original: `"Most people overestimate what they can do in 1 month and underestimate what they can do in 12. Real leverage compounds in the boring middle, not at the start or end."`,
+        translation:
+          '多數人高估自己一個月能做的事，低估自己一年能做的事。真正的複利長在「無聊的中間」，不在頭也不在尾。',
+        insight:
+          '台灣店家最常見的決策錯誤：3 個月沒爆紅就換新策略——LINE 換成 IG、IG 換成 Threads、Threads 換成 TikTok。換來換去，每一條都停在第 3 個月。如果你 3 年前在 GBP 持續發文、累積 200 則評論，你今天根本不用看這篇文章——你的店早就在同區搜尋結果前幾頁站穩了。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-26',
+      },
+      {
+        id: 'w23-02',
+        original: `"Boredom is the price of mastery. If your work feels exciting every day, you're probably switching too often. If it feels boring 6 days a week, you're probably doing the right thing."`,
+        translation:
+          '「無聊」是精通的代價。如果你的工作每天都很興奮，你可能換得太頻繁。如果它一週有 6 天很無聊，你可能正在做對的事。',
+        insight:
+          '對台灣小店家：第 1 年揉麵糰會覺得很有成就感、第 5 年揉麵糰會覺得無聊、第 10 年揉麵糰會覺得是「我的呼吸的一部分」。最後那個階段，才是別人模仿不來的護城河。日常營運開始無聊，是你的反射動作正在形成——不是問題，是訊號。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-28',
+      },
+      {
+        id: 'w23-03',
+        original: `"The boring middle is where careers are made. Day 1 is inspiration. Day 1000 is identity. Days 30-300 are the desert. Most people quit in the desert."`,
+        translation:
+          '「無聊的中間」是事業真正成形的地方。第 1 天是靈感、第 1000 天是身份。第 30 到第 300 天是沙漠。多數人在沙漠裡就放棄了。',
+        insight:
+          'adlo 過去一年累積的 50+ 篇 SEO 文章、8 支工具——絕大多數是沙漠期的產出，沒有單一篇爆紅、沒有單一支工具被瘋傳。但這些日復一日的小累積，疊到第 12 個月，新進對手要追平就得花掉同樣多的時間。寫第 1 篇 GBP 貼文時的心情，跟寫第 50 篇時的心情會完全不同，但你的客人只看得到第 50 篇之後的成果。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-29',
+      },
+      {
+        id: 'w23-04',
+        original: `"One viral post gets you new followers. 100 boring consistent posts gets you customers. The first feels better, the second pays better."`,
+        translation:
+          '1 篇 viral 貼文幫你拿新粉絲。100 篇無聊但持續的貼文幫你拿客人。第一種感覺比較爽，第二種比較賺。',
+        insight:
+          '店家最常做錯：花 8 小時做一支「希望會爆」的短影片，結果觸及只有 200。同樣 8 小時拆成 20 篇 GBP 貼文 + 20 則 LINE 推播 + 20 則 IG，半年後客人記得你是誰，自己找回來的。爆款是運氣，累積是技術。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-05-31',
+      },
+      {
+        id: 'w23-05',
+        original: `"Attention compounds like money. Spending 1 hour a day for 5 years on the same topic makes you irreplaceable. Spending 5 hours a day across 5 topics for 1 year makes you forgettable."`,
+        translation:
+          '注意力跟錢一樣會複利。一天花 1 小時、連續 5 年寫同一個主題，會讓你變成不可取代的人。一天花 5 小時、橫跨 5 個主題寫 1 年，會讓你變成被遺忘的人。',
+        insight:
+          '「我什麼都做：餐飲 + 文創 + 一日體驗 + 婚禮場地」——這種店半年內掉到沒人記得。「我只做台中西區、午餐、給上班族的便當」——這種店 3 年後不用打廣告。你的店越窄、越久、GBP 越活躍，才在「上班族 午餐 台中」這類搜尋裡站得住腳。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-01',
+      },
+      {
+        id: 'w23-06',
+        original: `"Patience is not waiting. Patience is doing the right thing for years without external validation. Most people can do it for 3 months. The ones who do it for 3 years become irreplaceable."`,
+        translation:
+          '耐心不是等待。耐心是在沒有外部認可的情況下，持續做對的事很多年。多數人能做 3 個月。能做 3 年的，會變成不可取代。',
+        insight:
+          '店家常被問「你開幾年了？」——5 年以下是「新開的」、10 年是「老店」、20 年是「在地必訪」。Google 地圖會自動把「資歷年數」當成排名訊號。下次有人問你開幾年了，不要輕描淡寫——那幾年是你花了真金白銀買來的排名訊號，比花錢買廣告位划算太多。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-02',
+      },
+      {
+        id: 'w23-07',
+        original: `"Year 1: 10 followers, no money. Year 2: 100 followers, $1k. Year 3: 1,000 followers, $10k. Most people quit before year 2. The compounding only kicks in for those who stay past the dip."`,
+        translation:
+          '第 1 年：10 個追蹤者、沒收入。第 2 年：100 個追蹤者、賺 1 千美元。第 3 年：1,000 個追蹤者、賺 1 萬美元。多數人在第 2 年前放棄。複利只發生在「撐過低谷」的人身上。',
+        insight:
+          '開店第 1 年燒錢、第 2 年損平、第 3 年開始賺。多數店家在第 2 年底收掉，因為「看不到複利曲線」——但這正是曲線即將上揚的點。第 3 年能不能熬到，現金流的帳要每季算清楚，不是靠感覺撐。設一個固定日期（例如每季最後一週），把現金跑道、應收帳款、固定支出全部對一次。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-03',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
