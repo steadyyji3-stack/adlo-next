@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { apiError, apiOk } from '@/lib/api-response';
+import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { createOnboardingSubmission, getCustomerDetail } from '@/lib/customers';
 import { writeAuditLog } from '@/lib/audit-log';
 
 const onboardingSchema = z.object({
-  customerId: z.string().uuid(),
   storeName: z.string().trim().min(1, '店家名稱必填').max(120),
   storeAddress: z.string().trim().max(240).optional(),
   storeCity: z.string().trim().max(40).optional(),
@@ -27,18 +27,26 @@ export async function POST(request: NextRequest) {
       return apiError('VALIDATION_FAILED', parsed.error.issues[0]?.message ?? '表單資料不完整', 400);
     }
 
-    const existingCustomer = await getCustomerDetail(parsed.data.customerId);
+    const customerId = await getCustomerIdFromSession();
+    if (!customerId) {
+      return apiError('UNAUTHORIZED', '請先登入客戶後台', 401);
+    }
+
+    const existingCustomer = await getCustomerDetail(customerId);
     if (!existingCustomer) {
       return apiError('CUSTOMER_NOT_FOUND', '找不到客戶資料', 404);
     }
 
-    const result = await createOnboardingSubmission(parsed.data);
+    const result = await createOnboardingSubmission({
+      ...parsed.data,
+      customerId,
+    });
 
     await writeAuditLog({
-      actor: `customer:${parsed.data.customerId}`,
+      actor: `customer:${customerId}`,
       action: 'onboarding.submit',
       targetType: 'customer',
-      targetId: parsed.data.customerId,
+      targetId: customerId,
       payload: {
         fields: ['store_profile', 'gbp_url', 'contact', 'signature_items'],
         has_website_url: Boolean(parsed.data.websiteUrl),

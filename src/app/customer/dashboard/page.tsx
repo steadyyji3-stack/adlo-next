@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getCustomerIdFromSearchParams } from '@/lib/customer-auth';
+import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { getCustomerDashboardData, type GbpPost, type GbpReview, type KeywordRanking, type MonthlyReport } from '@/lib/customer-dashboard';
 
 export const dynamic = 'force-dynamic';
@@ -40,13 +40,8 @@ const statusClasses: Record<string, string> = {
   drafted: 'border-blue-200 bg-blue-50 text-blue-700',
 };
 
-export default async function CustomerDashboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ customer_id?: string }>;
-}) {
-  const params = await searchParams;
-  const customerId = getCustomerIdFromSearchParams(params);
+export default async function CustomerDashboardPage() {
+  const customerId = await getCustomerIdFromSession();
 
   if (!customerId) {
     return <CustomerGate />;
@@ -54,17 +49,16 @@ export default async function CustomerDashboardPage({
 
   const dashboard = await getCustomerDashboardData(customerId);
   if (!dashboard) {
-    return <CustomerGate title="找不到客戶資料" body="這個 customer_id 沒有對應到 adlo 客戶。請回到 onboarding email 重新開啟。" />;
+    return <CustomerGate title="找不到客戶資料" body="你的登入 session 沒有對應到 adlo 客戶。請確認使用訂閱 email 登入。" />;
   }
 
   const { customer, latestSubscription, posts, reviews, rankings, reports, kpis } = dashboard;
-  const query = `customer_id=${encodeURIComponent(customer.id)}`;
 
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white px-6 py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-          <Link href={`/customer/dashboard?${query}`} className="text-xl font-extrabold tracking-tight text-slate-950">
+          <Link href="/customer/dashboard" className="text-xl font-extrabold tracking-tight text-slate-950">
             adlo
           </Link>
           <div className="flex items-center gap-3">
@@ -88,7 +82,7 @@ export default async function CustomerDashboardPage({
             </p>
           </div>
           <Button asChild variant="outline" className="font-bold">
-            <Link href={`/onboarding?customer_id=${customer.id}`}>更新 onboarding</Link>
+            <Link href="/onboarding">更新 onboarding</Link>
           </Button>
         </div>
 
@@ -114,7 +108,7 @@ export default async function CustomerDashboardPage({
   );
 }
 
-function CustomerGate({ title = '請從客戶連結進入', body = '目前 Sprint foundation 使用 onboarding email 內的 customer_id 連結；NextAuth magic link 會在後續 PR 補上。' }: { title?: string; body?: string }) {
+function CustomerGate({ title = '請先登入客戶後台', body = '請使用 adlo 寄出的 email magic link 登入。' }: { title?: string; body?: string }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
       <Card className="w-full max-w-lg border-slate-200 bg-white">

@@ -110,6 +110,13 @@ function subscriptionSyncInput(subscription: Stripe.Subscription) {
   };
 }
 
+function buildCustomerLoginUrl(origin: string, email: string, nextPath = '/onboarding') {
+  const url = new URL('/customer/login', origin);
+  url.searchParams.set('email', email);
+  url.searchParams.set('next', nextPath);
+  return url.toString();
+}
+
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: NextRequest) {
   const stripe = getStripe();
   const email = session.customer_email ?? session.customer_details?.email;
@@ -161,7 +168,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
   });
 
   const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
-  const onboardingUrl = `${origin}/onboarding?customer_id=${customer.id}`;
+  const onboardingUrl = buildCustomerLoginUrl(origin, email, '/onboarding');
 
   await getResend().emails.send({
     from: 'adlo 系統通知 <hello@adlo.tw>',

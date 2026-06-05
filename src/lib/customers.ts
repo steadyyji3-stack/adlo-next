@@ -184,6 +184,11 @@ export async function getCustomerDetail(id: string): Promise<CustomerDetail | nu
   };
 }
 
+export async function getCustomerByEmail(email: string) {
+  const [customer] = await selectRows<Customer>('customers', { email: email.trim().toLowerCase() }, { limit: 1 });
+  return customer ?? null;
+}
+
 export async function updateCustomer(id: string, data: Partial<Pick<
   Customer,
   'name' | 'phone' | 'line_id' | 'store_name' | 'store_address' | 'store_city' | 'gbp_url' | 'website_url' | 'industry' | 'signature_items' | 'onboarding_status' | 'service_status'

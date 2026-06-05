@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { getCustomerSubscriptionSnapshot } from '@/lib/customer-billing';
 import { CancelSubscriptionButton } from './CancelSubscriptionButton';
 
@@ -26,12 +27,8 @@ const statusClasses: Record<string, string> = {
   unpaid: 'border-rose-200 bg-rose-50 text-rose-700',
 };
 
-export default async function CustomerBillingPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ customer_id?: string }>;
-}) {
-  const { customer_id: customerId } = await searchParams;
+export default async function CustomerBillingPage() {
+  const customerId = await getCustomerIdFromSession();
   const snapshot = customerId ? await getCustomerSubscriptionSnapshot(customerId) : null;
 
   return (
@@ -51,7 +48,7 @@ export default async function CustomerBillingPage({
         </div>
 
         {!customerId ? (
-          <Notice title="缺少 customer_id" body="請從 adlo 寄給你的客戶後台連結重新開啟訂閱管理頁。" />
+          <Notice title="請先登入客戶後台" body="請使用 adlo 寄出的 email magic link 登入後再管理訂閱。" />
         ) : !snapshot ? (
           <Notice title="找不到客戶資料" body="請確認連結是否正確，或聯絡 adlo 協助處理。" />
         ) : (
@@ -80,7 +77,7 @@ export default async function CustomerBillingPage({
                 取消會在 Stripe Customer Portal 完成；Stripe webhook 回傳後，adlo 會同步更新訂閱狀態。服務會依 Stripe 訂閱週期維持到目前週期結束。
               </div>
 
-              <CancelSubscriptionButton customerId={snapshot.customer.id} />
+              <CancelSubscriptionButton />
             </CardContent>
           </Card>
         )}

@@ -1,11 +1,10 @@
-import { NextRequest } from 'next/server';
 import { apiError, apiOk } from '@/lib/api-response';
 import { getCustomerIdFromRequest } from '@/lib/customer-auth';
 import { getCustomerSubscriptionSnapshot } from '@/lib/customer-billing';
 
-export async function GET(request: NextRequest) {
-  const customerId = getCustomerIdFromRequest(request);
-  if (!customerId) return apiError('UNAUTHORIZED', '缺少 customer_id，請從 onboarding email 連結進入', 401);
+export async function GET() {
+  const customerId = await getCustomerIdFromRequest();
+  if (!customerId) return apiError('UNAUTHORIZED', '請先登入客戶後台', 401);
 
   try {
     const snapshot = await getCustomerSubscriptionSnapshot(customerId);
