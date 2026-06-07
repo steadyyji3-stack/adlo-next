@@ -2,13 +2,15 @@
 
 Track B1 foundation for customer subscription self-service.
 
-## Temporary Customer Access
+## Customer Access
 
-Until the customer dashboard moves to NextAuth, these endpoints accept the same temporary customer identifier pattern used by the current onboarding/customer foundation:
+Customer billing uses the same Auth.js session as the customer dashboard:
 
-- `customer_id` query param
-- `customer_id` cookie
-- `customer_id` JSON body for `POST /api/me/cancel`
+- email magic-link login
+- database-backed session cookie
+- `session.user.customerId`
+
+Raw `customer_id` query params, cookies, and JSON bodies are no longer trusted for production identity.
 
 ## `GET /api/me/subscription`
 
@@ -17,7 +19,7 @@ Returns the customer subscription snapshot.
 Example:
 
 ```http
-GET /api/me/subscription?customer_id=00000000-0000-0000-0000-000000000000
+GET /api/me/subscription
 ```
 
 Response:
@@ -46,9 +48,7 @@ Creates a Stripe Customer Portal session and returns the redirect URL.
 Body:
 
 ```json
-{
-  "customer_id": "00000000-0000-0000-0000-000000000000"
-}
+{}
 ```
 
 Response:
@@ -64,7 +64,7 @@ Creates `billing.portal_session.create` in `audit_log`.
 
 ## Customer UI
 
-`/customer/billing?customer_id=:id`
+`/customer/billing`
 
 - Shows the current subscription.
 - Opens Stripe Customer Portal for payment method management or cancellation.
@@ -76,3 +76,4 @@ Creates `billing.portal_session.create` in `audit_log`.
 - This PR does not store Stripe Customer Portal URLs in `audit_log`.
 - This PR does not log OAuth credentials, API keys, tokens, request headers, or payment method data.
 - Subscription state changes still come from Stripe webhooks.
+- `?customer_id=<uuid>` and body `{ "customer_id": "..." }` do not grant access.

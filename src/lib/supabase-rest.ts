@@ -5,7 +5,7 @@ type QueryValue = string | number | boolean | null | undefined;
 export type SupabaseFilter = Record<string, QueryValue>;
 
 interface RequestOptions {
-  method?: 'GET' | 'POST' | 'PATCH';
+  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
   query?: URLSearchParams;
   body?: unknown;
   prefer?: string;
@@ -119,6 +119,17 @@ export async function updateRows<T>(
     method: 'PATCH',
     query: buildEqQuery(filters),
     body,
+    prefer: 'return=representation',
+  });
+}
+
+export async function deleteRows<T>(
+  table: string,
+  filters: SupabaseFilter,
+): Promise<T[]> {
+  return request<T[]>(table, {
+    method: 'DELETE',
+    query: buildEqQuery(filters),
     prefer: 'return=representation',
   });
 }

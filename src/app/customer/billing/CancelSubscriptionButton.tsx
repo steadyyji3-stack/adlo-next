@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ExternalLink, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export function CancelSubscriptionButton({ customerId }: { customerId: string }) {
+export function CancelSubscriptionButton() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -15,7 +15,7 @@ export function CancelSubscriptionButton({ customerId }: { customerId: string })
       const response = await fetch('/api/me/cancel', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ customer_id: customerId }),
+        body: JSON.stringify({}),
       });
       const data = await response.json();
       if (!response.ok || !data.ok || !data.url) {

@@ -1,11 +1,8 @@
 import { OnboardingForm } from './OnboardingForm';
+import { getCustomerIdFromSession } from '@/lib/customer-auth';
 
-export default async function OnboardingPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ customer_id?: string }>;
-}) {
-  const { customer_id: customerId } = await searchParams;
+export default async function OnboardingPage() {
+  const customerId = await getCustomerIdFromSession();
 
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-10">
@@ -19,10 +16,10 @@ export default async function OnboardingPage({
         </div>
 
         {customerId ? (
-          <OnboardingForm customerId={customerId} />
+          <OnboardingForm />
         ) : (
           <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-relaxed text-amber-800">
-            這個 onboarding 連結缺少 customer_id。請回到 adlo 寄給你的 onboarding email 重新開啟。
+            請先使用 adlo 寄出的 email magic link 登入，再填寫 onboarding 表單。
           </div>
         )}
       </div>

@@ -7,13 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
-interface OnboardingFormProps {
-  customerId: string;
-}
-
 const emptyItems = ['', '', '', '', ''];
 
-export function OnboardingForm({ customerId }: OnboardingFormProps) {
+export function OnboardingForm() {
   const [signatureItems, setSignatureItems] = useState(emptyItems);
   const [state, setState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -25,7 +21,6 @@ export function OnboardingForm({ customerId }: OnboardingFormProps) {
 
     const formData = new FormData(event.currentTarget);
     const payload = {
-      customerId,
       storeName: String(formData.get('storeName') ?? ''),
       storeAddress: String(formData.get('storeAddress') ?? ''),
       storeCity: String(formData.get('storeCity') ?? ''),
