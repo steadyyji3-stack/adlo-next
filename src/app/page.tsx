@@ -5,16 +5,17 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
-  TrendingDown, MapPin, MapPinOff, Search, PenLine, MousePointerClick, BarChart2
+  Activity, Bell, PenLine, MessageSquare, Radar, Search, FileCheck2, Link2, Sparkles,
+  TrendingDown, MapPinOff, BarChart2, ArrowRight,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'adlo — 讓 Google 地圖把客戶送到你門口',
-  description: '台灣在地 SEO 行銷專家。透過 Google 商家優化與區域精準廣告，為實體店面打造自動導流系統。',
+  description: '台灣中小店家的在地行銷工具箱。8 支免費工具：GBP 健診、貼文產生、評論收集、競爭雷達——3 秒自助產出，不用註冊、不交出 Google 帳號。',
   alternates: { canonical: 'https://adlo.tw' },
   openGraph: {
     title: 'adlo — 讓 Google 地圖把客戶送到你門口',
-    description: '台灣在地 SEO 行銷專家。Google 商家優化、在地 SEO、精準廣告一站整合。',
+    description: '台灣中小店家的在地行銷工具箱。8 支免費工具，結構化自助產出，不是 AI 聊天。',
     url: 'https://adlo.tw',
     siteName: 'adlo',
     locale: 'zh_TW',
@@ -22,55 +23,107 @@ export const metadata: Metadata = {
   },
 };
 
-const serviceCards = [
-  { icon: MapPin,           title: 'Google 商家優化', desc: '讓顧客搜尋「附近+行業」時，第一個看到你', href: '/services#gbp' },
-  { icon: Search,           title: '在地 SEO 佈局',   desc: '針對「[地區]+[行業]」關鍵字做深度優化',     href: '/services#seo' },
-  { icon: PenLine,          title: '內容行銷',         desc: '吸引搜尋流量的在地化文章與社群貼文',         href: '/services#content' },
-  { icon: MousePointerClick,title: '精準廣告投放',     desc: 'Google Ads + Meta 廣告，只打方圓 5 公里的潛在客', href: '/services#ads' },
+const tools = [
+  { icon: Activity,       name: 'GBP 健診',          tagline: '30 秒看 Google 商家幾分', href: '/check' },
+  { icon: PenLine,        name: 'GBP 貼文產生器',     tagline: '下週 7 天貼文，3 秒搞定',   href: '/tools/post-writer' },
+  { icon: MessageSquare,  name: 'LINE 推播產生器',    tagline: '7 篇 LINE OA 推播初稿',     href: '/tools/line-broadcast' },
+  { icon: Radar,          name: '競爭對手雷達',       tagline: '你 vs 同區 3 家，一張圖',   href: '/tools/competitor' },
+  { icon: Search,         name: '關鍵字難度檢查',     tagline: '這個字值不值得做',         href: '/tools/keyword' },
+  { icon: FileCheck2,     name: 'SEO 文章計分',       tagline: '貼 URL，即時拿分數',       href: '/tools/seo-scorer' },
+  { icon: Link2,          name: '評論收集連結',       tagline: 'QR + 6 套訊息模板',        href: '/tools/review-link' },
+  { icon: Sparkles,       name: '店名 / Slogan',     tagline: '一次給 15 組命名',         href: '/tools/name' },
 ];
 
 const painPoints = [
-  { icon: TrendingDown, title: '廣告費越燒越貴',       desc: '花了大把廣告費，帶進的是點擊而不是實際客流，投資回報率不斷下滑。' },
-  { icon: MapPinOff,    title: '競爭對手搶走排名',     desc: '客戶在附近搜尋，卻找到競爭對手。你的店面在 Google 地圖上被徹底隱形。' },
-  { icon: BarChart2,    title: '不知道從哪裡開始',     desc: 'SEO、社群、廣告，每個人說的都不同，卻沒有一套整合方案為你量身設計。' },
+  {
+    icon: TrendingDown,
+    title: '廣告費越燒越貴',
+    desc: '帶進的是點擊不是客流。先把免費的 Google 商家做起來，比一直買廣告划算。',
+    cta: '先做 GBP 健診',
+    href: '/check',
+  },
+  {
+    icon: MapPinOff,
+    title: '競爭對手搶走排名',
+    desc: '客人在附近搜尋卻找到別家。看一眼同區前 3 強在哪、你差在哪。',
+    cta: '開競爭對手雷達',
+    href: '/tools/competitor',
+  },
+  {
+    icon: BarChart2,
+    title: '不知道從哪裡開始',
+    desc: '每個人說的都不同。8 支工具按順序跑一輪，30 秒知道第一步該補什麼。',
+    cta: '逛免費工具箱',
+    href: '/tools',
+  },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* Hero — 動畫版 */}
+      {/* Hero — 互動版 */}
       <Hero />
 
-      {/* Service Teasers */}
+      {/* 免費工具箱 */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-14">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
             <div>
               <Badge className="mb-3 text-[#0F6E56] border-[#1D9E75]/30 bg-[#E1F5EE] tracking-widest text-xs font-bold uppercase" variant="outline">
-                核心服務
+                免費工具箱
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-3" style={{ fontFamily: 'var(--font-manrope)' }}>
-                我們做什麼？
+                把要收費的行銷諮詢，<br className="md:hidden" />變成 3 秒自助產出
               </h2>
-              <div className="w-16 h-0.5 bg-[#1D9E75]" />
+              <p className="text-slate-500 max-w-lg leading-relaxed">
+                不用註冊、不交出 Google 帳號。結構化工具，不是 AI 聊天——複製就能用。
+              </p>
+              <div className="w-16 h-0.5 bg-[#1D9E75] mt-5" />
             </div>
-            <Link href="/services" className="text-[#1D9E75] font-semibold text-sm hover:underline hidden md:block">
-              查看完整服務方案 →
+            <Link href="/tools" className="text-[#1D9E75] font-semibold text-sm hover:underline hidden md:inline-flex items-center gap-1">
+              看完整工具箱 <ArrowRight className="w-4 h-4" aria-hidden />
             </Link>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {serviceCards.map(({ icon: Icon, title, desc, href }) => (
-              <Link key={href} href={href} className="card-hover bg-white rounded-xl border border-slate-100 p-7 block group">
-                <div className="w-12 h-12 bg-slate-50 rounded-lg flex items-center justify-center mb-5 group-hover:bg-[#1D9E75] transition-colors">
-                  <Icon className="w-5 h-5 text-slate-700 group-hover:text-white transition-colors" />
+
+          {/* 精選：我的這週 */}
+          <Link
+            href="/my-week"
+            aria-label="我的這週：存一次店家檔案，每週素材自動備好"
+            className="group block rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 ring-1 ring-emerald-200 p-6 sm:p-8 mb-6 hover:ring-emerald-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="size-12 rounded-xl bg-[#1D9E75] flex items-center justify-center shrink-0">
+                <Bell className="size-6 text-white" aria-hidden />
+              </div>
+              <div className="flex-1 min-w-0">
+                <Badge className="bg-[#E1F5EE] text-[#0F6E56] border-[#1D9E75]/30 text-[11px] font-bold mb-2">存一次，每週自動備好</Badge>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900" style={{ fontFamily: 'var(--font-manrope)' }}>
+                  我的這週：每週 14 篇 GBP + LINE 素材，不用重填
+                </h3>
+                <p className="mt-1.5 text-sm sm:text-base text-slate-600 leading-relaxed">
+                  設定一次店名 + 產業 + 標籤，之後每次進來素材都備好。檔案只存你的瀏覽器，不上傳。
+                </p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0F6E56] shrink-0 group-hover:gap-2.5 transition-all">
+                開始設定 <ArrowRight className="w-4 h-4" aria-hidden />
+              </span>
+            </div>
+          </Link>
+
+          {/* 8 工具 grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {tools.map(({ icon: Icon, name, tagline, href }) => (
+              <Link key={href} href={href} className="card-hover bg-white rounded-xl border border-slate-100 p-5 block group">
+                <div className="w-11 h-11 bg-slate-50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-[#1D9E75] transition-colors">
+                  <Icon className="w-5 h-5 text-slate-700 group-hover:text-white transition-colors" aria-hidden />
                 </div>
-                <h3 className="text-slate-800 font-bold text-lg mb-2">{title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+                <h3 className="text-slate-800 font-bold text-base mb-1">{name}</h3>
+                <p className="text-slate-500 text-xs leading-relaxed">{tagline}</p>
               </Link>
             ))}
           </div>
           <div className="text-center mt-8 md:hidden">
-            <Link href="/services" className="text-[#1D9E75] font-semibold text-sm hover:underline">查看完整服務方案 →</Link>
+            <Link href="/tools" className="text-[#1D9E75] font-semibold text-sm hover:underline">看完整工具箱 →</Link>
           </div>
         </div>
       </section>
@@ -97,7 +150,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Pain Points */}
+      {/* Pain Points — 痛點導向工具 */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="text-center mb-14">
@@ -110,36 +163,50 @@ export default function HomePage() {
             <div className="w-16 h-0.5 bg-[#1D9E75] mx-auto" />
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {painPoints.map(({ icon: Icon, title, desc }) => (
-              <Card key={title} className="card-hover border-slate-100 group">
-                <CardContent className="p-10">
-                  <div className="w-14 h-14 bg-slate-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#1D9E75] transition-colors">
-                    <Icon className="w-6 h-6 text-slate-700 group-hover:text-white transition-colors" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
-                  <p className="text-slate-500 leading-relaxed text-sm">{desc}</p>
-                </CardContent>
-              </Card>
+            {painPoints.map(({ icon: Icon, title, desc, cta, href }) => (
+              <Link key={title} href={href} className="block group">
+                <Card className="card-hover border-slate-100 h-full">
+                  <CardContent className="p-8 flex flex-col h-full">
+                    <div className="w-14 h-14 bg-slate-50 rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#1D9E75] transition-colors">
+                      <Icon className="w-6 h-6 text-slate-700 group-hover:text-white transition-colors" aria-hidden />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
+                    <p className="text-slate-500 leading-relaxed text-sm flex-1">{desc}</p>
+                    <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-[#0F6E56] group-hover:gap-2.5 transition-all">
+                      {cta} <ArrowRight className="w-4 h-4" aria-hidden />
+                    </span>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Banner */}
+      {/* Final CTA — 產品導向 */}
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6 md:px-8 text-center">
           <Badge className="mb-4 text-[#0F6E56] border-[#1D9E75]/30 bg-[#E1F5EE] tracking-widest text-xs font-bold uppercase" variant="outline">
             現在開始
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4" style={{ fontFamily: 'var(--font-manrope)' }}>
-            準備好讓生意起飛了嗎？
+            3 秒，先讓工具幫你做一件事
           </h2>
           <p className="text-slate-500 mb-10 max-w-lg mx-auto leading-relaxed">
-            填寫諮詢表單，我們在 24 小時內聯繫您，提供免費在地競爭環境評估報告。
+            不用註冊、不用信用卡。先試一支工具，覺得有用再把店家檔案存起來，每週素材自動備好。
           </p>
-          <Button asChild size="lg" className="cta-gradient text-white font-bold hover:opacity-90 shadow-xl shadow-green-900/20 px-12">
-            <Link href="/contact">立即免費諮詢 →</Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button asChild size="lg" className="cta-gradient text-white font-bold hover:opacity-90 shadow-xl shadow-green-900/20 px-10">
+              <Link href="/tools">探索 8 支免費工具 →</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="font-bold border-slate-200 hover:border-[#1D9E75] hover:text-[#1D9E75]">
+              <Link href="/my-week">我的這週素材</Link>
+            </Button>
+          </div>
+          <p className="mt-8 text-sm text-slate-400">
+            想要我們直接幫你做？
+            <Link href="/diagnostic" className="text-emerald-700 font-medium hover:underline ml-1">看代管診斷方案 →</Link>
+          </p>
         </div>
       </section>
     </>
