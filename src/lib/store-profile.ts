@@ -14,11 +14,23 @@ import type { Industry } from './gbp-post-writer';
 
 const STORAGE_KEY = 'adlo_store_profile_v1';
 
+/**
+ * 業態（v2，雙業態擴充）：
+ * - 在地店家：GBP + LINE（原本唯一業態）
+ * - 電商品牌：商品貼文 + LINE
+ * - 實體+電商：GBP + 商品貼文 + LINE
+ */
+export type BusinessType = '在地店家' | '電商品牌' | '實體+電商';
+
 export interface StoreProfile {
   storeName: string;
   industry: Industry;
   selectedTags: string[];
   weekTheme?: string;
+  /** 業態。v1 舊紀錄沒有此欄，讀取時一律視為「在地店家」。 */
+  businessType?: BusinessType;
+  /** 銷售通路（型別預留，尚無 UI）。 */
+  channels?: string[];
   /** ISO 字串，最後一次儲存時間 */
   savedAt: string;
 }
@@ -28,15 +40,23 @@ export interface StoreProfileInput {
   industry: Industry;
   selectedTags: string[];
   weekTheme?: string;
+  businessType?: BusinessType;
+  channels?: string[];
 }
 
 const VALID_INDUSTRIES: Industry[] = [
   '餐飲', '美髮美容', '醫美', '牙科', '律師', '補教', '零售', '其他',
 ];
 
+const VALID_BUSINESS_TYPES: BusinessType[] = [
+  '在地店家', '電商品牌', '實體+電商',
+];
+
 function isValidProfile(value: unknown): value is StoreProfile {
   if (!value || typeof value !== 'object') return false;
   const v = value as Record<string, unknown>;
+  // 注意：businessType / channels 為 v2 新欄位，缺少或格式不符都不影響有效性
+  // （v1 舊紀錄向下相容），讀取時由 normalizeProfile 補預設值。
   return (
     typeof v.storeName === 'string' &&
     v.storeName.trim().length >= 2 &&
@@ -47,11 +67,26 @@ function isValidProfile(value: unknown): value is StoreProfile {
   );
 }
 
+/** v1 → v2 讀取時正規化：舊紀錄沒 businessType 一律視為「在地店家」。 */
+function normalizeProfile(profile: StoreProfile): StoreProfile {
+  const v = profile as StoreProfile & Record<string, unknown>;
+  const businessType: BusinessType = VALID_BUSINESS_TYPES.includes(
+    v.businessType as BusinessType,
+  )
+    ? (v.businessType as BusinessType)
+    : '在地店家';
+  const channels =
+    Array.isArray(v.channels) && v.channels.every((c) => typeof c === 'string')
+      ? (v.channels as string[])
+      : undefined;
+  return { ...profile, businessType, channels };
+}
+
 function parseRaw(raw: string | null): StoreProfile | null {
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as unknown;
-    return isValidProfile(parsed) ? parsed : null;
+    return isValidProfile(parsed) ? normalizeProfile(parsed) : null;
   } catch {
     return null;
   }
@@ -76,6 +111,13 @@ export function saveStoreProfile(input: StoreProfileInput): StoreProfile {
     industry: input.industry,
     selectedTags: input.selectedTags.map((t) => t.trim()).filter(Boolean),
     weekTheme: input.weekTheme?.trim() || undefined,
+    businessType:
+      input.businessType && VALID_BUSINESS_TYPES.includes(input.businessType)
+        ? input.businessType
+        : '在地店家',
+    channels: input.channels
+      ?.map((c) => c.trim())
+      .filter(Boolean),
     savedAt: new Date().toISOString(),
   };
   if (typeof window !== 'undefined') {

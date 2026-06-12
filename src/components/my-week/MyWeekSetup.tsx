@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { Check, Save } from 'lucide-react';
 import { INDUSTRY_TAGS, type Industry } from '@/lib/gbp-post-writer';
-import type { StoreProfile, StoreProfileInput } from '@/lib/store-profile';
+import type { BusinessType, StoreProfile, StoreProfileInput } from '@/lib/store-profile';
 
 interface Props {
   /** 編輯模式時帶入既有檔案 */
@@ -26,10 +26,15 @@ const INDUSTRIES: Industry[] = [
   '餐飲', '美髮美容', '醫美', '牙科', '律師', '補教', '零售', '其他',
 ];
 
+const BUSINESS_TYPES: BusinessType[] = ['在地店家', '電商品牌', '實體+電商'];
+
 const TAG_HARD_MAX = 8;
 
 export default function MyWeekSetup({ initial, onSave, onCancel }: Props) {
   const [storeName, setStoreName] = useState(initial?.storeName ?? '');
+  const [businessType, setBusinessType] = useState<BusinessType>(
+    initial?.businessType ?? '在地店家',
+  );
   const [industry, setIndustry] = useState<Industry | ''>(initial?.industry ?? '');
   const [weekTheme, setWeekTheme] = useState(initial?.weekTheme ?? '');
   const [selectedTags, setSelectedTags] = useState<string[]>(initial?.selectedTags ?? []);
@@ -70,6 +75,7 @@ export default function MyWeekSetup({ initial, onSave, onCancel }: Props) {
       industry: industry as Industry,
       selectedTags,
       weekTheme: weekTheme.trim() || undefined,
+      businessType,
     });
   }
 
@@ -94,6 +100,34 @@ export default function MyWeekSetup({ initial, onSave, onCancel }: Props) {
             maxLength={40}
           />
         </div>
+
+        <fieldset>
+          <legend className="text-sm font-semibold text-slate-900 mb-2 block">
+            業態 <span className="text-slate-400 font-normal text-xs">（影響產出的素材通路）</span>
+          </legend>
+          <div role="group" aria-label="選擇業態" className="flex flex-wrap gap-2">
+            {BUSINESS_TYPES.map((bt) => {
+              const isOn = businessType === bt;
+              return (
+                <button
+                  type="button"
+                  key={bt}
+                  onClick={() => setBusinessType(bt)}
+                  aria-pressed={isOn}
+                  className={[
+                    'inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1',
+                    isOn
+                      ? 'bg-[#1D9E75] text-white border-[#1D9E75] hover:bg-[#168060]'
+                      : 'bg-white text-slate-700 border-slate-300 hover:border-emerald-400 hover:bg-emerald-50',
+                  ].join(' ')}
+                >
+                  {isOn && <Check className="w-3 h-3" aria-hidden />}
+                  {bt}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
 
         <div>
           <Label htmlFor="sp-industry" className="text-sm font-semibold text-slate-900 mb-2 block">
