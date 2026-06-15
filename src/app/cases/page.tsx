@@ -11,7 +11,7 @@ import {
 
 export const metadata: Metadata = {
   title: { absolute: '客戶成效案例 | adlo 台灣在地 SEO 行銷' },
-  description: '實名公開追蹤：Baseus 台灣（3C 電商）、品威窗簾（北投在地店）——用 adlo 工具，從 Day-0 起點到結果，全程公開。加上早期合作案例：醫美年度新用戶 17 萬、電商新會員成長 374%。',
+  description: '實名公開追蹤：Baseus 台灣（3C 電商）、品威窗簾（北投在地店）——用 adlo 工具，從 Day-0 起點到結果，全程公開。加上早期合作案例：醫美年度新用戶 17 萬、當鋪廣告受眾品質提升 20 倍。',
   alternates: { canonical: 'https://adlo.tw/cases' },
 };
 
@@ -92,30 +92,13 @@ const cases = [
     color: 'border-[#1D9E75]',
     highlight: true,
   },
-  {
-    id: 'brand',
-    label: '台灣電子3C品牌',
-    industry: '電子品牌 / 電商',
-    city: '全台',
-    icon: BarChart2,
-    services: ['在地 SEO', 'Google Ads', 'Meta 廣告', '內容行銷', 'AI 代管協助', '數位市調'],
-    challenge: '電商平台流量成長停滯，會員數長期低成長，品牌在台灣市場的數位聲量不足，多渠道資源分散、缺乏整合策略。',
-    solution: '全渠道整合：SEO + 廣告 + 內容行銷三位一體，同步導入 AI 自動化流程提升內容產出效率，並進行市場調研確立關鍵商品定位。',
-    results: [
-      { label: '累積會員突破', value: '破萬', note: '持續成長中' },
-      { label: '電商新會員單期成長', value: '↑374%', note: '新增會員 1,653 人（單一期間）' },
-      { label: '服務涵蓋範圍', value: '6 大模組', note: 'adlo 全包服務' },
-    ],
-    color: 'border-slate-200',
-    highlight: false,
-  },
 ];
 
 const aggregate = [
-  { icon: Users,            value: '34萬+', label: '累積觸及新用戶' },
-  { icon: TrendingUp,       value: '374%',  label: '最高會員成長率' },
-  { icon: Search,           value: '3+',    label: '成功服務客戶數' },
-  { icon: MousePointerClick, value: '20×',  label: '廣告受眾品質提升' },
+  { icon: Users,             value: '17萬+', label: '醫美年度新使用者' },
+  { icon: Search,            value: '3.9萬', label: '自然搜尋新客' },
+  { icon: TrendingUp,        value: '12萬+', label: '廣告觸及規模' },
+  { icon: MousePointerClick, value: '20×',   label: '廣告受眾品質提升' },
 ];
 
 const caseJsonLd = {
