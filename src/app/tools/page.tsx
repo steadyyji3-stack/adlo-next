@@ -13,6 +13,7 @@ import {
   ArrowDown,
   Bell,
   MessageSquare,
+  Wand2,
 } from 'lucide-react';
 import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
@@ -134,6 +135,17 @@ const tools: Tool[] = [
     icon: MessageSquare,
     status: 'live',
     replaces: 'LINE OA 內容策略諮詢 NT$5,000',
+  },
+  {
+    slug: 'prompt',
+    href: '/tools/prompt',
+    name: 'AI 提示詞產生器',
+    tagline: '把「我想做的事」翻成 AI 聽得懂的指令',
+    description:
+      '用一句口語講你想用 AI 做什麼，產出結構化、可直接貼到 ChatGPT / Claude 的提示詞，附「精簡版 / 進階版」與拆解教學。不用學 prompt 技巧。',
+    icon: Wand2,
+    status: 'live',
+    replaces: 'AI 工具導入教學 NT$4,000',
   },
 ];
 
