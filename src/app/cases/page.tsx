@@ -95,6 +95,7 @@ const cases = [
     challenge: '醫美市場競爭激烈，診所關鍵字如「除毛」「瘦小腿」被大型醫美集團壟斷，過去主要依賴 referral 口碑，流量不穩定。',
     solution: '多渠道並進：Meta 廣告觸及精準族群（性別 × 年齡 × 興趣圈定）、Google Ads 捕捉主動搜尋、同步建立 SEO 長尾關鍵字內容群。',
     results: [
+      { label: '除毛類別 區域廣告能見度', value: '同區第一', note: '從被集團壟斷，到在地競價能見度居冠' },
       { label: '年度新使用者', value: '17 萬', note: '全年度累積（2025）' },
       { label: '自然搜尋流量', value: '3.9 萬', note: '有機 Google 搜尋新用戶' },
       { label: '廣告觸及規模', value: '12 萬+', note: 'Cross-network 工作階段' },
