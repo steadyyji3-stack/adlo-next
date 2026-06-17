@@ -37,6 +37,15 @@ const liveCases = [
     ],
     goal: '分類頁 SEO 72→80+、3 篇長尾文上線收錄、每週素材改由 adlo /my-week 產出。',
     tools: ['seo-scorer', 'keyword', '/my-week 電商模式'],
+    progress: {
+      window: 'GA4 量測 5/20–6/16',
+      caveat: '追蹤起點量測，尚未歸因為 adlo 成效',
+      items: [
+        { label: '自然搜尋工作階段', value: '5,458', note: '全站第一大流量渠道，高於付費社群與 google/cpc' },
+        { label: '自然搜尋佔比', value: '約 29%', note: '占全站約 1.9 萬工作階段' },
+        { label: '長尾內容上線', value: '1 / 3', note: 'VP2 160W 車充實測：7 段 H2 + FAQ + 5 產品內鏈（6/15）' },
+      ],
+    },
   },
   {
     id: 'pinwei',
@@ -54,6 +63,7 @@ const liveCases = [
     ],
     goal: 'Google 商家從 0 建立、/check 拿到第一個分數、評論 0→N、「北投 窗簾」進地圖前 3。',
     tools: ['/check', '/my-week 在地店家模式', 'review-link', 'keyword'],
+    progress: null,
   },
 ];
 
@@ -239,6 +249,30 @@ export default function CasesPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* 追蹤進度 */}
+                  {c.progress && (
+                    <div className="px-8 py-6 border-t border-slate-100 bg-[#F8FAFC]">
+                      <div className="flex items-center justify-between gap-3 flex-wrap mb-5">
+                        <p className="text-xs font-bold text-[#0F6E56] uppercase tracking-widest inline-flex items-center gap-1.5">
+                          <TrendingUp className="w-3.5 h-3.5" aria-hidden /> 追蹤進度 · {c.progress.window}
+                        </p>
+                        <span className="text-[11px] text-slate-400">{c.progress.caveat}</span>
+                      </div>
+                      <div className="grid sm:grid-cols-3 gap-5">
+                        {c.progress.items.map((p, i) => (
+                          <div key={i} className="flex items-start gap-3">
+                            <CheckCircle2 className="w-4 h-4 text-[#1D9E75] shrink-0 mt-1" aria-hidden />
+                            <div>
+                              <p className="text-2xl font-extrabold text-slate-900 leading-none mb-1" style={{ fontFamily: 'var(--font-manrope)' }}>{p.value}</p>
+                              <p className="text-xs font-semibold text-slate-700">{p.label}</p>
+                              <p className="text-xs text-slate-400">{p.note}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </article>
               );
             })}
