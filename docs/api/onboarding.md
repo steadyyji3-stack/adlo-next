@@ -4,13 +4,16 @@ Track B endpoint for customer onboarding form submissions.
 
 ## Auth
 
-Public for Sprint 1, gated by `customerId` from the onboarding email link. Customer magic-link auth is planned for Sprint 3.
+Protected by the customer Auth.js session.
+
+The Stripe welcome email sends customers to `/customer/login?email=...&next=/onboarding`. After the customer uses the email magic link, `/onboarding` resolves `customerId` from `session.user.customerId`.
+
+Raw `customer_id` query strings are no longer trusted.
 
 ## Request
 
 ```json
 {
-  "customerId": "uuid",
   "storeName": "店名",
   "storeAddress": "地址",
   "storeCity": "台北市",
@@ -29,6 +32,7 @@ Public for Sprint 1, gated by `customerId` from the onboarding email link. Custo
 ## Behavior
 
 - Validates payload with Zod.
+- Resolves `customerId` from the Auth.js session.
 - Updates the matching `customers` row.
 - Creates an `onboarding_submissions` row with `pending_review`.
 - Writes `audit_log` action `onboarding.submit`.

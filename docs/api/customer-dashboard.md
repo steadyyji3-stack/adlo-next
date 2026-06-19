@@ -4,12 +4,14 @@ Track B foundation for customer-facing post-sale data.
 
 ## Temporary auth model
 
-Sprint foundation accepts `customer_id` from either:
+Customer dashboard auth now follows the Track B spec:
 
-- `customer_id` query string
-- `customer_id` cookie
+- Auth.js / NextAuth v5 email magic-link
+- database-backed session cookie
+- `session.user.customerId` resolved from the subscribed customer email
+- middleware gate for `/customer/*`
 
-NextAuth magic-link sessions will replace this temporary handoff in a later customer auth PR.
+Raw `customer_id` query strings and cookies are no longer trusted for customer identity.
 
 ## GET /api/me
 
@@ -52,7 +54,7 @@ Returns recent rows from `monthly_reports`.
 
 ## Customer UI
 
-`/customer/dashboard?customer_id=...` renders the first customer dashboard:
+`/customer/dashboard` renders the signed-in customer's dashboard:
 
 - service status and store identity
 - subscription summary
@@ -66,5 +68,6 @@ Returns recent rows from `monthly_reports`.
 
 - Read-only only; no customer mutation in this PR.
 - No OAuth token handling.
-- No customer token or OAuth credential is logged.
-- Missing `customer_id` returns `UNAUTHORIZED`.
+- No OAuth credential is logged.
+- Missing or invalid session returns `UNAUTHORIZED`.
+- `?customer_id=<uuid>` does not grant access because customer identity comes from the Auth.js session.
