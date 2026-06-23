@@ -30,7 +30,7 @@ const stats = [
 
 export default function Hero() {
   return (
-    <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 overflow-hidden bg-white">
+    <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 overflow-hidden bg-gradient-to-b from-emerald-50/50 via-white to-white">
       {/* Grid texture */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -42,6 +42,49 @@ export default function Hero() {
       />
       {/* Radial glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_40%_at_50%_-5%,rgba(29,158,117,0.08),transparent)] pointer-events-none" />
+
+      {/* Drifting ambient blobs（速度優先：transform-only 動畫） */}
+      <div
+        className="hero-blob absolute -top-24 -left-20 h-72 w-72 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(29,158,117,0.14), transparent 70%)' }}
+        aria-hidden
+      />
+      <div
+        className="hero-blob-2 absolute top-32 right-1/3 h-80 w-80 rounded-full pointer-events-none hidden md:block"
+        style={{ background: 'radial-gradient(circle, rgba(29,158,117,0.10), transparent 70%)' }}
+        aria-hidden
+      />
+
+      {/* 雷達訊號脈衝 + 地圖圖釘（inline SVG 動畫，僅 lg+ 顯示；呼應「被 Google 地圖找到」） */}
+      <div
+        className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-[38%] hidden lg:block pointer-events-none"
+        aria-hidden
+      >
+        <svg
+          viewBox="0 0 520 520"
+          className="h-[440px] w-[440px] xl:h-[520px] xl:w-[520px]"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* 靜態導引圈 */}
+          <circle cx="260" cy="260" r="130" stroke="#1D9E75" strokeOpacity="0.10" strokeWidth="1" />
+          <circle cx="260" cy="260" r="190" stroke="#1D9E75" strokeOpacity="0.07" strokeWidth="1" />
+          <circle cx="260" cy="260" r="250" stroke="#1D9E75" strokeOpacity="0.05" strokeWidth="1" />
+          {/* 脈衝圈（基準 r=80，scale 0.34→1） */}
+          <circle className="radar-ring" cx="260" cy="260" r="80" />
+          <circle className="radar-ring" cx="260" cy="260" r="80" style={{ animationDelay: '1.4s' }} />
+          <circle className="radar-ring" cx="260" cy="260" r="80" style={{ animationDelay: '2.8s' }} />
+          {/* 中心圖釘 */}
+          <g className="radar-pin">
+            <circle cx="260" cy="262" r="36" fill="#1D9E75" fillOpacity="0.12" />
+            <path
+              d="M260 230c-13.8 0-25 11.2-25 25 0 17.5 25 41 25 41s25-23.5 25-41c0-13.8-11.2-25-25-25z"
+              fill="#1D9E75"
+            />
+            <circle cx="260" cy="255" r="8.5" fill="#ffffff" />
+          </g>
+        </svg>
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-8 relative">
         <motion.div
@@ -55,7 +98,7 @@ export default function Hero() {
             {/* Social proof badge */}
             <motion.div variants={fadeUp}>
               <div className="inline-flex items-center gap-2 bg-[#E1F5EE] border border-[#1D9E75]/20 rounded-full px-4 py-2 mb-6">
-                <span className="w-2 h-2 rounded-full bg-[#1D9E75] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#1D9E75] animate-pulse motion-reduce:animate-none" />
                 <span className="text-[#0F6E56] text-xs font-bold tracking-widest uppercase">
                   台北信義區牙醫 +142% 門店預約率
                 </span>
