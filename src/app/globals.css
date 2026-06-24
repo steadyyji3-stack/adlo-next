@@ -131,11 +131,32 @@
 .hero-blob  { animation: blob-drift 19s ease-in-out infinite; }
 .hero-blob-2 { animation: blob-drift 24s ease-in-out infinite reverse; }
 
+/* Hero 進場：CSS 驅動，關鍵 above-fold 內容預設可見，不依賴 JS hydration。
+   （framer-motion 的 initial=hidden 會在 SSR 寫死 opacity:0，client JS 一有閃失就整塊隱形） */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.hero-reveal {
+  opacity: 1; /* fallback：動畫不支援時仍可見 */
+  animation: hero-fade-up 0.55s ease-out both;
+}
+.hero-reveal-scale {
+  opacity: 1;
+  animation: hero-fade-in 0.6s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .radar-ring,
   .radar-pin,
   .hero-blob,
-  .hero-blob-2 {
+  .hero-blob-2,
+  .hero-reveal,
+  .hero-reveal-scale {
     animation: none !important;
   }
   /* 關閉動畫時留一圈淡淡的靜態雷達，視覺不至於空掉 */
