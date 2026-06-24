@@ -6,8 +6,11 @@ import SiteNav from '@/components/layout/SiteNav';
 import SiteFooter from '@/components/layout/SiteFooter';
 import ClickTracker from '@/components/tracking/ClickTracker';
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+// .trim() 防禦：env 值若夾帶換行/空白（例如貼進 Vercel 時多了 \n），
+// 會讓 @next/third-parties 內嵌的 GTM/GA script 字串斷行 → SyntaxError →
+// 整棵 hydration 中斷 → 依賴 client JS 的 Hero（framer-motion）卡在 opacity:0。
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID?.trim();
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID?.trim();
 
 const inter = Inter({
   subsets: ['latin'],
