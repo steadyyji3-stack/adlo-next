@@ -101,7 +101,7 @@ export default function Hero() {
             {/* Tags */}
             <div className="hero-reveal flex flex-wrap gap-2 mb-8" style={{ animationDelay: '0.24s' }}>
               {['不用註冊', '不交出 Google 帳號', '結構化工具不是 AI 聊天', '台灣在地專用'].map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs text-slate-500 bg-slate-100">
+                <Badge key={tag} variant="secondary" className="text-xs text-slate-600 bg-slate-100">
                   {tag}
                 </Badge>
               ))}
