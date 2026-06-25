@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -118,15 +117,10 @@ export default function HeroTryWidget() {
         {error && <p role="alert" className="text-sm text-rose-600 text-center">{error}</p>}
       </form>
 
-      <AnimatePresence mode="wait">
-        {sample && (
-          <motion.div
+      {sample && (
+          <div
             key={sample.title + sample.content}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="px-6 pb-6"
+            className="widget-result-fade px-6 pb-6"
             aria-live="polite"
           >
             <div className="rounded-xl bg-slate-50 ring-1 ring-slate-200 p-4">
@@ -165,9 +159,8 @@ export default function HeroTryWidget() {
                 8 支免費工具
               </Link>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {!sample && (
         <div className="px-6 pb-6 -mt-2">
