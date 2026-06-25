@@ -156,7 +156,7 @@ export default function HeroTryWidget() {
                 className="inline-flex items-center justify-center gap-1.5 rounded-xl ring-1 ring-slate-200 text-slate-700 font-bold text-sm h-11 px-4 hover:ring-emerald-400 hover:text-[#0F6E56] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 data-gtm-event="home_try_widget_to_tools"
               >
-                8 支免費工具
+                9 支免費工具
               </Link>
             </div>
           </div>
