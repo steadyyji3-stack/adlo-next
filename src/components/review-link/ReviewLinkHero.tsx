@@ -50,6 +50,10 @@ const INDUSTRY_GROUPS: { label: string; items: string[] }[] = [
     items: ['健身 / 瑜伽', '牙醫 / 診所', '醫美', '寵物服務'],
   },
   {
+    label: '裝潢修繕',
+    items: ['裝潢', '裝修', '安裝', '維修'],
+  },
+  {
     label: '其他服務',
     items: ['零售 / 服飾', '住宿 / 民宿', '律師 / 會計', '補習 / 家教', '其他'],
   },
