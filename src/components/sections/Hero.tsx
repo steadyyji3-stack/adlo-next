@@ -94,7 +94,7 @@ export default function Hero() {
 
             {/* Sub */}
             <p className="hero-reveal text-lg text-slate-500 leading-relaxed mb-5 max-w-lg" style={{ animationDelay: '0.16s' }}>
-              adlo 把要收費的在地行銷諮詢，做成 9 支免費工具。
+              adlo 把要收費的在地行銷諮詢，做成 10 支免費工具。
               貼文、評論、健檢——3 秒自助產出，自己動手。
             </p>
 
@@ -114,7 +114,7 @@ export default function Hero() {
                 size="lg"
                 className="cta-gradient text-white hover:opacity-90 shadow-lg shadow-green-900/20 font-bold text-base px-8"
               >
-                <Link href="/tools">探索 9 支免費工具 →</Link>
+                <Link href="/tools">探索 10 支免費工具 →</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="font-bold text-base border-slate-200 hover:border-[#1D9E75] hover:text-[#1D9E75]">
                 <Link href="/my-week">我的這週素材</Link>
