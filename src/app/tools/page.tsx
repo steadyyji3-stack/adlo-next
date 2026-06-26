@@ -14,6 +14,7 @@ import {
   Bell,
   MessageSquare,
   Wand2,
+  MapPinned,
 } from 'lucide-react';
 import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
@@ -58,6 +59,17 @@ const tools: Tool[] = [
     icon: Activity,
     status: 'live',
     replaces: '基礎版月訂閱的入門諮詢',
+  },
+  {
+    slug: 'map-visibility',
+    href: '/tools/map-visibility',
+    name: 'Google 地圖優化清單',
+    tagline: '健診告訴你幾分，這支告訴你怎麼補',
+    description:
+      '勾選你的 Google 商家現況，產出依優先序排好的地圖曝光優化行動清單：先做哪件、為什麼影響在地排名、哪支工具能代勞。',
+    icon: MapPinned,
+    status: 'live',
+    replaces: 'GBP 優化顧問的現場盤點',
   },
   {
     slug: 'post-writer',

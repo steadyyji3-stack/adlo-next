@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Activity, Bell, PenLine, MessageSquare, Radar, Search, FileCheck2, Link2, Sparkles,
-  Wand2, TrendingDown, MapPinOff, BarChart2, ArrowRight,
+  Wand2, MapPinned, TrendingDown, MapPinOff, BarChart2, ArrowRight,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'adlo — 讓 Google 地圖把客戶送到你門口',
-  description: '台灣中小店家的在地行銷工具箱。9 支免費工具：GBP 健診、貼文產生、評論收集、競爭雷達——3 秒自助產出，不用註冊、不交出 Google 帳號。',
+  description: '台灣中小店家的在地行銷工具箱。10 支免費工具：GBP 健診、貼文產生、評論收集、競爭雷達——3 秒自助產出，不用註冊、不交出 Google 帳號。',
   alternates: { canonical: 'https://adlo.tw' },
   openGraph: {
     title: 'adlo — 讓 Google 地圖把客戶送到你門口',
-    description: '台灣中小店家的在地行銷工具箱。9 支免費工具，結構化自助產出，不是 AI 聊天。',
+    description: '台灣中小店家的在地行銷工具箱。10 支免費工具，結構化自助產出，不是 AI 聊天。',
     url: 'https://adlo.tw',
     siteName: 'adlo',
     locale: 'zh_TW',
@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 
 const tools = [
   { icon: Activity,       name: 'GBP 健診',          tagline: '30 秒看 Google 商家幾分', href: '/check' },
+  { icon: MapPinned,      name: 'Google 地圖優化清單', tagline: '健診完，告訴你怎麼補',     href: '/tools/map-visibility' },
   { icon: PenLine,        name: 'GBP 貼文產生器',     tagline: '下週 7 天貼文，3 秒搞定',   href: '/tools/post-writer' },
   { icon: MessageSquare,  name: 'LINE 推播產生器',    tagline: '7 篇 LINE OA 推播初稿',     href: '/tools/line-broadcast' },
   { icon: Radar,          name: '競爭對手雷達',       tagline: '你 vs 同區 3 家，一張圖',   href: '/tools/competitor' },
@@ -53,7 +54,7 @@ const painPoints = [
   {
     icon: BarChart2,
     title: '不知道從哪裡開始',
-    desc: '每個人說的都不同。9 支工具按順序跑一輪，30 秒知道第一步該補什麼。',
+    desc: '每個人說的都不同。10 支工具按順序跑一輪，30 秒知道第一步該補什麼。',
     cta: '逛免費工具箱',
     href: '/tools',
   },
@@ -111,7 +112,7 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* 9 工具 grid */}
+          {/* 10 工具 grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {tools.map(({ icon: Icon, name, tagline, href }) => (
               <Link key={href} href={href} className="card-hover bg-white rounded-xl border border-slate-100 p-5 block group">
@@ -198,7 +199,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button asChild size="lg" className="cta-gradient text-white font-bold hover:opacity-90 shadow-xl shadow-green-900/20 px-10">
-              <Link href="/tools">探索 9 支免費工具 →</Link>
+              <Link href="/tools">探索 10 支免費工具 →</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="font-bold border-slate-200 hover:border-[#1D9E75] hover:text-[#1D9E75]">
               <Link href="/my-week">我的這週素材</Link>
