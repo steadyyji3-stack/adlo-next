@@ -13,6 +13,7 @@ import {
   ArrowDown,
   Bell,
   MessageSquare,
+  MessageSquareReply,
   Wand2,
   MapPinned,
 } from 'lucide-react';
@@ -125,6 +126,17 @@ const tools: Tool[] = [
     icon: Link2,
     status: 'live',
     replaces: '月訂閱「評論管理策略建議」',
+  },
+  {
+    slug: 'review-reply',
+    href: '/tools/review-reply',
+    name: '評論回覆產生器',
+    tagline: '收到評論，3 種回覆幫你寫好',
+    description:
+      '貼上客人的 Google 評論，依星等產出 3 種語氣的回覆初稿：好評加溫、負評不失風度。回覆率是在地排名訊號，跟「評論收集連結」湊成收→回閉環。',
+    icon: MessageSquareReply,
+    status: 'live',
+    replaces: '月訂閱「評論管理策略建議」的回覆代筆',
   },
   {
     slug: 'name',
