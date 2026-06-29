@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -138,9 +140,17 @@ export default function MyWeekSetup({ initial, onSave, onCancel }: Props) {
               <SelectValue placeholder="選一個（影響可用的標籤池）" />
             </SelectTrigger>
             <SelectContent>
-              {INDUSTRIES.map((it) => (
+              {INDUSTRIES.filter((it) => it !== '其他').map((it) => (
                 <SelectItem key={it} value={it}>{it}</SelectItem>
               ))}
+              <SelectGroup>
+                <SelectLabel>裝潢修繕</SelectLabel>
+                <SelectItem value="裝潢">裝潢</SelectItem>
+                <SelectItem value="裝修">裝修</SelectItem>
+                <SelectItem value="安裝">安裝</SelectItem>
+                <SelectItem value="維修">維修</SelectItem>
+              </SelectGroup>
+              <SelectItem value="其他">其他</SelectItem>
             </SelectContent>
           </Select>
         </div>
