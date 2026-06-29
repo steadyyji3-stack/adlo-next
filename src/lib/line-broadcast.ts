@@ -29,7 +29,12 @@ export type LineIndustry =
   | '律師'
   | '補教'
   | '零售'
-  | '其他';
+  | '其他'
+  // 裝潢修繕父類別下的 4 子項（共用同一套模板）
+  | '裝潢'
+  | '裝修'
+  | '安裝'
+  | '維修';
 
 export interface LineBroadcastInput {
   storeName: string;
@@ -62,7 +67,33 @@ export interface TagGroup {
  * 各產業可用的標籤池。用戶從中勾選，組合為模板的可植入素材。
  * 每組標籤都從台灣中小店家視角設計，不堆 SaaS / 簡中常見詞。
  */
+// 裝潢修繕共用標籤（裝潢／裝修／安裝／維修 4 子項共用）
+const RENOVATION_TAGS: TagGroup[] = [
+  {
+    key: 'product',
+    label: '服務項目',
+    description: '你做哪些工程？',
+    tags: ['全室裝潢', '老屋翻新', '局部裝修', '水電', '泥作防水', '木作系統櫃', '油漆粉刷', '衛浴廚房', '冷氣安裝', '居家維修'],
+  },
+  {
+    key: 'audience',
+    label: '客群／場景',
+    description: '誰來找你？',
+    tags: ['新屋裝潢', '中古屋翻新', '租屋小修', '店面商空', '辦公室', '屋主自住', '包租公', '緊急修繕'],
+  },
+  {
+    key: 'value',
+    label: '訴求／堅持',
+    description: '你跟別家最大的不同？',
+    tags: ['報價透明', '不追加報價', '工程保固', '材料可選', '準時交屋', '工地乾淨', '免費丈量', '只接在地'],
+  },
+];
+
 export const INDUSTRY_TAGS: Record<LineIndustry, TagGroup[]> = {
+  裝潢: RENOVATION_TAGS,
+  裝修: RENOVATION_TAGS,
+  安裝: RENOVATION_TAGS,
+  維修: RENOVATION_TAGS,
   餐飲: [
     {
       key: 'product',
@@ -293,7 +324,41 @@ type DraftBuilder = (c: BuildCtx) => string;
 //   5. 短句、換行多、不要長段落
 // ─────────────────────────────────────────────────────────────────
 
+// ═══════════════════════════════ 裝潢修繕 ═══════════════════════════════
+// 裝潢／裝修／安裝／維修 4 子項共用同一套 LINE 模板
+const RENOVATION_LINE_TEMPLATES: DraftBuilder[] = [
+  // 週一 歡迎
+  ({ name, theme, ctxFirst }) =>
+    `早安🔧\n\n${name} 本週照常接案，現場丈量跟報價都免費。${theme ? `\n本週重點：${theme}。` : ''}${ctxFirst ? `\n\n想先跟你說：${ctxFirst}。` : ''}\n\n這個月檔期比較滿，要排工程的直接 LINE 回地址跟需求，我們先幫你卡丈量時間。`,
+  // 週二 教育
+  ({ name, ctxFirst }) =>
+    `常被問：為什麼同樣的工程，每家報價差這麼多。\n\n差別多半在看不到的地方：材料等級、防水做不做確實、舊管線換不換。\n\n一個總價數字看不出什麼，逐項列的報價單才看得出貴在哪、省在哪。${ctxFirst ? `\n\n（這禮拜想多聊：${ctxFirst}）` : ''}\n\n— ${name}`,
+  // 週三 QA
+  ({ name }) =>
+    `常被問：保固多久、工期多長？\n\n・防水、泥作保固一年，期間有問題回來免費處理\n・局部維修通常 1-3 天\n・整間翻新多半 3-6 週，報價時給你排程表\n\n還有想問的，LINE 直接傳屋況照片，我們先初步看。\n\n— ${name}`,
+  // 週四 幕後
+  ({ name, ctxFirst }) =>
+    `今天在工地${ctxFirst ? `——${ctxFirst}。` : '花了快一個鐘頭，就為了把一道牆角的矽利康收乾淨'}。\n\n這種地方屋主住進去半年後才會發現做得好不好。我們寧可交屋前先處理掉。\n\n看不到的地方，才是功夫。\n\n— ${name}`,
+  // 週五 新品
+  ({ name, theme, ctxFirst }) => {
+    const what = theme || ctxFirst;
+    return what
+      ? `${name} 這季新增：${what} 🔧\n\n適用情況、價格範圍都放進 LINE 圖文選單。\n\n要看適不適合你家，LINE 傳屋況照片或約現場評估。`
+      : `${name} 最近多接了幾種工法的案子 🔧\n\n還在累積案例，先給 LINE 好友問。有需求的傳照片，我們評估完再報。`;
+  },
+  // 週六 促銷
+  ({ name }) =>
+    `週六🔧\n\n${name} 想先把這個月的丈量檔期排一排。\n\n這個月底前預約現場丈量：報價單免費、不綁約、比過價不做也沒關係。\n\n不推銷、不叫你當場簽。要約直接回地址跟需求就行。`,
+  // 週日 節慶
+  ({ name, theme }) =>
+    `週日晚安🌙\n\n禮拜天我們${theme ? `把「${theme}」的料件跟排程都備好了` : '把這禮拜的工地都收尾、明天的料備齊'}，明天照常開工。\n\n下週想處理但還不確定的屋況，先 LINE 傳照片問，會幫你看。\n\n— ${name}`,
+];
+
 const INDUSTRY_TEMPLATES: Record<LineIndustry, DraftBuilder[]> = {
+  裝潢: RENOVATION_LINE_TEMPLATES,
+  裝修: RENOVATION_LINE_TEMPLATES,
+  安裝: RENOVATION_LINE_TEMPLATES,
+  維修: RENOVATION_LINE_TEMPLATES,
   // ═══════════════════════════════ 餐飲 ═══════════════════════════════
   餐飲: [
     // 週一 歡迎
