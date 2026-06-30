@@ -6,16 +6,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Activity, Bell, PenLine, MessageSquare, MessageSquareReply, Radar, Search, FileCheck2, Link2, Sparkles,
-  Wand2, MapPinned, TrendingDown, MapPinOff, BarChart2, ArrowRight,
+  Wand2, MapPinned, Calculator, TrendingDown, MapPinOff, BarChart2, ArrowRight,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'adlo — 讓 Google 地圖把客戶送到你門口',
-  description: '台灣中小店家的在地行銷工具箱。11 支免費工具：GBP 健診、貼文產生、評論收集、競爭雷達——3 秒自助產出，不用註冊、不交出 Google 帳號。',
+  description: '台灣中小店家的在地行銷工具箱。12 支免費工具：GBP 健診、貼文產生、評論收集、競爭雷達——3 秒自助產出，不用註冊、不交出 Google 帳號。',
   alternates: { canonical: 'https://adlo.tw' },
   openGraph: {
     title: 'adlo — 讓 Google 地圖把客戶送到你門口',
-    description: '台灣中小店家的在地行銷工具箱。11 支免費工具，結構化自助產出，不是 AI 聊天。',
+    description: '台灣中小店家的在地行銷工具箱。12 支免費工具，結構化自助產出，不是 AI 聊天。',
     url: 'https://adlo.tw',
     siteName: 'adlo',
     locale: 'zh_TW',
@@ -30,6 +30,7 @@ const tools = [
   { icon: MessageSquare,  name: 'LINE 推播產生器',    tagline: '7 篇 LINE OA 推播初稿',     href: '/tools/line-broadcast' },
   { icon: Radar,          name: '競爭對手雷達',       tagline: '你 vs 同區 3 家，一張圖',   href: '/tools/competitor' },
   { icon: Search,         name: '關鍵字難度檢查',     tagline: '這個字值不值得做',         href: '/tools/keyword' },
+  { icon: Calculator,     name: '廣告該不該投試算',   tagline: '算清楚再燒，別賠了才知道', href: '/tools/ad-budget' },
   { icon: FileCheck2,     name: 'SEO 文章計分',       tagline: '貼 URL，即時拿分數',       href: '/tools/seo-scorer' },
   { icon: Link2,          name: '評論收集連結',       tagline: 'QR + 6 套訊息模板',        href: '/tools/review-link' },
   { icon: MessageSquareReply, name: '評論回覆產生器',  tagline: '收到評論，3 種回覆幫你寫好', href: '/tools/review-reply' },
@@ -55,7 +56,7 @@ const painPoints = [
   {
     icon: BarChart2,
     title: '不知道從哪裡開始',
-    desc: '每個人說的都不同。11 支工具按順序跑一輪，30 秒知道第一步該補什麼。',
+    desc: '每個人說的都不同。12 支工具按順序跑一輪，30 秒知道第一步該補什麼。',
     cta: '逛免費工具箱',
     href: '/tools',
   },
@@ -113,7 +114,7 @@ export default function HomePage() {
             </div>
           </Link>
 
-          {/* 11 工具 grid */}
+          {/* 12 工具 grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {tools.map(({ icon: Icon, name, tagline, href }) => (
               <Link key={href} href={href} className="card-hover bg-white rounded-xl border border-slate-100 p-5 block group">
@@ -200,7 +201,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button asChild size="lg" className="cta-gradient text-white font-bold hover:opacity-90 shadow-xl shadow-green-900/20 px-10">
-              <Link href="/tools">探索 11 支免費工具 →</Link>
+              <Link href="/tools">探索 12 支免費工具 →</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="font-bold border-slate-200 hover:border-[#1D9E75] hover:text-[#1D9E75]">
               <Link href="/my-week">我的這週素材</Link>

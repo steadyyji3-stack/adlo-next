@@ -16,6 +16,7 @@ import {
   MessageSquareReply,
   Wand2,
   MapPinned,
+  Calculator,
 } from 'lucide-react';
 import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
@@ -104,6 +105,17 @@ const tools: Tool[] = [
     icon: Search,
     status: 'live',
     replaces: 'Growth 方案「10 關鍵字佈局」研究',
+  },
+  {
+    slug: 'ad-budget',
+    href: '/tools/ad-budget',
+    name: '廣告該不該投試算機',
+    tagline: '損益兩平 CPC、ROAS、每月淨利一次算',
+    description:
+      '用你的客單價、毛利率、轉換率、CPC，算出「每次點擊最多能付多少還不虧」，別等燒完一個月才發現一直在賠。純試算、不上傳資料。',
+    icon: Calculator,
+    status: 'live',
+    replaces: '廣告投放顧問的 break-even 評估',
   },
   {
     slug: 'seo-scorer',
