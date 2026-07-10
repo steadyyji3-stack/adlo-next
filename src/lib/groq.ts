@@ -492,3 +492,326 @@ export async function generateNamesViaGroq(
 
   return { result: { names, slogans }, tokensUsed };
 }
+
+/* ════════════════════════════════════════════════════════════════
+   AI 提示詞產生器（prompt-generator）
+   把老闆口語的需求 → 結構化、可直接貼上 ChatGPT/Claude 的提示詞
+   ════════════════════════════════════════════════════════════════ */
+
+export interface PromptGeneratorInput {
+  task: string;
+  useCase: string;
+  tone?: string;
+  platform?: string;
+}
+
+export interface PromptBreakdownItem {
+  label: string;
+  content: string;
+}
+
+export interface PromptVariant {
+  label: string;
+  angle: string;
+  prompt: string;
+}
+
+export interface PromptGeneratorResult {
+  mainPrompt: string;
+  breakdown: PromptBreakdownItem[];
+  variants: PromptVariant[];
+  tips: string[];
+}
+
+const PROMPT_SYSTEM_PROMPT = `你是台灣的 AI 提示詞（prompt）工程顧問，專門把中小店家老闆「一句口語的需求」翻成「結構清楚、AI 一次就聽懂」的提示詞。
+
+【一個好提示詞的 5 個區塊】
+1. 角色：要 AI 扮演什麼專家（例：你是專寫台灣小餐廳的社群文案）
+2. 背景：在地情境、店家類型、目標對象、現況
+3. 任務：具體要 AI 產出什麼、幾個、多長
+4. 限制：語氣、字數、要避免的東西、要包含的重點
+5. 輸出格式：要 AI 用什麼結構回（條列／表格／分段／含標題）
+
+【語氣與用語規範】
+- 提示詞一律繁體中文、台灣用語，不要簡中味、不要翻譯腔
+- 禁止詞：賦能、打造、優質、極致、致力、卓越、業界領先、最強、第一名
+- mainPrompt 必須「直接複製貼到 ChatGPT / Claude 就能用」，不要留待填的空格以外的東西
+
+【回傳純 JSON（禁止 markdown code fence、禁止前後任何文字）】
+{
+  "mainPrompt": "完整可直接貼上的提示詞，含上述 5 區塊，用換行與小標題組織，約 200-400 字",
+  "breakdown": [
+    {"label":"角色","content":"這個提示詞裡的角色設定是什麼、為什麼這樣設"},
+    {"label":"背景","content":"..."},
+    {"label":"任務","content":"..."},
+    {"label":"限制","content":"..."},
+    {"label":"輸出格式","content":"..."}
+  ],
+  "variants": [
+    {"label":"精簡版","angle":"趕時間時用，最少輸入","prompt":"一段較短的可貼上提示詞"},
+    {"label":"進階版","angle":"要更高品質、願意多給脈絡","prompt":"一段較完整、含更多脈絡與限制的可貼上提示詞"}
+  ],
+  "tips": ["一句使用技巧","第二句","第三句"]
+}`;
+
+function buildPromptUserMessage(input: PromptGeneratorInput): string {
+  const lines = [
+    `我想用 AI 做的事：${input.task}`,
+    `用途場景：${input.useCase}`,
+  ];
+  if (input.tone?.trim()) lines.push(`語氣偏好：${input.tone.trim()}`);
+  if (input.platform?.trim()) lines.push(`主要會貼到的 AI：${input.platform.trim()}`);
+  lines.push('');
+  lines.push('請把上面翻成結構化提示詞，回傳 { "mainPrompt", "breakdown", "variants", "tips" }。');
+  return lines.join('\n');
+}
+
+/**
+ * Call Groq Llama 3.3 70B, turn a plain-language need into a ready-to-paste prompt.
+ * Throws on failure (caller should surface user-friendly error).
+ */
+export async function generatePromptViaGroq(
+  input: PromptGeneratorInput,
+): Promise<{ result: PromptGeneratorResult; tokensUsed: number }> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY 未設定');
+
+  const messages: GroqMessage[] = [
+    { role: 'system', content: PROMPT_SYSTEM_PROMPT },
+    { role: 'user', content: buildPromptUserMessage(input) },
+  ];
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+
+  let res: Response;
+  try {
+    res = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages,
+        temperature: 0.7,
+        max_tokens: 4096,
+        response_format: { type: 'json_object' },
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Groq API HTTP ${res.status}: ${body.slice(0, 200)}`);
+  }
+
+  const data = (await res.json()) as GroqResponse;
+  if (data.error) throw new Error(`Groq error: ${data.error.message}`);
+
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error('Groq 回應為空');
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(content);
+  } catch {
+    const m = content.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error(`Groq 回應非 JSON：${content.slice(0, 100)}`);
+    parsed = JSON.parse(m[0]);
+  }
+
+  const raw = parsed as {
+    mainPrompt?: unknown;
+    breakdown?: unknown;
+    variants?: unknown;
+    tips?: unknown;
+  };
+
+  const mainPrompt = String(raw.mainPrompt ?? '').trim();
+  if (mainPrompt.length < 20) {
+    throw new Error(`mainPrompt 異常，長度：${mainPrompt.length}`);
+  }
+
+  const breakdown: PromptBreakdownItem[] = Array.isArray(raw.breakdown)
+    ? (raw.breakdown as Record<string, unknown>[])
+        .map((b) => ({
+          label: String(b.label ?? '').trim(),
+          content: String(b.content ?? '').trim(),
+        }))
+        .filter((b) => b.label && b.content)
+    : [];
+
+  const variants: PromptVariant[] = Array.isArray(raw.variants)
+    ? (raw.variants as Record<string, unknown>[])
+        .map((v) => ({
+          label: String(v.label ?? '').trim(),
+          angle: String(v.angle ?? '').trim(),
+          prompt: String(v.prompt ?? '').trim(),
+        }))
+        .filter((v) => v.prompt.length >= 10)
+    : [];
+
+  const tips: string[] = Array.isArray(raw.tips)
+    ? (raw.tips as unknown[]).map((t) => String(t).trim()).filter((t) => t.length > 0)
+    : [];
+
+  const tokensUsed =
+    (data.usage?.prompt_tokens ?? 0) + (data.usage?.completion_tokens ?? 0);
+
+  return { result: { mainPrompt, breakdown, variants, tips }, tokensUsed };
+}
+
+/* ════════════════════════════════════════════════════════════════
+   評論回覆產生器（review-reply）
+   貼上一則 Google / 商家評論 → 3 種語氣的回覆初稿 + 回覆要點
+   ════════════════════════════════════════════════════════════════ */
+
+export interface ReviewReplyInput {
+  rating: number; // 1-5
+  reviewText: string; // 客人的評論原文
+  industry?: string; // 店家類型（選填，幫助語氣）
+  ownerNote?: string; // 老闆想補充/回應的點（選填）
+}
+
+export interface ReviewReplyVariant {
+  label: string; // 例：簡短誠懇 / 完整說明 / 溫暖加溫
+  angle: string; // 什麼情況用這版
+  reply: string; // 可直接貼上的回覆
+}
+
+export interface ReviewReplyResult {
+  variants: ReviewReplyVariant[]; // 3 種
+  tips: string[]; // 回覆這類評論的 2-4 個要點
+}
+
+const REVIEW_REPLY_SYSTEM_PROMPT = `你是台灣中小店家的 Google 商家評論回覆顧問。你幫老闆把一則客人的評論，回成「真誠、得體、台灣口吻」的回覆——公開回覆是給「下一個還沒上門的客人」看的，不是只回給寫評論的人。
+
+【依星等的回覆策略】
+- 4–5 星（好評）：真誠感謝 → 呼應他提到的「具體」細節（不要罐頭式「感謝您的支持」）→ 輕輕邀請再訪，但不推銷、不討拍。
+- 3 星（中評）：先謝謝願意回饋 → 釐清或承接他不滿意的點 → 具體說會怎麼調整 → 留再給一次機會的餘地。
+- 1–2 星（負評）：先同理、不狡辯、不甩鍋客人 → 對可改善的點具體回應 → 邀請私下聯繫處理（留 LINE / 電話 / email 的「動作」描述，不要硬塞假資料）→ 全程冷靜、有風度。公開回覆的目標是讓「旁觀的潛在客人」覺得這家店可信、會處理事情。
+
+【鐵則】
+- 絕不跟客人吵架、不嘲諷、不長篇大論自我辯護。
+- 不要罐頭：每一版都要呼應這則評論「真的提到的內容」。
+- 不要假裝有客人沒提到的事實；老闆補充的點（若有）才可使用。
+- 繁體中文、台灣用語，用「我們」「你」不用「您」；emoji ≤ 1 個、禁止連續驚嘆號。
+
+【絕對禁止詞】
+賦能、打造、優質、極致、致力、卓越、典範、業界領先、最強、第一名、不容錯過、敬請關注。
+
+【回傳純 JSON（禁止 markdown code fence、禁止前後任何文字）】
+{
+  "variants": [
+    {"label":"簡短誠懇","angle":"最常用、最安全的一版","reply":"可直接貼上的回覆，2-4 句"},
+    {"label":"完整說明","angle":"想把來龍去脈講清楚時用","reply":"較完整的一版，含具體說明"},
+    {"label":"溫暖加溫","angle":"想多一點人情味、拉近距離時用","reply":"語氣更暖的一版"}
+  ],
+  "tips": ["針對這個星等，回覆時的 1 個要點","第二個要點","第三個要點"]
+}`;
+
+function buildReviewReplyPrompt(input: ReviewReplyInput): string {
+  const lines = [
+    `客人給的星等：${input.rating} 星`,
+    `店家類型：${input.industry?.trim() || '（未提供）'}`,
+    `客人的評論原文：\n「${input.reviewText.trim()}」`,
+  ];
+  if (input.ownerNote?.trim()) {
+    lines.push(`老闆想補充/回應的點（可用於回覆）：${input.ownerNote.trim()}`);
+  }
+  lines.push('');
+  lines.push('請依星等策略產出 3 種語氣的回覆 + 回覆要點，回傳 { "variants": [...3個...], "tips": [...] }。');
+  return lines.join('\n');
+}
+
+/**
+ * Call Groq Llama 3.3 70B, draft 3 review-reply variants.
+ * Throws on failure (caller surfaces a user-friendly error).
+ */
+export async function generateReviewRepliesViaGroq(
+  input: ReviewReplyInput,
+): Promise<{ result: ReviewReplyResult; tokensUsed: number }> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) throw new Error('GROQ_API_KEY 未設定');
+
+  const messages: GroqMessage[] = [
+    { role: 'system', content: REVIEW_REPLY_SYSTEM_PROMPT },
+    { role: 'user', content: buildReviewReplyPrompt(input) },
+  ];
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 25000);
+
+  let res: Response;
+  try {
+    res = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages,
+        temperature: 0.7,
+        max_tokens: 2048,
+        response_format: { type: 'json_object' },
+      }),
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Groq API HTTP ${res.status}: ${body.slice(0, 200)}`);
+  }
+
+  const data = (await res.json()) as GroqResponse;
+  if (data.error) throw new Error(`Groq error: ${data.error.message}`);
+
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error('Groq 回應為空');
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(content);
+  } catch {
+    const m = content.match(/\{[\s\S]*\}/);
+    if (!m) throw new Error(`Groq 回應非 JSON：${content.slice(0, 100)}`);
+    parsed = JSON.parse(m[0]);
+  }
+
+  const raw = parsed as { variants?: unknown; tips?: unknown };
+
+  if (!Array.isArray(raw.variants) || raw.variants.length < 1) {
+    throw new Error(`variants 異常，數量：${Array.isArray(raw.variants) ? raw.variants.length : '非array'}`);
+  }
+
+  const variants: ReviewReplyVariant[] = (raw.variants as Record<string, unknown>[])
+    .map((v) => ({
+      label: sanitizeText(String(v.label ?? '').trim()),
+      angle: sanitizeText(String(v.angle ?? '').trim()),
+      reply: sanitizeText(String(v.reply ?? '').trim()),
+    }))
+    .filter((v) => v.reply.length >= 4);
+
+  if (variants.length === 0) {
+    throw new Error('沒有有效的回覆變體');
+  }
+
+  const tips: string[] = Array.isArray(raw.tips)
+    ? (raw.tips as unknown[]).map((t) => sanitizeText(String(t).trim())).filter((t) => t.length > 0)
+    : [];
+
+  const tokensUsed =
+    (data.usage?.prompt_tokens ?? 0) + (data.usage?.completion_tokens ?? 0);
+
+  return { result: { variants, tips }, tokensUsed };
+}

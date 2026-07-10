@@ -17,6 +17,7 @@ export const dynamic = 'force-dynamic';
 const TOOL = 'post-writer';
 const VALID_INDUSTRIES: Industry[] = [
   '餐飲', '美髮美容', '醫美', '牙科', '律師', '補教', '零售', '其他',
+  '裝潢', '裝修', '安裝', '維修',
 ];
 
 interface GenerateBody {

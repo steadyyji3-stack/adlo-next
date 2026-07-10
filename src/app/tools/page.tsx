@@ -13,6 +13,9 @@ import {
   ArrowDown,
   Bell,
   MessageSquare,
+  MessageSquareReply,
+  Wand2,
+  MapPinned,
 } from 'lucide-react';
 import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
@@ -57,6 +60,17 @@ const tools: Tool[] = [
     icon: Activity,
     status: 'live',
     replaces: '基礎版月訂閱的入門諮詢',
+  },
+  {
+    slug: 'map-visibility',
+    href: '/tools/map-visibility',
+    name: 'Google 地圖優化清單',
+    tagline: '健診告訴你幾分，這支告訴你怎麼補',
+    description:
+      '勾選你的 Google 商家現況，產出依優先序排好的地圖曝光優化行動清單：先做哪件、為什麼影響在地排名、哪支工具能代勞。',
+    icon: MapPinned,
+    status: 'live',
+    replaces: 'GBP 優化顧問的現場盤點',
   },
   {
     slug: 'post-writer',
@@ -114,6 +128,17 @@ const tools: Tool[] = [
     replaces: '月訂閱「評論管理策略建議」',
   },
   {
+    slug: 'review-reply',
+    href: '/tools/review-reply',
+    name: '評論回覆產生器',
+    tagline: '收到評論，3 種回覆幫你寫好',
+    description:
+      '貼上客人的 Google 評論，依星等產出 3 種語氣的回覆初稿：好評加溫、負評不失風度。回覆率是在地排名訊號，跟「評論收集連結」湊成收→回閉環。',
+    icon: MessageSquareReply,
+    status: 'live',
+    replaces: '月訂閱「評論管理策略建議」的回覆代筆',
+  },
+  {
     slug: 'name',
     href: '/tools/name',
     name: '店名 / Slogan 產生器',
@@ -134,6 +159,17 @@ const tools: Tool[] = [
     icon: MessageSquare,
     status: 'live',
     replaces: 'LINE OA 內容策略諮詢 NT$5,000',
+  },
+  {
+    slug: 'prompt',
+    href: '/tools/prompt',
+    name: 'AI 提示詞產生器',
+    tagline: '把「我想做的事」翻成 AI 聽得懂的指令',
+    description:
+      '用一句口語講你想用 AI 做什麼，產出結構化、可直接貼到 ChatGPT / Claude 的提示詞，附「精簡版 / 進階版」與拆解教學。不用學 prompt 技巧。',
+    icon: Wand2,
+    status: 'live',
+    replaces: 'AI 工具導入教學 NT$4,000',
   },
 ];
 
@@ -203,6 +239,41 @@ export default function ToolsIndexPage() {
               <span>每週四上新</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 精選：我的這週（黏著功能） */}
+      <section className="py-8 sm:py-10 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <Link
+            href="/my-week"
+            aria-label="前往「我的這週」：存一次店家檔案，每週素材自動備好"
+            className="group block rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 ring-1 ring-emerald-200 p-6 sm:p-8 hover:ring-emerald-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            data-gtm-event="tools_featured_my_week"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="size-12 rounded-xl bg-[#1D9E75] flex items-center justify-center shrink-0">
+                <Bell className="size-6 text-white" aria-hidden />
+              </div>
+              <div className="flex-1 min-w-0">
+                <Badge className="bg-[#E1F5EE] text-[#0F6E56] border-[#1D9E75]/30 text-[11px] font-bold mb-2">
+                  存一次，每週自動備好
+                </Badge>
+                <h2
+                  className="text-xl sm:text-2xl font-extrabold text-slate-900"
+                  style={{ fontFamily: 'var(--font-manrope)' }}
+                >
+                  我的這週：每週 14 篇 GBP + LINE 素材，不用重填
+                </h2>
+                <p className="mt-1.5 text-sm sm:text-base text-slate-600 leading-relaxed">
+                  設定一次店名 + 產業 + 標籤，之後每次進來素材都備好。檔案只存你的瀏覽器，不上傳。
+                </p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0F6E56] shrink-0 group-hover:gap-2.5 transition-all">
+                開始設定 <ArrowRight className="w-4 h-4" aria-hidden />
+              </span>
+            </div>
+          </Link>
         </div>
       </section>
 

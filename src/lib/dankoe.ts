@@ -752,6 +752,96 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #10  |  2026-W24  |  把學習的渴望變成事業入口——2026 年最不會過時的護城河
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w24',
+    issueNumber: 10,
+    theme: '把學習的渴望變成事業入口——2026 年最不會過時的護城河',
+    publishedAt: '2026-06-11',
+    summary:
+      '本期聚焦 Dan Koe 6 月連續在談的核心命題：你對某件事的好奇心，才是 2026 年最抗 AI 替代的資產。從「Point B（你能帶客人到哪裡）」到「每天 2 小時 × 6 年 = 一人事業」，拆解台灣中小店家如何把「我懂這件事」變成客人願意付錢的服務。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&auto=format&fit=crop&q=80',
+      alt: '翻開的書本特寫，書頁透著光，象徵持續學習的渴望',
+      credit: 'Patrick Tomasso',
+      creditUrl: 'https://unsplash.com/@impatrickt',
+    },
+    posts: [
+      {
+        id: 'w24-01',
+        original: `"Most people think they need a product idea. What they actually need is a Point B. Where do you want to take someone? That's the business. The product is just the vehicle."`,
+        translation:
+          '多數人以為自己需要的是一個「產品想法」。他們真正需要的是一個「Point B」——你想把別人帶到哪裡？那才是事業本身。產品只是工具。',
+        insight:
+          '台灣店家常說「我有手藝，不知道怎麼做生意」——Dan Koe 的框架是：先想「你能幫客人從哪裡到哪裡？」（Point A → Point B）。咖啡師的 Point B：「讓客人下午有 15 分鐘的安靜」。律師的 Point B：「讓客人的繼承糾紛在 60 天內解決」。Point B 清楚了，定價、服務設計、GBP 描述全部跟著清楚。你的 Point B 是什麼？',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-09',
+      },
+      {
+        id: 'w24-02',
+        original: `"Your love of learning is a business model. Most people treat curiosity as a hobby. The few who treat it as infrastructure become irreplaceable. You already know what you're endlessly curious about."`,
+        translation:
+          '你對學習的渴望就是一個商業模式。多數人把好奇心當興趣，少數人把它當成基礎建設，這些人變得不可取代。你已經知道自己對什麼永遠充滿好奇。',
+        insight:
+          '台灣老一輩觀念：「學得多不如做得多」。Dan Koe 的反直覺：持續學習某個領域的人，會比「只做不學」的人累積出更深的護城河。一個深入研究台灣 GBP 演算法 3 年的顧問，比廣告投 100 萬的業者更難被取代。你今天花最多時間在學什麼？那個就是你的商業護城河的原料。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-10',
+      },
+      {
+        id: 'w24-03',
+        original: `"Writing is the skill that makes every other skill more valuable. You can be an excellent chef, therapist, or developer — but if you can write about what you do, your reach and rates multiply."`,
+        translation:
+          '寫作是讓所有其他技能都變更值錢的技能。你可以是很棒的廚師、治療師、工程師——但如果你能把你在做的事寫出來，你的影響力和收費能力都會倍增。',
+        insight:
+          '台灣老闆常說「我做的讓產品說話就好，不需要行銷」。Dan Koe 說的剛好相反：你的技術是 1，寫作是後面的 0。台中有個麵包師傅，每天早上在 IG 寫 3 句話說他為什麼選這種麵粉——6 個月後預購排到 3 週後，什麼廣告都沒投。寫作不是文人的事，是你讓客人「懂你為什麼值這個價格」的唯一方法。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-11',
+      },
+      {
+        id: 'w24-04',
+        original: `"One newsletter → one week of content. The ecosystem beats the algorithm. Stop feeding platforms. Start building your own distribution that no platform can take away."`,
+        translation:
+          '一篇 newsletter → 整週的內容。生態系勝過演算法。不要只餵內容給平台，開始建立沒有平台能奪走的自有傳播渠道。',
+        insight:
+          '台灣店家常問「IG 還是 Threads 還是 LINE？」——Dan Koe 的答案是：先有一個核心內容（一週的 GBP 貼文初稿、一篇部落格文章），再拆解成各平台版本。adlo GBP 貼文產生器的設計邏輯就是這個：7 篇出來，你可以貼 GBP、剪裁成 Threads 觀點文、濃縮成 LINE 推播。一次輸入，多平台輸出。演算法永遠在變，自有內容不會消失。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-12',
+      },
+      {
+        id: 'w24-05',
+        original: `"AI doesn't replace your curiosity. It amplifies it. The person who knows what to ask — and can recognize a good answer — will always outperform the person who just uses AI to generate."`,
+        translation:
+          'AI 不會取代你的好奇心，它放大好奇心。「知道問什麼問題、能判斷答案好不好」的人，永遠會跑贏「只是用 AI 生內容」的人。',
+        insight:
+          '2026 台灣很多老闆開始用 AI 寫貼文，結果大家的 GBP 描述、Threads 文、LINE 推播感覺都一樣——因為他們問的問題都一樣、用的 AI 都一樣。唯一的差異化回到你的「視角」：你在這個產業的獨特經驗、你看到的客人其他人沒注意到的事。AI 可以幫你把想法寫成句子，但想法本身沒有 AI 替你想。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-13',
+      },
+      {
+        id: 'w24-06',
+        original: `"Personal brand isn't about being famous. It's about being known by the right people for the right things. 1,000 people who trust you completely is worth more than 100,000 who vaguely know your name."`,
+        translation:
+          '個人品牌不是要出名，是要讓對的人因為對的事認識你。1,000 個完全信任你的人，比 100,000 個模糊知道你名字的人更值錢。',
+        insight:
+          '台灣 GBP 排名前 3 的店家，不見得有最多追蹤者，卻有最穩定的客人——因為對的 300 個人認識他們、信任他們、每個月回來。不要追蹤數，追「有多少人在你發文後 5 分鐘內回覆、或上個月回頭消費」。這 300 個人，才是你真正的個人品牌的體現。adlo 的評論收集工具幫你把這 300 人的聲音留在 Google——比 1 萬個粉絲有用。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-14',
+      },
+      {
+        id: 'w24-07',
+        original: `"The gap is widening. People who are experimenting with AI, learning how to write better, and building their own platforms today — they are compounding at a rate that feels invisible until it isn't. By the end of 2026, it will be obvious who started in 2024."`,
+        translation:
+          '差距正在擴大。現在在用 AI 做實驗、學習寫作、建立自己傳播渠道的人——他們正在以一種「看不出來、直到突然很明顯」的速度複利。2026 年底，就能看出誰在 2024 年開始動了。',
+        insight:
+          '對台灣中小店家：今天開始每週更新 GBP 的店，2026 年底在同區搜尋的排名，會跟今天才要開始的店拉開肉眼可見的差距。差距不是一夜之間顯現，是某天突然「對手怎麼這麼多評論、這麼多內容」——但那個差距早在 6 個月前就開始了。你能控制的只有：今天動還是下週再說。',
+        xUrl: 'https://x.com/thedankoe',
+        postedAt: '2026-06-15',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {

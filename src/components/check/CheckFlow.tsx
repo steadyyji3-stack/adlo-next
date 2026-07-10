@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import CheckHero from './CheckHero';
 import CheckLoading from './CheckLoading';
 import CheckScore from './CheckScore';
+import CheckHistory from './CheckHistory';
 import CheckShareCards from './CheckShareCards';
 import CheckEmailGate from './CheckEmailGate';
 import {
@@ -11,6 +12,7 @@ import {
   trackCheckResult,
   trackCheckRateLimited,
 } from '@/lib/gtm';
+import { recordCheckSnapshot, getCheckHistory, type CheckSnapshot } from '@/lib/check-history';
 
 export type Stage = 'input' | 'loading' | 'result';
 
@@ -49,6 +51,7 @@ const MIN_LOADING_MS = 4200;
 export default function CheckFlow() {
   const [stage, setStage] = useState<Stage>('input');
   const [result, setResult] = useState<CheckResult | null>(null);
+  const [history, setHistory] = useState<CheckSnapshot[]>([]);
   const [showEmailGate, setShowEmailGate] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -110,6 +113,16 @@ export default function CheckFlow() {
         weakestMetric: data.weakestMetric,
         regionRankPercent: data.regionRankPercent,
       });
+
+      // 記錄分數快照（本機）→ 取得含本次的歷史，供 CheckHistory 顯示變化曲線
+      recordCheckSnapshot({
+        storeName: data.storeName,
+        location: data.location,
+        score: data.score,
+        breakdown: data.breakdown,
+      });
+      setHistory(getCheckHistory(data.storeName, data.location));
+
       trackCheckResult({
         score: data.score,
         weakest_metric: data.weakestMetric,
@@ -146,6 +159,7 @@ export default function CheckFlow() {
   const handleReset = useCallback(() => {
     setStage('input');
     setResult(null);
+    setHistory([]);
     setErrorMsg(null);
   }, []);
 
@@ -169,6 +183,7 @@ export default function CheckFlow() {
       {stage === 'result' && result && (
         <div className="bg-gradient-to-b from-emerald-50 via-white to-white">
           <CheckScore result={result} onReset={handleReset} />
+          <CheckHistory history={history} />
           <CheckShareCards result={result} />
         </div>
       )}

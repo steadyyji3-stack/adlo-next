@@ -95,6 +95,84 @@
   box-shadow: 0 16px 32px -8px rgba(51, 65, 85, 0.12);
 }
 
+/* ── Hero decorative motion ──────────────────────────────────────────
+   速度優先：只動 transform / opacity（GPU 合成，不觸發 reflow/CLS）。
+   全部裝飾 aria-hidden + pointer-events-none，prefers-reduced-motion 自動關閉。 */
+@keyframes radar-pulse {
+  0%   { transform: scale(0.34); opacity: 0; }
+  12%  { opacity: 0.5; }
+  78%  { opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+.radar-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  fill: none;
+  stroke: #1D9E75;
+  stroke-width: 1.5;
+  opacity: 0;
+  animation: radar-pulse 4.2s ease-out infinite;
+}
+
+@keyframes pin-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.radar-pin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pin-float 5s ease-in-out infinite;
+}
+
+@keyframes blob-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(0, -26px, 0) scale(1.08); }
+}
+.hero-blob  { animation: blob-drift 19s ease-in-out infinite; }
+.hero-blob-2 { animation: blob-drift 24s ease-in-out infinite reverse; }
+
+/* Hero 進場：CSS 驅動，關鍵 above-fold 內容預設可見，不依賴 JS hydration。
+   （framer-motion 的 initial=hidden 會在 SSR 寫死 opacity:0，client JS 一有閃失就整塊隱形） */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.hero-reveal {
+  opacity: 1; /* fallback：動畫不支援時仍可見 */
+  animation: hero-fade-up 0.55s ease-out both;
+}
+.hero-reveal-scale {
+  opacity: 1;
+  animation: hero-fade-in 0.6s ease-out both;
+}
+
+/* HeroTryWidget 結果面板：條件渲染 + CSS fade（不依賴 framer，generate 後一定看得到） */
+@keyframes widget-result-fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.widget-result-fade {
+  animation: widget-result-fade 0.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-ring,
+  .radar-pin,
+  .hero-blob,
+  .hero-blob-2,
+  .hero-reveal,
+  .hero-reveal-scale,
+  .widget-result-fade {
+    animation: none !important;
+  }
+  /* 關閉動畫時留一圈淡淡的靜態雷達，視覺不至於空掉 */
+  .radar-ring { opacity: 0.12; }
+}
+
 /* ── Blog article in-line figures ───────────────────────────────────── */
 .prose figure {
   margin: 2rem 0;
