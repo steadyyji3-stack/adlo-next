@@ -1,5 +1,7 @@
 import Stripe from 'stripe';
 
+export const SUBSCRIPTION_TRIAL_PERIOD_DAYS = 30;
+
 /* ── Stripe 伺服器端實例（惰性，避免 build 時 env 為空報錯）── */
 let _stripe: Stripe | null = null;
 

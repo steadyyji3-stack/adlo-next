@@ -12,7 +12,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 
 - Requires Stripe customer id, subscription id, and email.
 - Upserts `customers` by `stripe_customer_id`.
-- Retrieves the Stripe subscription and upserts `subscriptions`.
+- Retrieves the Stripe subscription and upserts `subscriptions`, including `trial_end` for the first-month-free offer.
 - Sends onboarding email to `/customer/login?email=...&next=/onboarding`; Auth.js sends the one-time magic link before the customer reaches onboarding.
 - Notifies Lorenzo by email.
 - Writes `audit_log` action `stripe.checkout.completed`.
@@ -24,7 +24,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Sets the related customer service status to `cancelled`.
 - Writes `audit_log` action `stripe.subscription.deleted`.
 
-### `customer.subscription.updated` and `invoice.payment_failed`
+### `customer.subscription.updated`, `invoice.payment_succeeded`, and `invoice.payment_failed`
 
 `customer.subscription.updated`:
 
@@ -32,6 +32,12 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Syncs plan, Stripe status, current period, trial end, and cancellation timestamp.
 - Maps active/trialing to customer `service_status = active`; cancelled to `cancelled`; other non-good states to `paused`.
 - Writes `audit_log` action `stripe.subscription.updated`.
+
+`invoice.payment_succeeded`:
+
+- Finds the local subscription from the invoice subscription id when Stripe provides it.
+- Retrieves the Stripe subscription and syncs status, plan, current period, trial end, and cancellation timestamp.
+- Writes `audit_log` action `stripe.invoice.payment_succeeded`.
 
 `invoice.payment_failed`:
 
@@ -44,4 +50,5 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 
 - Webhook logs never include customer OAuth tokens or credentials.
 - Audit payload stores Stripe ids and event metadata only.
+- No webhook handler implements score-based refunds, ranking guarantees, or outcome refund logic.
 - OAuth token handling is intentionally out of Sprint 1.

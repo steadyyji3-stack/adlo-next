@@ -20,10 +20,13 @@ function getResend() {
   return new Resend(key);
 }
 
-function welcomeEmail(planName: string, customerName: string, onboardingUrl?: string) {
+function welcomeEmail(planName: string, customerName: string, onboardingUrl?: string, trialEnd?: string | null) {
   const name = customerName || '您好';
   const onboardingBlock = onboardingUrl
     ? `<p style="margin:24px 0;"><a href="${onboardingUrl}" style="display:inline-block;background:#1D9E75;color:#fff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700;">填寫 5 分鐘 onboarding 表單</a></p>`
+    : '';
+  const trialBlock = trialEnd
+    ? `<p style="color:#475569;line-height:1.7;">首月免費已啟用，試用期至 <strong>${new Date(trialEnd).toLocaleDateString('zh-TW')}</strong>。你可以隨時在 Stripe Customer Portal 取消訂閱。</p>`
     : '';
 
   return `
@@ -39,6 +42,7 @@ function welcomeEmail(planName: string, customerName: string, onboardingUrl?: st
     <div style="padding:32px;">
       <h2 style="color:#0f172a;font-size:20px;margin:0 0 16px;">${name}，歡迎加入</h2>
       <p style="color:#475569;line-height:1.7;">你已成功訂閱 <strong style="color:#1D9E75;">${planName}</strong>，感謝你的信任。</p>
+      ${trialBlock}
       <p style="color:#475569;line-height:1.7;">下一步請填寫 onboarding 表單，我們會用這些資料建立你的第一個月執行計畫。</p>
       ${onboardingBlock}
       <p style="color:#64748b;font-size:14px;">有任何問題，直接回覆這封信，或寄到 <a href="mailto:hello@adlo.tw" style="color:#1D9E75;">hello@adlo.tw</a></p>
@@ -139,19 +143,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
   });
 
   const subscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
-  const fallbackStart = new Date();
-  const fallbackEnd = new Date(fallbackStart.getTime() + 30 * 24 * 60 * 60 * 1000);
-  const period = getSubscriptionPeriod(subscription);
+  const subscriptionInput = subscriptionSyncInput(subscription);
 
   await upsertSubscription({
     customerId: customer.id,
     stripeSubscriptionId,
-    planId,
-    status: normalizeSubscriptionStatus(subscription.status),
-    currentPeriodStart: toIsoFromUnix(period.currentPeriodStart, fallbackStart),
-    currentPeriodEnd: toIsoFromUnix(period.currentPeriodEnd, fallbackEnd),
-    trialEnd: subscription.trial_end ? toIsoFromUnix(subscription.trial_end, fallbackEnd) : null,
-    cancelledAt: subscription.canceled_at ? toIsoFromUnix(subscription.canceled_at, fallbackEnd) : null,
+    planId: subscriptionInput.planId ?? planId,
+    status: subscriptionInput.status,
+    currentPeriodStart: subscriptionInput.currentPeriodStart,
+    currentPeriodEnd: subscriptionInput.currentPeriodEnd,
+    trialEnd: subscriptionInput.trialEnd,
+    cancelledAt: subscriptionInput.cancelledAt,
   });
 
   await writeAuditLog({
@@ -174,7 +176,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
     from: 'adlo 系統通知 <hello@adlo.tw>',
     to: email,
     subject: `歡迎加入 adlo — ${planName} 訂閱確認`,
-    html: welcomeEmail(planName, customerName, onboardingUrl),
+    html: welcomeEmail(planName, customerName, onboardingUrl, subscriptionInput.trialEnd),
   });
 
   await getResend().emails.send({
@@ -254,6 +256,25 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   });
 }
 
+async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
+  const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
+  const localSubscription = stripeSubscriptionId
+    ? await syncExistingSubscription(subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)))
+    : null;
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.invoice.payment_succeeded',
+    targetType: 'subscription',
+    targetId: localSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: stripeSubscriptionId,
+      invoice_id: invoice.id,
+      local_subscription_found: Boolean(localSubscription),
+    },
+  });
+}
+
 export async function handleStripeWebhook(req: NextRequest) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature') ?? '';
@@ -280,6 +301,9 @@ export async function handleStripeWebhook(req: NextRequest) {
         break;
       case 'invoice.payment_failed':
         await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
+        break;
+      case 'invoice.payment_succeeded':
+        await handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice);
         break;
       default:
         break;
