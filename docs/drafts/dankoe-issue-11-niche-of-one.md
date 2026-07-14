@@ -1,10 +1,10 @@
 ---
 author: Ada
 date: 2026-07-14
-status: draft — 待 Lorenzo 確認後由 Kael 併入 src/lib/dankoe.ts
+status: shipped — Lorenzo 核准直接上線，已併入 src/lib/dankoe.ts（issue 11）
 ---
 
-# Dan Koe 連載 第 10 期草稿｜建立一條窄道市場，你的成功會容易許多
+# Dan Koe 連載 第 11 期草稿｜建立一條窄道市場，你的成功會容易許多
 
 > **給 Lorenzo 的說明：**
 > 1. 第 8 期已寫過「窄到變成必選」（定位減法），本期刻意切不同角度：**不是把自己塞進既有的小框框，而是自己開一條窄道（niche of one）**——並用可驗證的收入案例證明「窄道 = 成功更容易」。
@@ -17,7 +17,7 @@ status: draft — 待 Lorenzo 確認後由 Kael 併入 src/lib/dankoe.ts
 ## Issue 資料結構（Kael 併入用）
 
 - **week**: `2026-w29`
-- **issueNumber**: `10`
+- **issueNumber**: `11`
 - **theme**: `不要找利基，開一條窄道——你就是那個市場`
 - **publishedAt**: `2026-07-14`
 - **summary**: `第 8 期談過「窄到變成必選」，這期進一步：Dan Koe 其實反對硬擠進別人定義好的小框框。他主張 niche of one——自己開一條窄道，讓你成為那條道上唯一的人。本期 5 篇原文加一個可查證的收入案例：一份只有 1,000 訂閱者的 newsletter，如何做到年營收百萬美元。建立一條窄道市場，你的成功會容易許多。`
