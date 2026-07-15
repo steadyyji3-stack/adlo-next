@@ -67,6 +67,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://adlo.tw/tools',          lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
     { url: 'https://adlo.tw/check',          lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/diagnostic',     lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
+    { url: 'https://adlo.tw/my-week',        lastModified: new Date(), priority: 0.85, changeFrequency: 'weekly' },
+    { url: 'https://adlo.tw/subscribe',      lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/blog',           lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
     { url: 'https://adlo.tw/blog/dan-koe',   lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
     { url: 'https://adlo.tw/cities',         lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
