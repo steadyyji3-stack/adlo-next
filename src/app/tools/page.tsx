@@ -16,6 +16,7 @@ import {
   MessageSquareReply,
   Wand2,
   MapPinned,
+  TrendingDown,
 } from 'lucide-react';
 import NotAIChatBadge from '@/components/shared/NotAIChatBadge';
 
@@ -133,7 +134,7 @@ const tools: Tool[] = [
     name: '評論回覆產生器',
     tagline: '收到評論，3 種回覆幫你寫好',
     description:
-      '貼上客人的 Google 評論，依星等產出 3 種語氣的回覆初稿：好評加溫、負評不失風度。回覆率是在地排名訊號，跟「評論收集連結」湊成收→回閉環。',
+      '貼上客人的 Google 評論，依星等產出 3 種語氣的回覆初稿：好評加溫、負評不失風度。回覆率是在地排名訊號，跟「評論收集連結」湊成一收一回的完整循環。',
     icon: MessageSquareReply,
     status: 'live',
     replaces: '月訂閱「評論管理策略建議」的回覆代筆',
@@ -159,6 +160,17 @@ const tools: Tool[] = [
     icon: MessageSquare,
     status: 'live',
     replaces: 'LINE OA 內容策略諮詢 NT$5,000',
+  },
+  {
+    slug: 'ad-waste',
+    href: '/tools/ad-waste',
+    name: '廣告浪費估算器',
+    tagline: '你的 Google 廣告，每月悄悄漏掉多少錢？',
+    description:
+      '選預算區間、勾 7 個現況，30 秒估出每月浪費金額區間＋漏錢原因排行＋今天就能做的修法。不用登入，不碰你的廣告帳戶。',
+    icon: TrendingDown,
+    status: 'live',
+    replaces: '診斷包 NT$1,990 的「浪費清單」章節',
   },
   {
     slug: 'prompt',
