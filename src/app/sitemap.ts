@@ -4,6 +4,21 @@ import { getAllIssues } from '@/lib/dankoe';
 import { getAllCities } from '@/lib/cities';
 import { getAllNewServices } from '@/lib/new-services';
 
+/** /tools 底下的工具頁 slug（新工具上線時記得同步加這裡） */
+const TOOL_SLUGS = [
+  'map-visibility',
+  'post-writer',
+  'competitor',
+  'keyword',
+  'seo-scorer',
+  'review-link',
+  'review-reply',
+  'name',
+  'line-broadcast',
+  'prompt',
+  'ad-waste',
+] as const;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPosts();
   const blogEntries: MetadataRoute.Sitemap = posts.map(post => ({
@@ -29,6 +44,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
   }));
 
+  const toolEntries: MetadataRoute.Sitemap = TOOL_SLUGS.map(slug => ({
+    url: `https://adlo.tw/tools/${slug}`,
+    lastModified: new Date(),
+    priority: 0.85,
+    changeFrequency: 'monthly',
+  }));
+
   const advancedServices = getAllNewServices();
   const advancedServiceEntries: MetadataRoute.Sitemap = advancedServices.map(svc => ({
     url: `https://adlo.tw/services/${svc.slug}`,
@@ -42,6 +64,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://adlo.tw/about',          lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/services',       lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/pricing',        lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
+    { url: 'https://adlo.tw/tools',          lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
+    { url: 'https://adlo.tw/check',          lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
+    { url: 'https://adlo.tw/diagnostic',     lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
+    { url: 'https://adlo.tw/my-week',        lastModified: new Date(), priority: 0.85, changeFrequency: 'weekly' },
+    { url: 'https://adlo.tw/subscribe',      lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/blog',           lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
     { url: 'https://adlo.tw/blog/dan-koe',   lastModified: new Date(), priority: 0.9, changeFrequency: 'weekly' },
     { url: 'https://adlo.tw/cities',         lastModified: new Date(), priority: 0.9, changeFrequency: 'monthly' },
@@ -50,6 +77,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: 'https://adlo.tw/process',        lastModified: new Date(), priority: 0.7, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/contact',        lastModified: new Date(), priority: 0.8, changeFrequency: 'monthly' },
     { url: 'https://adlo.tw/privacy',        lastModified: new Date(), priority: 0.3, changeFrequency: 'yearly' },
+    ...toolEntries,
     ...blogEntries,
     ...dkEntries,
     ...cityEntries,

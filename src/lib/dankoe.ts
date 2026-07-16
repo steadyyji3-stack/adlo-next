@@ -842,6 +842,75 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #11  |  2026-W29  |  不要找利基，開一條窄道
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w29',
+    issueNumber: 11,
+    theme: '不要找利基，開一條窄道——你就是那個市場',
+    publishedAt: '2026-07-14',
+    summary:
+      '第 8 期談過「窄到變成必選」，這期進一步：Dan Koe 其實反對硬擠進別人定義好的小框框。他主張 niche of one——自己開一條窄道，讓你成為那條道上唯一的人。本期 5 篇原文加一個可查證的收入案例：一份只有 1,000 訂閱者的 newsletter，如何做到年營收百萬美元。建立一條窄道市場，你的成功會容易許多。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&auto=format&fit=crop&q=80',
+      alt: '陽光穿過森林中一條窄窄的小徑——象徵自己開出來的窄道市場',
+      credit: 'Lukasz Szmigiel',
+      creditUrl: 'https://unsplash.com/@szmigieldesign',
+    },
+    posts: [
+      {
+        id: 'w29-01',
+        original: `"Niche down." The words that cause too many people to quit their dream of doing their own thing. Let's change that. How to create your niche of one (by being yourself):`,
+        translation:
+          '「利基化。」這三個字讓太多人放棄了做自己事業的夢想。我們來改變這件事。如何建立你的「一人利基」（做你自己）：',
+        insight:
+          '「你要選一個利基」這句創業建議，讓很多台灣老闆卡死：賣雞排的想「我的利基是什麼？」想了三年還在原地。Dan Koe 說反了才對——不是去找一個現成的小市場塞進去，是把「你這家店獨有的組合」變成一條別人進不來的窄道。你的地點＋你的手藝＋你堅持的細節，這個組合全台中只有你有。',
+        xUrl: 'https://x.com/thedankoe/status/1845096755295117697',
+        postedAt: '2024-10-12',
+      },
+      {
+        id: 'w29-02',
+        original: `The most difficult part is "finding your niche." And to that I say: Don't find a niche, you are the niche.`,
+        translation:
+          '最難的部分是「找到你的利基」。對此我想說：不要去找利基，你就是利基。',
+        insight:
+          '台灣店家最常見的焦慮：「隔壁也是做這個的，我要怎麼差異化？」答案不在產品表上，在你身上。同樣賣越南河粉，一個「嫁來台灣 20 年的越南媽媽親自熬湯」的故事，是任何競爭對手都抄不走的窄道。把老闆是誰、為什麼開這家店寫進 Google 商家介紹——那是你唯一不會被比價的資產。',
+        xUrl: 'https://x.com/thedankoe/status/1622215481410068481',
+        postedAt: '2023-02-05',
+      },
+      {
+        id: 'w29-03',
+        original: `1) The most profitable niche is you. The first thing you'll hear when you want to start a business is to "choose a niche." You do this by: - Choosing a market - Narrowing to a sub market - Creating a customer avatar - Identifying their problems. Then, you build a solution.`,
+        translation:
+          '最賺錢的利基就是你。想創業時你聽到的第一句話一定是「選一個利基」。做法是：選一個市場 → 縮小到子市場 → 建立客戶輪廓 → 找出他們的問題。然後，你打造解決方案。',
+        insight:
+          '注意 Dan Koe 這裡列的傳統流程：市場 → 子市場 → 客戶輪廓 → 問題 → 解方。多數台灣店家連第一步都沒做過，直接開店然後等客人。倒著做一次：你現在最好的 5 個客人是誰？他們共同的問題是什麼？答案就是你該全力經營的子市場。這比任何廣告投放都便宜，而且做一次受用好幾年。',
+        xUrl: 'https://x.com/thedankoe/status/1653356165751795721',
+        postedAt: '2023-05-02',
+      },
+      {
+        id: 'w29-04',
+        original: `Don't find a niche. Create one.`,
+        translation: '不要找利基。創造一個。',
+        insight:
+          '「找利基」是在別人畫好的地圖上搶位置；「創造利基」是自己畫地圖。台灣的在地服務業有一個天然優勢：地理範圍本身就是窄道的圍欄。「台中南屯、專接雙薪家庭的到府收送洗衣」——這個類別在你成立它之前不存在，你成立它的那天，你就是第一名，也是唯一一名。窄道市場的成功之所以容易，是因為你不用贏過任何人，你只要被對的人找到。',
+        xUrl: 'https://x.com/thedankoe/status/1772614520579514496',
+        postedAt: '2024-03-26',
+      },
+      {
+        id: 'w29-05',
+        original: `To recap: - You are the niche - Vision over target audience - Content ecosystems over funnels - Create a world for people to explore`,
+        translation:
+          '總結：一、你就是利基。二、願景重於目標受眾。三、內容生態系重於行銷漏斗。四、創造一個讓人想探索的世界。',
+        insight:
+          '「創造一個讓人探索的世界」聽起來很抽象，落地到台灣店家其實很具體：你的 Google 商家檔案就是那個世界的入口。照片牆是世界觀、貼文是連載、評論回覆是你和住民的對話。窄道市場不是把店做小，是把世界做深。最後給一個可查證的收入證明：Nathan May（The Feed Media）把 newsletter 設成邀請制、訂閱者只有約 1,000–1,500 人，卻在約 10 個半月做到年營收一百萬美元——因為他算過，他真正想服務的市場全世界只有 600 個人（300 家公司 × 2 個決策者），而沒有第二個人專門對這 600 人說話。你商圈 3 公里內對的那幾百個人，就是你的 600 人。精準解決一個窄問題，就會有人買單。（案例來源：Growth in Reverse 專訪 Nathan May，2025）',
+        xUrl: 'https://x.com/thedankoe/status/1845096839596441822',
+        postedAt: '2024-10-12',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {
