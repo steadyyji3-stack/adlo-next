@@ -5,8 +5,16 @@ import type {
   GrowthGenerationSource,
   GrowthTask,
 } from '@/lib/customer-growth-types';
-import { currentTaipeiWeekStart } from '@/lib/customer-content-bundles';
 import { selectRows, updateRows, upsertRow } from '@/lib/supabase-rest';
+
+const TAIPEI_OFFSET_MS = 8 * 60 * 60 * 1000;
+
+export function currentTaipeiGrowthWeekStart(now = new Date()) {
+  const taipei = new Date(now.getTime() + TAIPEI_OFFSET_MS);
+  const daysSinceMonday = (taipei.getUTCDay() + 6) % 7;
+  taipei.setUTCDate(taipei.getUTCDate() - daysSinceMonday);
+  return taipei.toISOString().slice(0, 10);
+}
 
 export async function listCustomerGrowthCycles(customerId: string, limit = 12) {
   return selectRows<CustomerGrowthCycle>(
@@ -19,7 +27,7 @@ export async function listCustomerGrowthCycles(customerId: string, limit = 12) {
 export async function getCurrentCustomerGrowthCycle(customerId: string) {
   const [cycle] = await selectRows<CustomerGrowthCycle>(
     'customer_growth_cycles',
-    { customer_id: customerId, week_start: currentTaipeiWeekStart() },
+    { customer_id: customerId, week_start: currentTaipeiGrowthWeekStart() },
     { limit: 1 },
   );
   return cycle ?? null;
@@ -38,7 +46,7 @@ export async function saveCustomerGrowthCycle(input: {
     'customer_growth_cycles',
     {
       customer_id: input.customerId,
-      week_start: currentTaipeiWeekStart(),
+      week_start: currentTaipeiGrowthWeekStart(),
       status: 'ready',
       task: input.task,
       evidence: input.evidence,
