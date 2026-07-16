@@ -13,7 +13,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Requires Stripe customer id, subscription id, and email.
 - Upserts `customers` by `stripe_customer_id`.
 - Retrieves the Stripe subscription and upserts `subscriptions`.
-- Sends onboarding email with `/onboarding?customer_id=...`.
+- Sends onboarding email to `/customer/login?email=...&next=/onboarding`; Auth.js sends the one-time magic link before the customer reaches onboarding.
 - Notifies Lorenzo by email.
 - Writes `audit_log` action `stripe.checkout.completed`.
 

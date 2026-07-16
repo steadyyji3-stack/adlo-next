@@ -1,29 +1,17 @@
-import { NextRequest } from 'next/server';
-import { z } from 'zod';
 import { apiError, apiOk } from '@/lib/api-response';
 import { writeAuditLog } from '@/lib/audit-log';
 import { getCustomerIdFromRequest } from '@/lib/customer-auth';
 import { createCustomerPortalSession } from '@/lib/customer-billing';
 
-const cancelRequestSchema = z.object({
-  customer_id: z.string().uuid().optional(),
-});
-
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    const body = await request.json().catch(() => ({}));
-    const parsed = cancelRequestSchema.safeParse(body);
-    if (!parsed.success) {
-      return apiError('VALIDATION_FAILED', parsed.error.issues[0]?.message ?? '取消訂閱資料格式錯誤', 400);
-    }
-
-    const customerId = parsed.data.customer_id ?? getCustomerIdFromRequest(request);
+    const customerId = await getCustomerIdFromRequest();
     if (!customerId) {
-      return apiError('CUSTOMER_ID_REQUIRED', '缺少 customer_id', 400);
+      return apiError('CUSTOMER_ACCESS_REQUIRED', '請先登入客戶後台', 401);
     }
 
     const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
-    const returnUrl = `${origin}/customer/billing?customer_id=${customerId}`;
+    const returnUrl = `${origin}/customer/billing`;
     const result = await createCustomerPortalSession({ customerId, returnUrl });
     if (!result) {
       return apiError('CUSTOMER_NOT_FOUND', '找不到客戶資料', 404);
