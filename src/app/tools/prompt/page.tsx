@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PromptGeneratorFlow from '@/components/prompt-generator/PromptGeneratorFlow';
 import PromptGeneratorFAQ from '@/components/prompt-generator/PromptGeneratorFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 AI 提示詞產生器｜一句話需求 → ChatGPT / Claude 指令',
@@ -57,6 +58,7 @@ export default function PromptGeneratorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <PromptGeneratorFlow />
+      <ToolNextSteps current="prompt" />
       <PromptGeneratorFAQ />
     </>
   );

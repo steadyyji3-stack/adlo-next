@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import KeywordFlow from '@/components/keyword/KeywordFlow';
 import KeywordFAQ from '@/components/keyword/KeywordFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費關鍵字難度檢查｜台灣在地關鍵字 × 搜尋量 × CPC × 決策建議',
@@ -22,6 +23,7 @@ export default function KeywordPage() {
   return (
     <>
       <KeywordFlow />
+      <ToolNextSteps current="keyword" />
       <KeywordFAQ />
     </>
   );
