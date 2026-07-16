@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import PostWriterFlow from '@/components/post-writer/PostWriterFlow';
 import PostWriterFAQ from '@/components/post-writer/PostWriterFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 GBP 貼文產生器｜下週 7 天 Google 商家貼文，3 秒搞定',
@@ -22,6 +23,7 @@ export default function PostWriterPage() {
   return (
     <main>
       <PostWriterFlow />
+      <ToolNextSteps current="post-writer" />
       <PostWriterFAQ />
     </main>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import CheckFlow from '@/components/check/CheckFlow';
 import CheckFAQ from '@/components/check/CheckFAQ';
 import CheckUpgradeCTA from '@/components/check/CheckUpgradeCTA';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 Google 商家健檢｜30 秒看懂你的店家幾分',
@@ -21,6 +22,7 @@ export default function CheckPage() {
   return (
     <>
       <CheckFlow />
+      <ToolNextSteps current="check" />
       <CheckUpgradeCTA />
       <CheckFAQ />
     </>
