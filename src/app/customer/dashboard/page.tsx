@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarDays, FileText, MessageSquareText, Newspaper, Sparkles, Star, TrendingUp } from 'lucide-react';
+import { CalendarDays, FileText, MessageSquareText, Newspaper, Sparkles, Star, Target, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -83,6 +83,12 @@ export default async function CustomerDashboardPage() {
           </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild className="bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">
+              <Link href="/customer/week">
+                <Target className="mr-2 h-4 w-4" aria-hidden />
+                本週任務
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="font-bold">
               <Link href="/customer/tools/content-studio">
                 <Sparkles className="mr-2 h-4 w-4" aria-hidden />
                 內容工作台
