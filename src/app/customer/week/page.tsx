@@ -10,7 +10,12 @@ import { GrowthWeek } from './GrowthWeek';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CustomerWeekPage() {
+export default async function CustomerWeekPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ generate?: string }>;
+}) {
+  const params = await searchParams;
   const customerId = await getCustomerIdFromSession();
   if (!customerId) return <Gate icon={Store} title="請先登入客戶後台" href="/customer/login" action="使用 email 登入" />;
 
@@ -40,7 +45,11 @@ export default async function CustomerWeekPage() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-7 sm:px-6 sm:py-10">
-        <GrowthWeek initialCycles={cycles} storeName={profile.storeName} />
+        <GrowthWeek
+          initialCycles={cycles}
+          storeName={profile.storeName}
+          autoGenerate={params.generate === '1'}
+        />
       </main>
     </div>
   );

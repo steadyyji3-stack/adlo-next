@@ -1,26 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, ClipboardCheck, Copy, Loader2, RefreshCw, Target } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import type { CustomerGrowthCycle } from '@/lib/customer-growth-types';
 
-export function GrowthWeek({ initialCycles, storeName }: { initialCycles: CustomerGrowthCycle[]; storeName: string }) {
+export function GrowthWeek({
+  initialCycles,
+  storeName,
+  autoGenerate = false,
+}: {
+  initialCycles: CustomerGrowthCycle[];
+  storeName: string;
+  autoGenerate?: boolean;
+}) {
   const [cycles, setCycles] = useState(initialCycles);
   const [instruction, setInstruction] = useState('');
   const [state, setState] = useState<'idle' | 'working' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [copied, setCopied] = useState<number | null>(null);
+  const autoStarted = useRef(false);
   const current = cycles.find((cycle) => isCurrentWeek(cycle.week_start)) ?? null;
 
-  async function generate() {
+  const generate = useCallback(async (instructionOverride?: string) => {
     setState('working'); setMessage('');
     try {
       const response = await fetch('/api/me/growth-cycle', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instruction: instruction.trim() || undefined }),
+        body: JSON.stringify({ instruction: (instructionOverride ?? instruction.trim()) || undefined }),
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error?.message ?? '產生失敗');
@@ -28,7 +37,13 @@ export function GrowthWeek({ initialCycles, storeName }: { initialCycles: Custom
       setCycles((items) => [cycle, ...items.filter((item) => item.id !== cycle.id)]);
       setInstruction(''); setState('idle');
     } catch (error) { setMessage(error instanceof Error ? error.message : '產生失敗'); setState('error'); }
-  }
+  }, [instruction]);
+
+  useEffect(() => {
+    if (!autoGenerate || current || autoStarted.current) return;
+    autoStarted.current = true;
+    void generate('');
+  }, [autoGenerate, current, generate]);
 
   async function complete() {
     if (!current) return;
@@ -65,7 +80,7 @@ export function GrowthWeek({ initialCycles, storeName }: { initialCycles: Custom
         </section>
 
         {!current ? (
-          <section className="py-16 text-center"><Target className="mx-auto h-9 w-9 text-[#1D9E75]" /><p className="mt-4 text-sm font-semibold text-slate-600">付款後的第一個成果，現在就能產生。</p><Button onClick={generate} disabled={state === 'working'} className="mt-6 bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">{state === 'working' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}產生本週任務</Button></section>
+          <section className="py-16 text-center"><Target className="mx-auto h-9 w-9 text-[#1D9E75]" /><p className="mt-4 text-sm font-semibold text-slate-600">付款後的第一個成果，現在就能產生。</p><Button onClick={() => generate()} disabled={state === 'working'} className="mt-6 bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">{state === 'working' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}{state === 'working' ? '正在準備任務' : '產生本週任務'}</Button></section>
         ) : (
           <div className="divide-y divide-slate-200">
             <section className="py-6"><h2 className="text-sm font-extrabold text-slate-950">為什麼是現在</h2><p className="mt-2 text-sm leading-7 text-slate-600">{current.task.whyNow}</p><ul className="mt-4 space-y-2">{current.evidence.map((item) => <li key={item} className="flex gap-2 text-sm text-slate-500"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#1D9E75]" />{item}</li>)}</ul></section>
@@ -80,7 +95,7 @@ export function GrowthWeek({ initialCycles, storeName }: { initialCycles: Custom
       <aside className="lg:border-l lg:border-slate-200 lg:pl-6">
         <h2 className="text-sm font-extrabold text-slate-950">調整本週任務</h2><p className="mt-2 text-xs leading-5 text-slate-500">可指定語氣或角度；每週最多產生 4 版。</p>
         <Textarea value={instruction} onChange={(event) => setInstruction(event.target.value)} maxLength={300} placeholder="例如：不要促銷，改成專業教育角度" className="mt-4 min-h-24 resize-none bg-white" />
-        <Button type="button" variant="outline" onClick={generate} disabled={state === 'working'} className="mt-3 w-full font-bold">{state === 'working' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}{current ? '重新產生' : '產生任務'}</Button>
+        <Button type="button" variant="outline" onClick={() => generate()} disabled={state === 'working'} className="mt-3 w-full font-bold">{state === 'working' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}{current ? '重新產生' : '產生任務'}</Button>
         <div className="mt-8 border-t border-slate-200 pt-6"><h2 className="text-sm font-extrabold text-slate-950">過去任務</h2>{cycles.length === 0 ? <p className="mt-3 text-xs text-slate-500">完成第一週後會開始累積。</p> : <div className="mt-3 space-y-4">{cycles.slice(0, 8).map((cycle) => <div key={cycle.id}><p className="text-xs text-slate-400">{formatWeek(cycle.week_start)}</p><p className="mt-1 text-sm font-semibold leading-5 text-slate-700">{cycle.task.title}</p><p className="mt-1 text-xs text-slate-500">{cycle.status === 'completed' ? '已完成' : '進行中'}</p></div>)}</div>}</div>
       </aside>
     </div>
