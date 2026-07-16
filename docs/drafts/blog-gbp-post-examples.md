@@ -1,7 +1,7 @@
 ---
 author: Ada
 date: 2026-07-15
-status: draft — 流量計畫優先 1，待 Lorenzo 確認後由 Kael 併入 src/lib/posts.ts
+status: shipped — Lorenzo 核准部署，已併入 src/lib/posts.ts
 ---
 
 # Blog 草稿｜Google 我的商家貼文範例大全（流量計畫優先 1）
