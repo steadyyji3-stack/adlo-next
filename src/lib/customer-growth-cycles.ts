@@ -41,7 +41,19 @@ export async function saveCustomerGrowthCycle(input: {
   source: GrowthGenerationSource;
   instruction?: string;
   generationCount: number;
+  previousCycle?: CustomerGrowthCycle | null;
 }) {
+  const revisions = input.previousCycle
+    ? [
+      ...(input.previousCycle.feedback?.revisions ?? []),
+      {
+        task: input.previousCycle.task,
+        instruction: input.previousCycle.instruction,
+        source: input.previousCycle.generation_source,
+        savedAt: input.previousCycle.updated_at,
+      },
+    ].slice(-3)
+    : [];
   return upsertRow<CustomerGrowthCycle>(
     'customer_growth_cycles',
     {
@@ -54,7 +66,9 @@ export async function saveCustomerGrowthCycle(input: {
       generation_source: input.source,
       generation_count: input.generationCount,
       instruction: input.instruction || null,
-      feedback: null,
+      feedback: revisions.length
+        ? { ...input.previousCycle?.feedback, revisions }
+        : null,
       completed_at: null,
     },
     'customer_id,week_start',
@@ -66,12 +80,21 @@ export async function completeCustomerGrowthCycle(
   cycleId: string,
   note?: string,
 ) {
+  const [existing] = await selectRows<CustomerGrowthCycle>(
+    'customer_growth_cycles',
+    { id: cycleId, customer_id: customerId },
+    { limit: 1 },
+  );
+  if (!existing) return null;
   const [cycle] = await updateRows<CustomerGrowthCycle>(
     'customer_growth_cycles',
     { id: cycleId, customer_id: customerId },
     {
       status: 'completed',
-      feedback: note ? { note } : {},
+      feedback: {
+        ...(existing.feedback ?? {}),
+        ...(note ? { note } : {}),
+      },
       completed_at: new Date().toISOString(),
     },
   );

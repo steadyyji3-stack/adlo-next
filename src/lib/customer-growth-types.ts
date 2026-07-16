@@ -21,6 +21,18 @@ export type GrowthTask = z.infer<typeof growthTaskSchema>;
 export type GrowthCycleStatus = 'ready' | 'completed';
 export type GrowthGenerationSource = 'groq' | 'template';
 
+export interface GrowthTaskRevision {
+  task: GrowthTask;
+  instruction: string | null;
+  source: GrowthGenerationSource;
+  savedAt: string;
+}
+
+export interface GrowthCycleFeedback {
+  note?: string;
+  revisions?: GrowthTaskRevision[];
+}
+
 export interface CustomerGrowthCycle {
   id: string;
   customer_id: string;
@@ -32,7 +44,7 @@ export interface CustomerGrowthCycle {
   generation_source: GrowthGenerationSource;
   generation_count: number;
   instruction: string | null;
-  feedback: { note?: string } | null;
+  feedback: GrowthCycleFeedback | null;
   completed_at: string | null;
   created_at: string;
   updated_at: string;

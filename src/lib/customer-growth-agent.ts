@@ -40,6 +40,7 @@ export async function generateWeeklyGrowthTask(input: {
               type: cycle.task.type,
               title: cycle.task.title,
               status: cycle.status,
+              resultNote: cycle.feedback?.note ?? null,
             })),
             instruction: input.instruction || null,
           }) },
@@ -61,7 +62,7 @@ export async function generateWeeklyGrowthTask(input: {
   }
 }
 
-const systemPrompt = `你是台灣在地店家的每週成長店長。只能根據輸入的 evidence 提出一個 5-30 分鐘能完成的任務，不得虛構分數、排名、評論或成效。任務類型只能是 gbp_post、line_broadcast、review_request。回傳符合以下欄位的純 JSON：type、title、objective、whyNow、scoreDimension、estimatedMinutes、steps（2-4項）、deliverables（1-3項，每項 label/content/usage）、successCheck。文案用台灣繁中、直接自然，不使用「賦能、打造、卓越、優質」。若使用者有 instruction，調整語氣或角度，但仍只能交付一個任務。`;
+const systemPrompt = `你是台灣在地店家的每週成長店長。只能根據輸入的 evidence 提出一個 5-30 分鐘能完成的任務，不得虛構分數、排名、評論或成效。任務類型只能是 gbp_post、line_broadcast、review_request。recentTasks 的 resultNote 是客戶實際回饋；優先延續有效做法，避免重複客戶明確表示不適合的任務。回傳符合以下欄位的純 JSON：type、title、objective、whyNow、scoreDimension、estimatedMinutes、steps（2-4項）、deliverables（1-3項，每項 label/content/usage）、successCheck。文案用台灣繁中、直接自然，不使用「賦能、打造、卓越、優質」。若使用者有 instruction，調整語氣或角度，但仍只能交付一個任務。`;
 
 function buildEvidence(profile: StoreProfile, history: CustomerGrowthCycle[]) {
   const evidence = [
@@ -71,6 +72,8 @@ function buildEvidence(profile: StoreProfile, history: CustomerGrowthCycle[]) {
   if (profile.weekTheme) evidence.push(`店家本週主題：${profile.weekTheme}`);
   const completed = history.filter((cycle) => cycle.status === 'completed').length;
   evidence.push(`系統內已有 ${history.length} 週任務，其中 ${completed} 週已完成`);
+  const latestResultNote = history.find((cycle) => cycle.feedback?.note)?.feedback?.note;
+  if (latestResultNote) evidence.push(`最近一次客戶結果回饋：${latestResultNote}`);
   return evidence;
 }
 

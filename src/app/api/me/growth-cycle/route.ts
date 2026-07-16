@@ -64,6 +64,7 @@ export async function POST(request: Request) {
       source: generated.source,
       instruction: parsed.data.instruction,
       generationCount,
+      previousCycle: current,
     });
     await writeAuditLog({
       actor: `customer:${access.customerId}`,
