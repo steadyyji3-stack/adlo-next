@@ -2,7 +2,15 @@ import { z } from 'zod';
 import type { StoreProfile } from '@/lib/store-profile';
 
 export const growthTaskSchema = z.object({
-  type: z.enum(['gbp_post', 'line_broadcast', 'review_request']),
+  type: z.enum([
+    'gbp_post',
+    'line_broadcast',
+    'review_request',
+    'case_post',
+    'quote_clarity',
+    'photo_refresh',
+    'service_page',
+  ]),
   title: z.string().trim().min(4).max(60),
   objective: z.string().trim().min(8).max(180),
   whyNow: z.string().trim().min(8).max(300),
@@ -20,6 +28,13 @@ export const growthTaskSchema = z.object({
 export type GrowthTask = z.infer<typeof growthTaskSchema>;
 export type GrowthCycleStatus = 'ready' | 'completed';
 export type GrowthGenerationSource = 'groq' | 'template';
+
+export interface GrowthBusinessContext {
+  storeCity: string | null;
+  hasWebsite: boolean;
+  hasGbpProfile: boolean;
+  signatureItems: string[];
+}
 
 export interface GrowthTaskRevision {
   task: GrowthTask;

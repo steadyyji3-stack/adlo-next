@@ -55,6 +55,12 @@ export async function POST(request: Request) {
       profile,
       history,
       instruction: parsed.data.instruction,
+      business: {
+        storeCity: access.customer.store_city,
+        hasWebsite: Boolean(access.customer.website_url),
+        hasGbpProfile: Boolean(access.customer.gbp_url),
+        signatureItems: access.customer.signature_items ?? [],
+      },
     });
     const cycle = await saveCustomerGrowthCycle({
       customerId: access.customerId,
