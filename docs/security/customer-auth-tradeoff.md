@@ -1,7 +1,7 @@
 # Customer Auth Tradeoff — Signed URL Token vs NextAuth Magic Link
 
-Decision owner: Lorenzo  
-Scope: Track B customer dashboard, onboarding entry, customer billing, and customer read APIs.  
+Decision owner: Lorenzo
+Scope: Track B customer dashboard, onboarding entry, customer billing, and customer read APIs.
 Date: 2026-06-05
 
 ## Background
