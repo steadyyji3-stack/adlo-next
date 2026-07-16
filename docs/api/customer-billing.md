@@ -69,6 +69,7 @@ Creates `billing.portal_session.create` in `audit_log`.
 - Shows the current subscription.
 - Opens Stripe Customer Portal for payment method management or cancellation.
 - Does not cancel locally. Stripe remains the source of truth.
+- The first month free trial is created in Checkout; trial conversion, cancellation, and failed payments are reflected from Stripe webhooks.
 
 ## Safety
 

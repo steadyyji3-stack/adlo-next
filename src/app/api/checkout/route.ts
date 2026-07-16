@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe, getPlanById } from '@/lib/stripe';
+import { z } from 'zod';
+import { stripe, getPlanById, SUBSCRIPTION_TRIAL_PERIOD_DAYS } from '@/lib/stripe';
+
+const checkoutRequestSchema = z.object({
+  planId: z.string().min(1),
+  billing: z.enum(['monthly', 'yearly']).default('monthly'),
+  customerEmail: z.string().email().optional(),
+  customerName: z.string().trim().max(120).optional(),
+});
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { planId, billing, customerEmail, customerName } = body as {
-      planId: string;
-      billing: 'monthly' | 'yearly';
-      customerEmail?: string;
-      customerName?: string;
-    };
+    const body = await req.json().catch(() => ({}));
+    const parsed = checkoutRequestSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.issues[0]?.message ?? '結帳資料格式錯誤' }, { status: 400 });
+    }
+
+    const { planId, billing, customerEmail, customerName } = parsed.data;
 
     /* ── 驗證方案 ───────────────────────────────────────────── */
     const plan = getPlanById(planId);
@@ -29,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     /* ── 建立 Stripe Checkout Session ───────────────────────── */
-    const origin = req.headers.get('origin') ?? 'https://adlo.tw';
+    const origin = process.env.NEXT_PUBLIC_SITE_URL ?? req.headers.get('origin') ?? 'https://adlo.tw';
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
@@ -41,9 +49,18 @@ export async function POST(req: NextRequest) {
         billing,
         planName: plan.name,
         customerName: customerName ?? '',
+        trialDays: String(SUBSCRIPTION_TRIAL_PERIOD_DAYS),
+        offer: 'first_month_free',
       },
       subscription_data: {
-        metadata: { planId, billing, planName: plan.name },
+        metadata: {
+          planId,
+          billing,
+          planName: plan.name,
+          trialDays: String(SUBSCRIPTION_TRIAL_PERIOD_DAYS),
+          offer: 'first_month_free',
+        },
+        trial_period_days: SUBSCRIPTION_TRIAL_PERIOD_DAYS,
       },
       payment_method_types: ['card'],
       allow_promotion_codes: true,
