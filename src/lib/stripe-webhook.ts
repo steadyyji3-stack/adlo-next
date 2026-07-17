@@ -10,9 +10,12 @@ import {
   getCustomerDetail,
   getSubscriptionByStripeId,
   syncExistingSubscription,
+  updateCustomer,
   upsertCheckoutCustomer,
   upsertSubscription,
+  type Customer,
   type PlanId,
+  type ServiceStatus,
   type SubscriptionStatus,
 } from '@/lib/customers';
 import { getStripe } from '@/lib/stripe';
@@ -28,9 +31,10 @@ function getResend() {
 }
 
 function welcomeEmail(planName: string, customerName: string, onboardingUrl?: string, trialEnd?: string | null) {
-  const name = customerName || '您好';
+  const name = escapeHtml(customerName || '您好');
+  const safePlanName = escapeHtml(planName);
   const onboardingBlock = onboardingUrl
-    ? `<p style="margin:24px 0;"><a href="${onboardingUrl}" style="display:inline-block;background:#1D9E75;color:#fff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700;">填寫 5 分鐘 onboarding 表單</a></p>`
+    ? `<p style="margin:24px 0;"><a href="${escapeHtml(onboardingUrl)}" style="display:inline-block;background:#1D9E75;color:#fff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700;">填寫 5 分鐘 onboarding 表單</a></p>`
     : '';
   const trialBlock = trialEnd
     ? `<p style="color:#475569;line-height:1.7;">首月免費已啟用，試用期至 <strong>${new Date(trialEnd).toLocaleDateString('zh-TW')}</strong>。你可以隨時在 Stripe Customer Portal 取消訂閱。</p>`
@@ -48,7 +52,7 @@ function welcomeEmail(planName: string, customerName: string, onboardingUrl?: st
     </div>
     <div style="padding:32px;">
       <h2 style="color:#0f172a;font-size:20px;margin:0 0 16px;">${name}，歡迎加入</h2>
-      <p style="color:#475569;line-height:1.7;">你已成功訂閱 <strong style="color:#1D9E75;">${planName}</strong>，感謝你的信任。</p>
+      <p style="color:#475569;line-height:1.7;">你已成功訂閱 <strong style="color:#1D9E75;">${safePlanName}</strong>，感謝你的信任。</p>
       ${trialBlock}
       <p style="color:#475569;line-height:1.7;">下一步請填寫 onboarding 表單，我們會用這些資料建立你的第一個月執行計畫。</p>
       ${onboardingBlock}
@@ -121,14 +125,13 @@ function subscriptionSyncInput(subscription: Stripe.Subscription) {
   };
 }
 
-function buildCustomerLoginUrl(origin: string, email: string, nextPath = '/onboarding') {
+function buildCustomerLoginUrl(origin: string, nextPath = '/onboarding') {
   const url = new URL('/customer/login', origin);
-  url.searchParams.set('email', email);
   url.searchParams.set('next', nextPath);
   return url.toString();
 }
 
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: NextRequest) {
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const stripe = getStripe();
   const email = session.customer_email ?? session.customer_details?.email;
   const stripeCustomerId = typeof session.customer === 'string' ? session.customer : session.customer?.id;
@@ -163,6 +166,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
     cancelledAt: subscriptionInput.cancelledAt,
   });
 
+  const nextServiceStatus = checkoutServiceStatus(customer, subscriptionInput.status);
+  if (customer.service_status !== nextServiceStatus) {
+    await updateCustomer(customer.id, { service_status: nextServiceStatus });
+  }
+
   await writeAuditLog({
     actor: 'system:stripe',
     action: 'stripe.checkout.completed',
@@ -176,25 +184,66 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
     },
   });
 
-  const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
-  const onboardingUrl = buildCustomerLoginUrl(origin, email, '/onboarding');
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
+  const onboardingUrl = buildCustomerLoginUrl(origin, '/onboarding');
+  const deliveryEmail = customer.email;
+  const deliveryName = customer.name || customerName;
 
-  await getResend().emails.send({
-    from: 'adlo 系統通知 <hello@adlo.tw>',
-    to: email,
-    subject: `歡迎加入 adlo — ${planName} 訂閱確認`,
-    html: welcomeEmail(planName, customerName, onboardingUrl, subscriptionInput.trialEnd),
-  });
+  const customerEmailAction = 'billing.email.checkout_welcome.sent';
+  if (!await hasBillingEmailBeenSent(customer.id, customerEmailAction, session.id)) {
+    const customerEmail = await getResend().emails.send(
+      {
+        from: 'adlo 系統通知 <hello@adlo.tw>',
+        to: deliveryEmail,
+        subject: `歡迎加入 adlo — ${emailSubjectName(planName)} 訂閱確認`,
+        html: welcomeEmail(planName, deliveryName, onboardingUrl, subscriptionInput.trialEnd),
+      },
+      { idempotencyKey: `checkout/customer-welcome/${session.id}` },
+    );
+    if (customerEmail.error) throw new Error('Resend checkout customer email failed');
+    await auditBillingEmailSent(
+      customer.id,
+      customerEmailAction,
+      'checkout_welcome',
+      customerEmail.data.id,
+      session.id,
+    );
+  }
 
-  await getResend().emails.send({
-    from: 'adlo 系統通知 <hello@adlo.tw>',
-    to: 'adlo.hello.tw@gmail.com',
-    subject: `新訂單成立 — ${planName}`,
-    html: `<p><strong>方案：</strong>${planName}</p>
-           <p><strong>客戶信箱：</strong>${email}</p>
-           <p><strong>客戶姓名：</strong>${customerName}</p>
-           <p><strong>Customer ID：</strong>${customer.id}</p>`,
-  });
+  const adminEmailAction = 'billing.email.checkout_admin_notification.sent';
+  if (!await hasBillingEmailBeenSent(customer.id, adminEmailAction, session.id)) {
+    const adminEmail = await getResend().emails.send(
+      {
+        from: 'adlo 系統通知 <hello@adlo.tw>',
+        to: 'adlo.hello.tw@gmail.com',
+        subject: `新訂單成立 — ${emailSubjectName(planName)}`,
+        html: `<p><strong>方案：</strong>${escapeHtml(planName)}</p>
+               <p><strong>客戶信箱：</strong>${escapeHtml(deliveryEmail)}</p>
+               <p><strong>客戶姓名：</strong>${escapeHtml(deliveryName)}</p>
+               <p><strong>Customer ID：</strong>${escapeHtml(customer.id)}</p>`,
+      },
+      { idempotencyKey: `checkout/admin-notification/${session.id}` },
+    );
+    if (adminEmail.error) throw new Error('Resend checkout admin email failed');
+    await auditBillingEmailSent(
+      customer.id,
+      adminEmailAction,
+      'checkout_admin_notification',
+      adminEmail.data.id,
+      session.id,
+    );
+  }
+}
+
+function checkoutServiceStatus(
+  customer: Pick<Customer, 'onboarding_status'>,
+  subscriptionStatus: SubscriptionStatus,
+): ServiceStatus {
+  if (subscriptionStatus === 'cancelled') return 'cancelled';
+  if (subscriptionStatus === 'active' || subscriptionStatus === 'trialing' || subscriptionStatus === 'past_due') {
+    return customer.onboarding_status === 'approved' ? 'active' : 'pending_onboarding';
+  }
+  return 'paused';
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
@@ -332,21 +381,41 @@ async function sendSubscriptionNotification(
 
   const action = billingEmailAuditAction(message);
   const referenceId = billingReferenceId(message);
-  const previousSends = await selectRows<BillingEmailAuditRow>(
-    'audit_log',
-    { action, target_id: customer.id },
-    { select: 'payload', order: 'created_at.desc', limit: 20 },
-  );
-  if (previousSends.some((row) => row.payload?.stripe_reference_id === referenceId)) return;
+  if (await hasBillingEmailBeenSent(customer.id, action, referenceId)) return;
 
   const providerMessageId = await sendBillingLifecycleEmail(customer, message);
+  await auditBillingEmailSent(
+    customer.id,
+    action,
+    message.type,
+    providerMessageId,
+    referenceId,
+  );
+}
+
+async function hasBillingEmailBeenSent(customerId: string, action: string, referenceId: string) {
+  const previousSends = await selectRows<BillingEmailAuditRow>(
+    'audit_log',
+    { action, target_id: customerId },
+    { select: 'payload', order: 'created_at.desc', limit: 20 },
+  );
+  return previousSends.some((row) => row.payload?.stripe_reference_id === referenceId);
+}
+
+async function auditBillingEmailSent(
+  customerId: string,
+  action: string,
+  notificationType: string,
+  providerMessageId: string,
+  referenceId: string,
+) {
   await writeAuditLog({
     actor: 'system:stripe',
     action,
     targetType: 'customer',
-    targetId: customer.id,
+    targetId: customerId,
     payload: {
-      notification_type: message.type,
+      notification_type: notificationType,
       provider_message_id: providerMessageId,
       stripe_reference_id: referenceId,
     },
@@ -385,7 +454,7 @@ export async function handleStripeWebhook(req: NextRequest) {
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session, req);
+        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
         break;
       case 'customer.subscription.deleted':
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
@@ -411,4 +480,18 @@ export async function handleStripeWebhook(req: NextRequest) {
   }
 
   return NextResponse.json({ received: true });
+}
+
+function escapeHtml(value: string) {
+  return value.replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  })[character] ?? character);
+}
+
+function emailSubjectName(value: string) {
+  return value.replace(/[\r\n]+/g, ' ').trim() || '訂閱方案';
 }

@@ -13,8 +13,11 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Requires Stripe customer id, subscription id, and email.
 - Upserts `customers` by `stripe_customer_id`.
 - Retrieves the Stripe subscription and upserts `subscriptions`, including `trial_end` for the first-month-free offer.
-- Sends onboarding email to `/customer/login?email=...&next=/onboarding`; Auth.js sends the one-time magic link before the customer reaches onboarding.
-- Notifies Lorenzo by email.
+- Reuses an existing customer matched by Stripe customer id or normalized subscription email without resetting store, onboarding, or service data.
+- Existing customers keep their stored login email; a changed Checkout billing email does not silently replace the Auth.js identity.
+- Restores an approved returning customer according to Stripe's current subscription status; a new customer remains pending onboarding.
+- Sends onboarding email to `/customer/login?next=/onboarding`; the URL does not contain customer email or a reusable credential.
+- Sends customer and Lorenzo notifications keyed independently by Checkout Session id, with Resend plus `audit_log` deduplication.
 - Writes `audit_log` action `stripe.checkout.completed`.
 
 ### `customer.subscription.deleted`
