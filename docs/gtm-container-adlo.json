@@ -38,7 +38,7 @@
         "type": "googtag",
         "parameter": [
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "tagId",
             "value": "G-NJ13ZSMK7W"
           }
@@ -59,74 +59,74 @@
         "type": "gaawe",
         "parameter": [
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "eventName",
             "value": "contact_form_submit"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "sendEcommerceData",
             "value": "false"
           },
           {
-            "type": "list",
+            "type": "LIST",
             "key": "eventParameters",
             "list": [
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "form_id"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - form_id}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "industry"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - industry}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "service"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - service}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "challenges_count"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - challenges_count}}"
                   }
@@ -135,7 +135,7 @@
             ]
           },
           {
-            "type": "tagReference",
+            "type": "TAG_REFERENCE",
             "key": "measurementId",
             "value": "GA4 Configuration - adlo"
           }
@@ -156,44 +156,44 @@
         "type": "gaawe",
         "parameter": [
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "eventName",
             "value": "pricing_plan_click"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "sendEcommerceData",
             "value": "false"
           },
           {
-            "type": "list",
+            "type": "LIST",
             "key": "eventParameters",
             "list": [
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "plan_id"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - plan_id}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "billing"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - billing}}"
                   }
@@ -202,7 +202,7 @@
             ]
           },
           {
-            "type": "tagReference",
+            "type": "TAG_REFERENCE",
             "key": "measurementId",
             "value": "GA4 Configuration - adlo"
           }
@@ -223,74 +223,74 @@
         "type": "gaawe",
         "parameter": [
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "eventName",
             "value": "{{DLV - interaction_name}}"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "sendEcommerceData",
             "value": "false"
           },
           {
-            "type": "list",
+            "type": "LIST",
             "key": "eventParameters",
             "list": [
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "interaction_name"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - interaction_name}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "link_url"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - link_url}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "platform"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - platform}}"
                   }
                 ]
               },
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "location"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{DLV - location}}"
                   }
@@ -299,7 +299,7 @@
             ]
           },
           {
-            "type": "tagReference",
+            "type": "TAG_REFERENCE",
             "key": "measurementId",
             "value": "GA4 Configuration - adlo"
           }
@@ -320,29 +320,29 @@
         "type": "gaawe",
         "parameter": [
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "eventName",
             "value": "scroll_75"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "sendEcommerceData",
             "value": "false"
           },
           {
-            "type": "list",
+            "type": "LIST",
             "key": "eventParameters",
             "list": [
               {
-                "type": "map",
+                "type": "MAP",
                 "map": [
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "name",
                     "value": "page_path"
                   },
                   {
-                    "type": "template",
+                    "type": "TEMPLATE",
                     "key": "value",
                     "value": "{{Page Path}}"
                   }
@@ -351,7 +351,7 @@
             ]
           },
           {
-            "type": "tagReference",
+            "type": "TAG_REFERENCE",
             "key": "measurementId",
             "value": "GA4 Configuration - adlo"
           }
@@ -377,12 +377,12 @@
             "type": "EQUALS",
             "parameter": [
               {
-                "type": "template",
+                "type": "TEMPLATE",
                 "key": "arg0",
                 "value": "{{_event}}"
               },
               {
-                "type": "template",
+                "type": "TEMPLATE",
                 "key": "arg1",
                 "value": "contact_form_submit"
               }
@@ -401,12 +401,12 @@
             "type": "EQUALS",
             "parameter": [
               {
-                "type": "template",
+                "type": "TEMPLATE",
                 "key": "arg0",
                 "value": "{{_event}}"
               },
               {
-                "type": "template",
+                "type": "TEMPLATE",
                 "key": "arg1",
                 "value": "pricing_plan_click"
               }
@@ -425,12 +425,12 @@
             "type": "EQUALS",
             "parameter": [
               {
-                "type": "template",
+                "type": "TEMPLATE",
                 "key": "arg0",
                 "value": "{{_event}}"
               },
               {
-                "type": "template",
+                "type": "TEMPLATE",
                 "key": "arg1",
                 "value": "adlo_interaction"
               }
@@ -446,27 +446,27 @@
         "type": "scrollDepth",
         "parameter": [
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "verticalThresholdOn",
             "value": "true"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "verticalThresholdUnits",
             "value": "PERCENT"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "verticalThresholdsPercent",
             "value": "75"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "horizontalThresholdOn",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "triggerStartOption",
             "value": "WINDOW_LOADED"
           }
@@ -482,17 +482,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "form_id"
           }
@@ -506,17 +506,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "industry"
           }
@@ -530,17 +530,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "service"
           }
@@ -554,17 +554,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "challenges_count"
           }
@@ -578,17 +578,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "plan_id"
           }
@@ -602,17 +602,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "billing"
           }
@@ -626,17 +626,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "interaction_name"
           }
@@ -650,17 +650,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "link_url"
           }
@@ -674,17 +674,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "platform"
           }
@@ -698,17 +698,17 @@
         "type": "v",
         "parameter": [
           {
-            "type": "integer",
+            "type": "INTEGER",
             "key": "dataLayerVersion",
             "value": "2"
           },
           {
-            "type": "boolean",
+            "type": "BOOLEAN",
             "key": "setDefaultValue",
             "value": "false"
           },
           {
-            "type": "template",
+            "type": "TEMPLATE",
             "key": "name",
             "value": "location"
           }
