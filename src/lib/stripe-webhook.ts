@@ -3,6 +3,12 @@ import { Resend } from 'resend';
 import type Stripe from 'stripe';
 import { apiError } from '@/lib/api-response';
 import {
+  sendBillingLifecycleEmail,
+  type BillingLifecycleMessage,
+} from '@/lib/billing-lifecycle-email';
+import {
+  getCustomerDetail,
+  getSubscriptionByStripeId,
   syncExistingSubscription,
   upsertCheckoutCustomer,
   upsertSubscription,
@@ -10,6 +16,7 @@ import {
   type SubscriptionStatus,
 } from '@/lib/customers';
 import { getStripe } from '@/lib/stripe';
+import { selectRows } from '@/lib/supabase-rest';
 import { writeAuditLog } from '@/lib/audit-log';
 
 export const stripeWebhookRuntime = 'nodejs';
@@ -208,9 +215,18 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       local_subscription_found: Boolean(syncedSubscription),
     },
   });
+
+  await sendSubscriptionNotification(syncedSubscription, {
+    type: 'subscription_ended',
+    subscriptionId: subscription.id,
+    endedAt: syncedSubscription?.cancelled_at ?? new Date().toISOString(),
+  });
 }
 
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+async function handleSubscriptionUpdated(
+  subscription: Stripe.Subscription,
+  previousAttributes?: Partial<Stripe.Subscription>,
+) {
   const syncedSubscription = await syncExistingSubscription(subscriptionSyncInput(subscription));
 
   await writeAuditLog({
@@ -224,6 +240,18 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       local_subscription_found: Boolean(syncedSubscription),
     },
   });
+
+  if (
+    subscription.cancel_at_period_end
+    && previousAttributes?.cancel_at_period_end === false
+    && syncedSubscription
+  ) {
+    await sendSubscriptionNotification(syncedSubscription, {
+      type: 'cancellation_scheduled',
+      subscriptionId: subscription.id,
+      accessUntil: syncedSubscription.current_period_end,
+    });
+  }
 }
 
 function getInvoiceSubscriptionId(invoice: Stripe.Invoice) {
@@ -254,10 +282,20 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       local_subscription_found: Boolean(localSubscription),
     },
   });
+
+  if (localSubscription) {
+    await sendSubscriptionNotification(localSubscription, {
+      type: 'payment_failed',
+      invoiceId: invoice.id,
+    });
+  }
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
+  const previousSubscription = stripeSubscriptionId
+    ? await getSubscriptionByStripeId(stripeSubscriptionId)
+    : null;
   const localSubscription = stripeSubscriptionId
     ? await syncExistingSubscription(subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)))
     : null;
@@ -273,6 +311,62 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
       local_subscription_found: Boolean(localSubscription),
     },
   });
+
+  const recoveredFromFailure = previousSubscription
+    && ['past_due', 'incomplete', 'unpaid'].includes(previousSubscription.status);
+  if (localSubscription && (recoveredFromFailure || invoice.attempt_count > 1)) {
+    await sendSubscriptionNotification(localSubscription, {
+      type: 'payment_recovered',
+      invoiceId: invoice.id,
+    });
+  }
+}
+
+async function sendSubscriptionNotification(
+  subscription: Awaited<ReturnType<typeof syncExistingSubscription>>,
+  message: BillingLifecycleMessage,
+) {
+  if (!subscription) return;
+  const customer = await getCustomerDetail(subscription.customer_id);
+  if (!customer) return;
+
+  const action = billingEmailAuditAction(message);
+  const referenceId = billingReferenceId(message);
+  const previousSends = await selectRows<BillingEmailAuditRow>(
+    'audit_log',
+    { action, target_id: customer.id },
+    { select: 'payload', order: 'created_at.desc', limit: 20 },
+  );
+  if (previousSends.some((row) => row.payload?.stripe_reference_id === referenceId)) return;
+
+  const providerMessageId = await sendBillingLifecycleEmail(customer, message);
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action,
+    targetType: 'customer',
+    targetId: customer.id,
+    payload: {
+      notification_type: message.type,
+      provider_message_id: providerMessageId,
+      stripe_reference_id: referenceId,
+    },
+  });
+}
+
+interface BillingEmailAuditRow {
+  payload: Record<string, unknown> | null;
+}
+
+function billingEmailAuditAction(message: BillingLifecycleMessage) {
+  return `billing.email.${message.type}.sent`;
+}
+
+function billingReferenceId(message: BillingLifecycleMessage) {
+  if ('invoiceId' in message) return message.invoiceId;
+  if (message.type === 'cancellation_scheduled') {
+    return `${message.subscriptionId}/${message.accessUntil.slice(0, 10)}`;
+  }
+  return message.subscriptionId;
 }
 
 export async function handleStripeWebhook(req: NextRequest) {
@@ -297,7 +391,10 @@ export async function handleStripeWebhook(req: NextRequest) {
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
         break;
       case 'customer.subscription.updated':
-        await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+        await handleSubscriptionUpdated(
+          event.data.object as Stripe.Subscription,
+          event.data.previous_attributes as Partial<Stripe.Subscription> | undefined,
+        );
         break;
       case 'invoice.payment_failed':
         await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);

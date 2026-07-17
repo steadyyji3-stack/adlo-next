@@ -149,7 +149,8 @@ export async function syncExistingSubscription(input: {
 }
 
 function serviceStatusForSubscription(status: SubscriptionStatus): ServiceStatus {
-  if (status === 'active' || status === 'trialing') return 'active';
+  // Keep access during Stripe's configured payment-recovery grace period.
+  if (status === 'active' || status === 'trialing' || status === 'past_due') return 'active';
   if (status === 'cancelled') return 'cancelled';
   return 'paused';
 }
