@@ -1,7 +1,7 @@
 ---
 author: Ada
 date: 2026-07-17
-status: draft v3 — 純人物介紹 + 成名作全文忠實翻譯（原文已由 Lorenzo 提供）
+status: shipped — Lorenzo 核准部署，已併入 src/lib/posts.ts
 ---
 
 # Blog 草稿 v3｜Pieter Levels 人物介紹 + 成名作全文翻譯
