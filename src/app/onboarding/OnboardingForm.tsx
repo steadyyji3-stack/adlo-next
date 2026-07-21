@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState, useSyncExternalStore } from 'react';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -62,6 +63,7 @@ function OnboardingFormFields({
   initialProfile: StoreProfile | null;
   initialCustomer: InitialCustomer;
 }) {
+  const router = useRouter();
   const [storeName, setStoreName] = useState(
     initialProfile?.storeName ?? initialCustomer.storeName,
   );
@@ -125,6 +127,7 @@ function OnboardingFormFields({
       }
 
       setState('success');
+      router.push('/customer/week?generate=1');
     } catch {
       setState('error');
       setMessage('網路錯誤，請稍後再試');
@@ -140,7 +143,7 @@ function OnboardingFormFields({
           資料已同步到客戶後台，不需要等待人工審核。
         </p>
         <Button asChild className="mt-6 bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">
-          <Link href="/customer/dashboard">前往客戶後台</Link>
+          <Link href="/customer/week?generate=1">產生第一個本週任務</Link>
         </Button>
       </div>
     );
