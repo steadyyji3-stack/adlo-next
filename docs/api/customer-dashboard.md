@@ -23,6 +23,7 @@ Returns the customer dashboard aggregate:
   "dashboard": {
     "customer": {},
     "latestSubscription": {},
+    "currentGrowthCycle": {},
     "posts": [],
     "reviews": [],
     "rankings": [],
@@ -58,11 +59,21 @@ Returns recent rows from `monthly_reports`.
 
 - service status and store identity
 - subscription summary
+- current weekly growth task and completion state
 - KPI cards for posts, reviews, and ranking
 - recent GBP posts
 - recent GBP reviews and pending reply count
 - recent Local SEO ranking rows
 - monthly report links
+
+Dashboard KPI aggregation reads up to 120 recent post, review, and ranking rows,
+then returns the smaller display lists documented above. Monthly boundaries use
+`Asia/Taipei`, so activity around UTC month changes is counted in the customer's
+Taiwan calendar month.
+
+The Track A `/check` history currently exists only in browser localStorage. This
+dashboard does not invent or duplicate that source; a future Track A server data
+contract can be consumed here after it exists.
 
 ## Safety
 
