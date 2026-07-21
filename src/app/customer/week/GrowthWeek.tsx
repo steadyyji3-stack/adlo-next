@@ -24,6 +24,7 @@ export function GrowthWeek({
   const [completionNote, setCompletionNote] = useState('');
   const autoStarted = useRef(false);
   const current = cycles.find((cycle) => isCurrentWeek(cycle.week_start)) ?? null;
+  const currentCompleted = current?.status === 'completed';
 
   const generate = useCallback(async (instructionOverride?: string) => {
     setState('working'); setMessage('');
@@ -96,8 +97,8 @@ export function GrowthWeek({
 
       <aside className="lg:border-l lg:border-slate-200 lg:pl-6">
         <h2 className="text-sm font-extrabold text-slate-950">調整本週任務</h2><p className="mt-2 text-xs leading-5 text-slate-500">可指定語氣或角度；每週最多產生 4 版。</p>
-        <Textarea value={instruction} onChange={(event) => setInstruction(event.target.value)} maxLength={300} placeholder="例如：不要促銷，改成專業教育角度" className="mt-4 min-h-24 resize-none bg-white" />
-        <Button type="button" variant="outline" onClick={() => generate()} disabled={state === 'working'} className="mt-3 w-full font-bold">{state === 'working' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}{current ? '重新產生' : '產生任務'}</Button>
+        <Textarea value={instruction} onChange={(event) => setInstruction(event.target.value)} maxLength={300} disabled={currentCompleted} placeholder="例如：不要促銷，改成專業教育角度" className="mt-4 min-h-24 resize-none bg-white" />
+        <Button type="button" variant="outline" onClick={() => generate()} disabled={state === 'working' || currentCompleted} className="mt-3 w-full font-bold">{state === 'working' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : currentCompleted ? <Check className="mr-2 h-4 w-4" /> : <RefreshCw className="mr-2 h-4 w-4" />}{currentCompleted ? '本週已完成' : current ? '重新產生' : '產生任務'}</Button>
         {current?.feedback?.revisions?.length ? <div className="mt-4 border-l-2 border-slate-200 pl-3"><p className="text-xs font-bold text-slate-600">已記住 {current.feedback.revisions.length} 個舊版本</p><p className="mt-1 text-xs leading-5 text-slate-400">新版本仍會參考先前任務與你的調整。</p></div> : null}
         <div className="mt-8 border-t border-slate-200 pt-6"><h2 className="text-sm font-extrabold text-slate-950">過去任務</h2>{cycles.length === 0 ? <p className="mt-3 text-xs text-slate-500">完成第一週後會開始累積。</p> : <div className="mt-3 space-y-4">{cycles.slice(0, 8).map((cycle) => <div key={cycle.id}><p className="text-xs text-slate-400">{formatWeek(cycle.week_start)}</p><p className="mt-1 text-sm font-semibold leading-5 text-slate-700">{cycle.task.title}</p><p className="mt-1 text-xs text-slate-500">{cycle.status === 'completed' ? '已完成' : '進行中'}</p>{cycle.feedback?.note && <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">{cycle.feedback.note}</p>}</div>)}</div>}</div>
       </aside>

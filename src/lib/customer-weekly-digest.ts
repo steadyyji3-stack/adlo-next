@@ -47,13 +47,22 @@ export interface WeeklyDigestResult {
 
 export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyDigestResult> {
   const weekStart = currentTaipeiGrowthWeekStart(now);
-  const [customers, activeSubscriptions, trialingSubscriptions, profiles, currentCycles, sentAudits] = await Promise.all([
+  const [
+    customers,
+    activeSubscriptions,
+    trialingSubscriptions,
+    pastDueSubscriptions,
+    profiles,
+    currentCycles,
+    sentAudits,
+  ] = await Promise.all([
     selectRows<DigestCustomerRow>('customers', undefined, {
       select: 'id,email,name,store_name',
       order: 'created_at.asc',
     }),
     selectRows<DigestSubscriptionRow>('subscriptions', { status: 'active' }, { select: 'customer_id' }),
     selectRows<DigestSubscriptionRow>('subscriptions', { status: 'trialing' }, { select: 'customer_id' }),
+    selectRows<DigestSubscriptionRow>('subscriptions', { status: 'past_due' }, { select: 'customer_id' }),
     selectRows<CustomerStoreProfileRow>('customer_store_profiles', undefined, { select: 'customer_id' }),
     selectRows<CurrentGrowthCycleRow>('customer_growth_cycles', { week_start: weekStart }, { select: 'customer_id' }),
     selectRows<DigestAuditRow>('audit_log', { actor: 'system:weekly-digest', action: DIGEST_ACTION }, {
@@ -66,6 +75,7 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
   const activeCustomerIds = new Set([
     ...activeSubscriptions.map((subscription) => subscription.customer_id),
     ...trialingSubscriptions.map((subscription) => subscription.customer_id),
+    ...pastDueSubscriptions.map((subscription) => subscription.customer_id),
   ]);
   const profileCustomerIds = new Set(profiles.map((profile) => profile.customer_id));
   const currentCycleCustomerIds = new Set(currentCycles.map((cycle) => cycle.customer_id));

@@ -19,14 +19,16 @@ export default async function CustomerWeekPage({
   const customerId = await getCustomerIdFromSession();
   if (!customerId) return <Gate icon={Store} title="請先登入客戶後台" href="/customer/login" action="使用 email 登入" />;
 
-  const [customer, profile, cycles] = await Promise.all([
-    getCustomerDetail(customerId),
+  const customer = await getCustomerDetail(customerId);
+  if (!customer) return <Gate icon={Store} title="找不到客戶資料" href="/customer/login" action="重新登入" />;
+  const subscription = customer.subscriptions.find(({ status }) =>
+    status === 'active' || status === 'trialing' || status === 'past_due');
+  if (!subscription) return <Gate icon={CreditCard} title="需要有效訂閱" href="/customer/billing" action="查看訂閱" />;
+
+  const [profile, cycles] = await Promise.all([
     getCustomerStoreProfile(customerId),
     listCustomerGrowthCycles(customerId),
   ]);
-  if (!customer) return <Gate icon={Store} title="找不到客戶資料" href="/customer/login" action="重新登入" />;
-  const subscription = customer.subscriptions.find(({ status }) => status === 'active' || status === 'trialing');
-  if (!subscription) return <Gate icon={CreditCard} title="需要有效訂閱" href="/customer/billing" action="查看訂閱" />;
   if (!profile) return <Gate icon={Target} title="先讓我認識你的店" href="/onboarding" action="建立店家檔案" />;
 
   return (
@@ -39,8 +41,17 @@ export default async function CustomerWeekPage({
             </Button>
             <div className="min-w-0"><p className="truncate text-sm font-extrabold text-slate-950">{profile.storeName}</p><p className="text-xs text-slate-500">AI 成長店長</p></div>
           </div>
-          <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">
-            {subscription.status === 'trialing' ? '免費試用中' : '訂閱中'}
+          <Badge
+            variant="outline"
+            className={subscription.status === 'past_due'
+              ? 'border-amber-200 bg-amber-50 text-amber-700'
+              : 'border-emerald-200 bg-emerald-50 text-emerald-700'}
+          >
+            {subscription.status === 'trialing'
+              ? '免費試用中'
+              : subscription.status === 'past_due'
+                ? '付款處理中'
+                : '訂閱中'}
           </Badge>
         </div>
       </header>

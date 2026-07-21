@@ -48,6 +48,9 @@ export async function POST(request: Request) {
       listCustomerGrowthCycles(access.customerId),
     ]);
     if (!profile) return apiError('STORE_PROFILE_REQUIRED', '請先完成店家檔案', 409);
+    if (current?.status === 'completed') {
+      return apiError('GROWTH_CYCLE_ALREADY_COMPLETED', '本週任務已完成，下週會產生新任務', 409);
+    }
     const generationCount = (current?.generation_count ?? 0) + 1;
     if (generationCount > 4) return apiError('WEEKLY_GENERATION_LIMIT', '本週已調整 3 次，下週會產生新任務', 429);
 
@@ -119,7 +122,8 @@ async function paidCustomerAccess() {
   if (!customerId) return { response: apiError('UNAUTHORIZED', '請先登入客戶後台', 401) };
   const customer = await getCustomerDetail(customerId);
   if (!customer) return { response: apiError('CUSTOMER_NOT_FOUND', '找不到客戶資料', 404) };
-  const paid = customer.subscriptions.some(({ status }) => status === 'active' || status === 'trialing');
+  const paid = customer.subscriptions.some(({ status }) =>
+    status === 'active' || status === 'trialing' || status === 'past_due');
   if (!paid) return { response: apiError('SUBSCRIPTION_REQUIRED', '需要有效訂閱才能使用本週任務', 402) };
   return { customerId, customer };
 }

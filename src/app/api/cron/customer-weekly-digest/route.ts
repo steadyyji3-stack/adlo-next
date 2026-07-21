@@ -28,7 +28,7 @@ export async function GET(request: Request) {
 function hasValidCronSecret(request: Request) {
   const secret = process.env.CRON_SECRET;
   const authorization = request.headers.get('authorization');
-  if (!secret || !authorization?.startsWith('Bearer ')) return false;
+  if (!secret || secret.length < 16 || !authorization?.startsWith('Bearer ')) return false;
 
   const expected = Buffer.from(secret);
   const actual = Buffer.from(authorization.slice('Bearer '.length));
