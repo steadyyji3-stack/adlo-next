@@ -18,3 +18,7 @@ create index idx_customer_store_profiles_industry
 create trigger customer_store_profiles_set_updated_at
 before update on customer_store_profiles
 for each row execute function set_updated_at();
+
+-- Track B customer data is accessed only by server routes after Auth.js checks.
+-- No anon or authenticated Data API policies are intentionally granted.
+alter table customer_store_profiles enable row level security;

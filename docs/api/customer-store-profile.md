@@ -10,6 +10,11 @@ saved profile receives:
 Requires a verified Auth.js customer session. Query strings, cookies named
 customer_id, and request-body customer IDs are ignored.
 
+The `customer_store_profiles` table has row level security enabled without anon
+or authenticated Data API policies. Only server routes using the Supabase service
+role can access the table, and those routes resolve the customer id from the
+verified Auth.js session before reading or writing data.
+
 # PUT /api/me/store-profile
 
 Creates or replaces the signed-in customer's server-side store profile.
@@ -35,6 +40,13 @@ The server supplies savedAt; clients cannot choose it.
 - Keeps customers.store_name and customers.industry synchronized.
 - Writes audit_log action customer.store_profile.update.
 - Never stores OAuth tokens or Google account credentials.
+
+## Rollout
+
+Apply `supabase/migrations/20260716_customer_store_profiles.sql` before enabling
+the API in a target environment. The migration creates the table, index, update
+trigger, and its deny-by-default RLS boundary. No client-facing RLS policy should
+be added for this server-only Track B data.
 
 ## Response
 
