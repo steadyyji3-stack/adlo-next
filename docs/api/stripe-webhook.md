@@ -28,7 +28,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Writes `audit_log` action `stripe.subscription.deleted`.
 - Sends an idempotent subscription-ended confirmation email and audits the send.
 
-### `customer.subscription.updated`, `invoice.payment_succeeded`, and `invoice.payment_failed`
+### `customer.subscription.updated` and `customer.subscription.trial_will_end`
 
 `customer.subscription.updated`:
 
@@ -37,6 +37,15 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Maps active/trialing/past_due to customer `service_status = active` during recovery; cancelled to `cancelled`; unpaid/paused/incomplete to `paused`.
 - Writes `audit_log` action `stripe.subscription.updated`.
 - When `cancel_at_period_end = true`, sends an idempotent cancellation-scheduled email with the access end date.
+
+`customer.subscription.trial_will_end`:
+
+- Syncs the latest Stripe subscription state before sending customer communication.
+- Writes `audit_log` action `stripe.subscription.trial_will_end`.
+- Sends an idempotent first-month-free ending reminder with the trial end date and a link to the authenticated billing page.
+- Skips the conversion reminder when cancellation is already scheduled at period end.
+
+### `invoice.payment_succeeded`, `invoice.payment_failed`, and `invoice.payment_action_required`
 
 `invoice.payment_succeeded`:
 
@@ -51,7 +60,14 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Sets local subscription status to `past_due`.
 - Keeps the related customer service status active while Stripe reports `past_due`, so one failed charge does not immediately remove access.
 - Writes `audit_log` action `stripe.invoice.payment_failed`.
-- Sends an idempotent payment-failed email linking to the authenticated customer billing page.
+- Sends an idempotent payment-attention email linking to the authenticated customer billing page.
+
+`invoice.payment_action_required`:
+
+- Retrieves the Stripe subscription and syncs its current state instead of assuming a local status.
+- Writes `audit_log` action `stripe.invoice.payment_action_required`.
+- Sends the same payment-attention email used by `invoice.payment_failed`, covering payment method updates and bank authentication.
+- Uses the same invoice-based audit reference and Resend idempotency key as `invoice.payment_failed`, so the two events cannot produce duplicate emails for one invoice.
 
 ## Payment recovery policy
 
@@ -61,6 +77,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - `unpaid`, `paused`, or `cancelled` changes the customer service status away from active.
 - Email links never contain a customer id, Stripe portal session URL, or reusable customer credential.
 - Resend idempotency keys use the Stripe invoice or subscription reference so webhook retries do not duplicate customer email.
+- Trial-ending reminders are keyed by Stripe subscription id plus trial end date and are not sent for subscriptions already scheduled to cancel.
 
 ## Safety
 

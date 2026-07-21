@@ -334,8 +334,64 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
 
   if (localSubscription) {
     await sendSubscriptionNotification(localSubscription, {
-      type: 'payment_failed',
+      type: 'payment_attention_required',
       invoiceId: invoice.id,
+    });
+  }
+}
+
+async function handleInvoicePaymentActionRequired(invoice: Stripe.Invoice) {
+  const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
+  const localSubscription = stripeSubscriptionId
+    ? await syncExistingSubscription(
+      subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)),
+    )
+    : null;
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.invoice.payment_action_required',
+    targetType: 'subscription',
+    targetId: localSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: stripeSubscriptionId,
+      invoice_id: invoice.id,
+      local_subscription_found: Boolean(localSubscription),
+    },
+  });
+
+  if (localSubscription) {
+    await sendSubscriptionNotification(localSubscription, {
+      type: 'payment_attention_required',
+      invoiceId: invoice.id,
+    });
+  }
+}
+
+async function handleSubscriptionTrialWillEnd(subscription: Stripe.Subscription) {
+  const syncedSubscription = await syncExistingSubscription(subscriptionSyncInput(subscription));
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.subscription.trial_will_end',
+    targetType: 'subscription',
+    targetId: syncedSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: subscription.id,
+      trial_end: subscription.trial_end
+        ? toIsoFromUnix(subscription.trial_end, new Date())
+        : null,
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      local_subscription_found: Boolean(syncedSubscription),
+    },
+  });
+
+  if (syncedSubscription && subscription.trial_end && !subscription.cancel_at_period_end) {
+    await sendSubscriptionNotification(syncedSubscription, {
+      type: 'trial_ending',
+      subscriptionId: subscription.id,
+      trialEndsAt: syncedSubscription.trial_end
+        ?? toIsoFromUnix(subscription.trial_end, new Date()),
     });
   }
 }
@@ -432,6 +488,9 @@ function billingEmailAuditAction(message: BillingLifecycleMessage) {
 
 function billingReferenceId(message: BillingLifecycleMessage) {
   if ('invoiceId' in message) return message.invoiceId;
+  if (message.type === 'trial_ending') {
+    return `${message.subscriptionId}/${message.trialEndsAt.slice(0, 10)}`;
+  }
   if (message.type === 'cancellation_scheduled') {
     return `${message.subscriptionId}/${message.accessUntil.slice(0, 10)}`;
   }
@@ -464,6 +523,12 @@ export async function handleStripeWebhook(req: NextRequest) {
           event.data.object as Stripe.Subscription,
           event.data.previous_attributes as Partial<Stripe.Subscription> | undefined,
         );
+        break;
+      case 'customer.subscription.trial_will_end':
+        await handleSubscriptionTrialWillEnd(event.data.object as Stripe.Subscription);
+        break;
+      case 'invoice.payment_action_required':
+        await handleInvoicePaymentActionRequired(event.data.object as Stripe.Invoice);
         break;
       case 'invoice.payment_failed':
         await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);

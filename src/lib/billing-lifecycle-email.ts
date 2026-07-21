@@ -6,8 +6,9 @@ import type { Customer } from '@/lib/customers';
 type BillingEmailCustomer = Pick<Customer, 'id' | 'email' | 'name' | 'store_name'>;
 
 export type BillingLifecycleMessage =
-  | { type: 'payment_failed'; invoiceId: string }
+  | { type: 'payment_attention_required'; invoiceId: string }
   | { type: 'payment_recovered'; invoiceId: string }
+  | { type: 'trial_ending'; subscriptionId: string; trialEndsAt: string }
   | { type: 'cancellation_scheduled'; subscriptionId: string; accessUntil: string }
   | { type: 'subscription_ended'; subscriptionId: string; endedAt: string };
 
@@ -48,14 +49,14 @@ function buildEmailContent(customer: BillingEmailCustomer, message: BillingLifec
   const billingUrl = new URL('/customer/billing', siteUrl()).toString();
 
   switch (message.type) {
-    case 'payment_failed':
+    case 'payment_attention_required':
       return {
-        subject: `${storeName}：訂閱扣款未成功，請更新付款方式`,
-        heading: '付款方式需要更新',
-        body: '這次訂閱扣款沒有成功。你的服務目前仍在付款寬限期間，不需要重新訂閱；請前往 Stripe Customer Portal 更新付款方式，Stripe 會依帳務設定再次嘗試扣款。',
-        ctaLabel: '更新付款方式',
+        subject: `${storeName}：訂閱付款需要處理`,
+        heading: '請完成付款處理',
+        body: '本期訂閱付款需要你處理，可能是付款方式需要更新，或銀行要求完成驗證。你的服務目前仍在付款寬限期間，不需要重新訂閱；請前往 Stripe Customer Portal 完成付款處理。',
+        ctaLabel: '處理付款',
         ctaUrl: billingUrl,
-        footer: '為了避免服務在寬限期結束後暫停，請儘早完成更新。',
+        footer: '為了避免服務在寬限期結束後暫停，請儘早完成處理。',
       };
     case 'payment_recovered':
       return {
@@ -65,6 +66,15 @@ function buildEmailContent(customer: BillingEmailCustomer, message: BillingLifec
         ctaLabel: '查看訂閱狀態',
         ctaUrl: billingUrl,
         footer: '感謝你完成付款資料更新。',
+      };
+    case 'trial_ending':
+      return {
+        subject: `${storeName}：首月免費即將結束`,
+        heading: '首月免費即將結束',
+        body: `你的首月免費將於 ${formatDate(message.trialEndsAt)} 結束。若繼續訂閱，Stripe 會在試用結束後使用已儲存的付款方式扣款；你也可以在結束前前往 Stripe Customer Portal 取消。`,
+        ctaLabel: '管理訂閱',
+        ctaUrl: billingUrl,
+        footer: '你可以隨時管理訂閱，不需要聯絡客服。',
       };
     case 'cancellation_scheduled':
       return {
@@ -135,10 +145,12 @@ function renderText(customer: BillingEmailCustomer, content: EmailContent) {
 
 function idempotencyKey(message: BillingLifecycleMessage) {
   switch (message.type) {
-    case 'payment_failed':
-      return `billing/payment-failed/${message.invoiceId}`;
+    case 'payment_attention_required':
+      return `billing/payment-attention/${message.invoiceId}`;
     case 'payment_recovered':
       return `billing/payment-recovered/${message.invoiceId}`;
+    case 'trial_ending':
+      return `billing/trial-ending/${message.subscriptionId}/${message.trialEndsAt.slice(0, 10)}`;
     case 'cancellation_scheduled':
       return `billing/cancel-scheduled/${message.subscriptionId}/${message.accessUntil.slice(0, 10)}`;
     case 'subscription_ended':
