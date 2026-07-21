@@ -16,21 +16,22 @@ export default async function ContentStudioPage() {
     return <WorkspaceGate icon={Store} title="請先登入客戶後台" href="/customer/login" action="使用 email 登入" />;
   }
 
-  const [customer, profile, bundles] = await Promise.all([
-    getCustomerDetail(customerId),
-    getCustomerStoreProfile(customerId),
-    listCustomerContentBundles(customerId),
-  ]);
+  const customer = await getCustomerDetail(customerId);
   if (!customer) {
     return <WorkspaceGate icon={Store} title="找不到客戶資料" href="/customer/login" action="重新登入" />;
   }
 
-  const activeSubscription = customer.subscriptions.find(
-    (subscription) => subscription.status === 'active' || subscription.status === 'trialing',
+  const accessSubscription = customer.subscriptions.find(
+    (subscription) => ['active', 'trialing', 'past_due'].includes(subscription.status),
   );
-  if (!activeSubscription) {
+  if (!accessSubscription) {
     return <WorkspaceGate icon={CreditCard} title="需要有效訂閱" href="/customer/billing" action="查看訂閱狀態" />;
   }
+
+  const [profile, bundles] = await Promise.all([
+    getCustomerStoreProfile(customerId),
+    listCustomerContentBundles(customerId),
+  ]);
   if (!profile) {
     return <WorkspaceGate icon={FileText} title="請先建立店家檔案" href="/onboarding" action="建立店家檔案" />;
   }
@@ -50,8 +51,17 @@ export default async function ContentStudioPage() {
               <p className="text-xs text-slate-500">每週內容工作台</p>
             </div>
           </div>
-          <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">
-            {activeSubscription.status === 'trialing' ? '免費試用中' : '訂閱中'}
+          <Badge
+            variant="outline"
+            className={accessSubscription.status === 'past_due'
+              ? 'border-amber-200 bg-amber-50 text-amber-700'
+              : 'border-emerald-200 bg-emerald-50 text-emerald-700'}
+          >
+            {accessSubscription.status === 'trialing'
+              ? '免費試用中'
+              : accessSubscription.status === 'past_due'
+                ? '付款處理中'
+                : '訂閱中'}
           </Badge>
         </div>
       </header>

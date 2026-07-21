@@ -22,3 +22,7 @@ create index idx_customer_content_bundles_history
 create trigger customer_content_bundles_set_updated_at
 before update on customer_content_bundles
 for each row execute function set_updated_at();
+
+-- Track B customer history is accessed only by server routes after Auth.js checks.
+-- No anon or authenticated Data API policies are intentionally granted.
+alter table customer_content_bundles enable row level security;

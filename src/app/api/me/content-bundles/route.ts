@@ -75,6 +75,6 @@ export async function POST() {
 
 function hasPaidAccess(subscriptions: Array<{ status: string }>) {
   return subscriptions.some(
-    (subscription) => subscription.status === 'active' || subscription.status === 'trialing',
+    (subscription) => ['active', 'trialing', 'past_due'].includes(subscription.status),
   );
 }

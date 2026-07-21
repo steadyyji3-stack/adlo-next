@@ -9,7 +9,7 @@ Returns up to 12 saved weekly bundles for the signed-in customer, newest first.
 Requirements:
 
 - verified Auth.js customer session
-- an active or trialing subscription
+- an active, trialing, or payment-recovery (`past_due`) subscription
 
 The endpoint never accepts customer_id from query strings, cookies, or request
 bodies.
@@ -30,7 +30,7 @@ updates that week's bundle rather than creating duplicates.
 Requirements:
 
 - verified Auth.js customer session
-- an active or trialing subscription
+- an active, trialing, or payment-recovery (`past_due`) subscription
 - a server-side customer store profile
 
 Successful generation writes audit_log action content_bundle.generate. The
@@ -50,3 +50,10 @@ customer-entered profile values.
 Migration: supabase/migrations/20260716_customer_content_bundles.sql
 
 Each row contains exactly seven GBP posts and seven LINE broadcasts.
+
+The table has row level security enabled without anon or authenticated Data API
+policies. Only server routes using the Supabase service role can access it, after
+the route resolves the customer id from the verified Auth.js session and checks
+subscription access. Apply the migration before enabling this workspace in a
+target environment; no client-facing policy should be added for this server-only
+Track B history.
