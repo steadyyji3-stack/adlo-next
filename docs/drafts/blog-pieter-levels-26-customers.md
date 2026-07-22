@@ -1,7 +1,7 @@
 ---
 author: Ada
 date: 2026-07-21
-status: draft — 「一人事業啟示錄」系列第 2 篇（Pieter Levels 金句 + adlo 拆解）
+status: shipped — Lorenzo 核准部署，已併入 src/lib/posts.ts
 ---
 
 # Blog 草稿｜Pieter Levels「26 個客人」金句拆解（一人事業啟示錄 #2）
