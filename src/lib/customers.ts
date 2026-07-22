@@ -67,15 +67,29 @@ export async function upsertCheckoutCustomer(input: {
   name: string;
   storeName: string;
 }) {
+  const email = input.email.trim().toLowerCase();
+  const [stripeMatch, emailMatch] = await Promise.all([
+    selectRows<Customer>('customers', { stripe_customer_id: input.stripeCustomerId }, { limit: 1 }),
+    selectRows<Customer>('customers', { email }, { limit: 1 }),
+  ]);
+  const existing = stripeMatch[0] ?? emailMatch[0];
+  if (existing) {
+    if (existing.stripe_customer_id === input.stripeCustomerId) return existing;
+    const [updated] = await updateRows<Customer>(
+      'customers',
+      { id: existing.id },
+      { stripe_customer_id: input.stripeCustomerId },
+    );
+    return updated ?? existing;
+  }
+
   return upsertRow<Customer>(
     'customers',
     {
       stripe_customer_id: input.stripeCustomerId,
-      email: input.email,
+      email,
       name: input.name,
       store_name: input.storeName,
-      onboarding_status: 'not_started',
-      service_status: 'pending_onboarding',
     },
     'stripe_customer_id',
   );
@@ -149,7 +163,8 @@ export async function syncExistingSubscription(input: {
 }
 
 function serviceStatusForSubscription(status: SubscriptionStatus): ServiceStatus {
-  if (status === 'active' || status === 'trialing') return 'active';
+  // Keep access during Stripe's configured payment-recovery grace period.
+  if (status === 'active' || status === 'trialing' || status === 'past_due') return 'active';
   if (status === 'cancelled') return 'cancelled';
   return 'paused';
 }
