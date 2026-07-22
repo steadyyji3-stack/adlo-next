@@ -90,11 +90,28 @@ export function SiteOptimizer({ initialUrl, storeName, industryMode }: SiteOptim
 
   function downloadReport() {
     if (!report) return;
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    downloadFile(
+      JSON.stringify(report, null, 2),
+      'application/json',
+      `adlo-site-optimizer-${report.hostname}-${report.scannedAt.slice(0, 10)}.json`,
+    );
+  }
+
+  function downloadHandoff() {
+    if (!report) return;
+    downloadFile(
+      buildMarkdownReport(report, storeName),
+      'text/markdown;charset=utf-8',
+      `adlo-網站優化交付-${report.hostname}-${report.scannedAt.slice(0, 10)}.md`,
+    );
+  }
+
+  function downloadFile(contents: string, type: string, filename: string) {
+    const blob = new Blob([contents], { type });
     const downloadUrl = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = downloadUrl;
-    anchor.download = `adlo-site-optimizer-${report.hostname}-${report.scannedAt.slice(0, 10)}.json`;
+    anchor.download = filename;
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
@@ -145,7 +162,7 @@ export function SiteOptimizer({ initialUrl, storeName, industryMode }: SiteOptim
 
       {report && (
         <>
-          <ReportSummary report={report} onDownload={downloadReport} />
+          <ReportSummary report={report} onDownloadMarkdown={downloadHandoff} onDownloadJson={downloadReport} />
           <PriorityFixes report={report} />
           <PageAudits report={report} />
           <ContentPack report={report} onCopySchema={copySchema} copied={copied} />
@@ -166,7 +183,15 @@ function EmptyFeature({ icon: Icon, title, body }: { icon: typeof ScanSearch; ti
   );
 }
 
-function ReportSummary({ report, onDownload }: { report: SiteOptimizationReport; onDownload: () => void }) {
+function ReportSummary({
+  report,
+  onDownloadMarkdown,
+  onDownloadJson,
+}: {
+  report: SiteOptimizationReport;
+  onDownloadMarkdown: () => void;
+  onDownloadJson: () => void;
+}) {
   const failed = report.pages.flatMap((page) => page.checks).filter((check) => check.status === 'fail').length;
   const warning = report.pages.flatMap((page) => page.checks).filter((check) => check.status === 'warn').length;
   return (
@@ -177,9 +202,14 @@ function ReportSummary({ report, onDownload }: { report: SiteOptimizationReport;
           <h2 className="mt-2 text-2xl font-extrabold text-slate-950">網站基礎分數 {report.overallScore}</h2>
           <p className="mt-1 text-sm text-slate-500">{report.pages.length} 個代表頁面 · {report.coverage === 'sitemap' ? 'Sitemap 掃描' : '首頁掃描'}</p>
         </div>
-        <Button variant="outline" onClick={onDownload} className="border-slate-300 bg-white font-bold">
-          <Download aria-hidden />下載 JSON
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={onDownloadMarkdown} className="bg-[#0F6E56] font-bold text-white hover:bg-[#0B5946]">
+            <Download aria-hidden />下載網站優化交付檔
+          </Button>
+          <Button variant="outline" onClick={onDownloadJson} className="border-slate-300 bg-white font-bold">
+            <FileCode2 aria-hidden />技術 JSON
+          </Button>
+        </div>
       </div>
       <div className="mt-6 grid grid-cols-3 border-y border-slate-200 bg-white">
         <Metric value={String(report.overallScore)} label="平均分數" tone="text-[#0F6E56]" />
@@ -330,10 +360,33 @@ function ContentPack({ report, onCopySchema, copied }: { report: SiteOptimizatio
 }
 
 function CopyField({ label, value }: { label: string; value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copyValue() {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  }
+
   return (
-    <div>
+    <div className="group relative pr-9">
       <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-400">{label}</dt>
       <dd className="mt-1 break-words font-semibold leading-6 text-slate-800">{value}</dd>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={copyValue}
+        className="absolute right-0 top-0 h-8 w-8 text-slate-400 hover:bg-emerald-50 hover:text-[#0F6E56]"
+        aria-label={`複製 ${label}`}
+        title={`複製 ${label}`}
+      >
+        {copied ? <Check aria-hidden /> : <Clipboard aria-hidden />}
+      </Button>
     </div>
   );
 }
@@ -368,4 +421,73 @@ function scoreTone(score: number) {
   if (score >= 80) return 'text-emerald-700';
   if (score >= 60) return 'text-amber-700';
   return 'text-rose-700';
+}
+
+function buildMarkdownReport(report: SiteOptimizationReport, storeName: string) {
+  const lines = [
+    `# ${storeName} 網站優化交付文件`,
+    '',
+    `- 網站：${report.targetUrl}`,
+    `- 產生時間：${new Date(report.scannedAt).toLocaleString('zh-TW')}`,
+    `- 代表頁面：${report.pages.length} 頁`,
+    `- 基礎分數：${report.overallScore}/100`,
+    `- 產業模式：${modeLabels[report.industryMode]}`,
+    '',
+    '## 優先修正',
+    '',
+    ...report.priorityFixes.flatMap((fix, index) => [
+      `### ${index + 1}. ${fix.title}（${fix.impact === 'high' ? '高影響' : '中影響'}）`,
+      '',
+      fix.action,
+      '',
+      `影響頁面：${fix.affectedPages.join('、')}`,
+      '',
+    ]),
+    '## 頁面文案',
+    '',
+    ...report.optimizationPack.pageBlueprints.flatMap((blueprint) => [
+      `### ${blueprint.page}`,
+      '',
+      `- Title：${blueprint.title}`,
+      `- Meta description：${blueprint.metaDescription}`,
+      `- H1：${blueprint.h1}`,
+      `- 建議區塊：${blueprint.sections.join('、')}`,
+      '',
+    ]),
+    '## 店家結構化資料',
+    '',
+    '```html',
+    report.optimizationPack.schemaMarkup,
+    '```',
+    '',
+    ...(report.optimizationPack.missingBusinessFields.length > 0 ? [
+      `發布前待補：${report.optimizationPack.missingBusinessFields.join('、')}`,
+      '',
+    ] : []),
+    '## 常見問題草稿',
+    '',
+    ...report.optimizationPack.faqDrafts.flatMap((faq) => [
+      `### ${faq.question}`,
+      '',
+      faq.answer,
+      '',
+    ]),
+    '## 上線順序',
+    '',
+    ...report.optimizationPack.implementationChecklist.map((item, index) => `${index + 1}. ${item}`),
+    '',
+    ...(report.optimizationPack.complianceNote ? [
+      '## 發布前複核',
+      '',
+      report.optimizationPack.complianceNote,
+      '',
+    ] : []),
+    '## 報告邊界',
+    '',
+    ...report.limitations.map((item) => `- ${item}`),
+    '',
+    '---',
+    '由 adlo 一鍵全站優化產生',
+  ];
+  return lines.join('\n');
 }
