@@ -48,7 +48,7 @@ export default function PrivacyPage() {
         <section id="scope">
           <h2 className="text-xl font-semibold text-slate-800 mb-3">1. 適用範圍</h2>
           <p className="text-slate-600 leading-relaxed">
-            adlo 區域精準行銷（以下簡稱「本公司」或「adlo」）尊重並保護您的個人資料。本政策適用於您使用
+            adlo 數位行銷（以下簡稱「本公司」或「adlo」）尊重並保護您的個人資料。本政策適用於您使用
             adlo.tw 網站及其提供之所有服務時（包含免費工具、深度診斷、月訂閱服務與客戶專區），本公司對您個人資料之蒐集、處理與利用。
             本政策不適用於本網站連結之第三方網站，該等網站之隱私保護依其各自政策辦理。
           </p>

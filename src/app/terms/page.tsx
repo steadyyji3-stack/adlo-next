@@ -46,7 +46,7 @@ export default function TermsPage() {
         <section id="acceptance">
           <h2 className="text-xl font-semibold text-slate-800 mb-3">1. 條款之接受</h2>
           <p className="text-slate-600 leading-relaxed">
-            歡迎使用 adlo 區域精準行銷（以下簡稱「本公司」或「adlo」）於 adlo.tw
+            歡迎使用 adlo 數位行銷（以下簡稱「本公司」或「adlo」）於 adlo.tw
             提供之服務。當您瀏覽本網站、使用免費工具、註冊帳號或訂閱付費服務，即表示您已閱讀、理解並同意本服務條款及
             <a href="/privacy" className="text-[#1D9E75] hover:underline">隱私權政策</a>
             之全部內容。若您不同意，請停止使用本服務。
