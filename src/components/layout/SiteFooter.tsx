@@ -68,6 +68,10 @@ export default function SiteFooter() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
           <p className="text-xs text-slate-600">© 2026 adlo 區域精準行銷</p>
+          <div className="flex items-center gap-4 text-xs">
+            <Link href="/privacy" className="text-slate-600 hover:text-slate-400 transition-colors">隱私權政策</Link>
+            <Link href="/terms" className="text-slate-600 hover:text-slate-400 transition-colors">服務條款</Link>
+          </div>
           <p className="text-xs text-slate-700">
             <a href="mailto:hello@adlo.tw" data-gtm-event="email_click" data-gtm-location="footer" className="hover:text-slate-400 transition-colors">hello@adlo.tw</a>
           </p>
