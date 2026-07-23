@@ -4073,6 +4073,126 @@ export const posts: Post[] = [
       },
     ],
   },
+  {
+    slug: 'google-maps-ranking-guide-taiwan-2026',
+    title: 'Google 地圖排名怎麼提升？官方 3 大因素＋5 個反直覺優化法（2026 台灣店家版）',
+    description: 'Google 官方只承認三個地圖排名因素：關聯性、距離、名氣。距離你動不了，剩下兩個才是戰場。這篇拆解排名卡住的真正原因、5 個代理商不會告訴你的反直覺優化法、行業別優先順序，最後附 30 秒免費工具直接量你現在的地圖排名。還在照抄「九大技巧」？先看看你卡在哪一項。',
+    publishedAt: '2026-07-22',
+    category: '在地 SEO',
+    tags: ['Google 地圖排名', 'Google 地圖 SEO', 'Local SEO', 'Google 我的商家', '在地 SEO', '台灣中小店家'],
+    author: 'adlo 編輯部',
+    readingTime: 11,
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=1200&auto=format&fit=crop&q=80',
+      alt: '手機上的 Google 地圖搜尋在地店家結果',
+      credit: 'Firmbee.com',
+      creditUrl: 'https://unsplash.com/@firmbee',
+    },
+    content: `
+<p class="lead">客人搜「你的產業＋地區」——例如「板橋 美睫」——你的店排第 9。你可能覺得「至少有上榜」。但地圖搜尋的點擊幾乎全部集中在前三名那個小框框（Local Pack），排第 9 和沒排，客人眼裡是同一件事。</p>
+
+<p>市面上的「Google 地圖優化 9 技巧」文章你可能看過不少：填完整資料、多拍照、請客人留評論。都對，但都沒回答關鍵問題：<strong>為什麼你做了這些，排名還是不動？</strong></p>
+
+<p>這篇從 Google 官方承認的三個排名因素講起，拆解排名卡住的真正原因，再給你 5 個大部分代理商不會講的反直覺優化法。</p>
+
+<h2>Google 官方只承認三個排名因素</h2>
+
+<p>Google 在<a href="https://support.google.com/business/answer/7091?hl=zh-Hant" target="_blank" rel="noopener">官方說明文件</a>裡白紙黑字寫著，地圖搜尋結果由三件事決定：</p>
+
+<table>
+  <thead><tr><th>因素</th><th>Google 的定義</th><th>你能控制多少</th></tr></thead>
+  <tbody>
+    <tr><td>關聯性（Relevance）</td><td>商家檔案與搜尋字詞的吻合程度</td><td>幾乎全部——類別、描述、服務項目都是你填的</td></tr>
+    <tr><td>距離（Distance）</td><td>商家與搜尋者位置的距離</td><td>零。店開在哪就是哪</td></tr>
+    <tr><td>名氣（Prominence）</td><td>商家在線上與線下的知名度：評論數、評分、連結、報導</td><td>可以累積，但需要時間</td></tr>
+  </tbody>
+</table>
+
+<p>看懂這張表，你就懂了第一件事：<strong>距離你動不了，所以真正的戰場只有關聯性和名氣兩個。</strong>而大部分店家的問題是——把時間花在已經及格的項目上重複優化，真正拖後腿的那一項卻沒動過。</p>
+
+<h2>排名卡住的真正原因：你在錯的維度上加分</h2>
+
+<p>我們在<a href="/blog/google-business-profile-6d-health-check-taiwan-2026">六維度健檢</a>整理台灣 2,400 家中小店家的公開 GBP 資料時，看到一個重複出現的模式：排名卡在 4–10 名的店家，通常「資料完整度」都已經 80 分以上。問題是他們持續在這個項目加分，評論回覆率、照片多樣性這些真正有差距的維度，卻停在 40 分沒動過。</p>
+
+<p>排名是比較出來的。你的對手如果完整度也 80 分，你填到 95 分不會讓你超車；你在對手只有 40 分的維度做到 70 分，才會。</p>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80" alt="數據儀表板，分析地圖排名各維度分數" loading="lazy" />
+  <figcaption>排名是相對的：找出「對手弱、你也弱」的維度優先補，投資報酬率最高。Photo by <a href="https://unsplash.com/@mjessier" target="_blank" rel="noopener">Myriam Jessier</a> on Unsplash</figcaption>
+</figure>
+
+<h2>5 個反直覺優化法</h2>
+
+<h3>① 店名塞關鍵字：短期有效，長期是停權炸彈</h3>
+<p>你一定看過「XX美睫｜板橋美睫推薦｜日式嫁接睫毛」這種店名。塞關鍵字確實會提升關聯性分數——這是它流行的原因。但這直接違反 Google 商家名稱規範，被檢舉或被演算法掃到，輕則強制改名、重則停權。<a href="/blog/google-business-profile-suspended-recovery-2026">停權救回來平均要跑數週流程</a>，這段期間你在地圖上是消失的。正確做法：店名保持乾淨，關鍵字放進商家描述和服務項目。</p>
+
+<h3>② 客人上傳的照片，權重比你自己傳的高</h3>
+<p>我們在 <a href="/blog/taiwan-gbp-algorithm-shifts-2026-observation">2026 台灣 GBP 演算法觀察</a>裡追蹤 200+ 店家數據發現：用戶上傳照片活躍的商家，排名表現明顯優於只有商家自傳照片的。邏輯不難懂——客人願意拍照上傳，是 Google 眼裡最難造假的「真實熱度」訊號。與其自己一次上傳 30 張精修圖，不如在店裡設計一個讓客人想拍照的點。</p>
+
+<h3>③ 負評好好回，比想辦法刪掉更能救排名</h3>
+<p>多數店家收到一星負評的直覺是檢舉、找方法刪。但檢舉成功率低，而且就算刪掉，對排名沒有加分。反過來，<strong>評論回覆率與回覆速度是名氣分數的一部分</strong>——一則有誠意的負評回覆，後來的客人看得到，Google 也看得到。回覆卡住不知道怎麼寫，可以用 adlo 的<a href="/tools/review-reply">評論回覆產生器</a>，30 秒生成一則不卑不亢的回覆草稿。</p>
+
+<h3>④ 主類別選最窄的，不是最寬的</h3>
+<p>「餐廳」和「拉麵店」都能選的時候，多數店家選「餐廳」，覺得涵蓋面大。實際上相反：搜「拉麵」的人，Google 優先排主類別是「拉麵店」的商家。主類別選到最精準的那一個，附加類別再放寬的。</p>
+
+<h3>⑤ 評論要「持續」，不要「爆量」</h3>
+<p>辦活動一週衝 50 則評論，然後三個月沒有新評論——這個模式對排名的幫助，低於每個月穩定進 5 則。評論的「新鮮度」是排名訊號之一，而爆量後長期空白，反而是負面模式。把請客人留評論做成日常流程（結帳時的一張 QR code 卡片），比辦一次活動有效。</p>
+
+<h2>不同行業，優先順序不一樣</h2>
+
+<table>
+  <thead><tr><th>行業</th><th>第一優先</th><th>原因</th></tr></thead>
+  <tbody>
+    <tr><td>餐飲</td><td>照片（菜色＋環境）</td><td>客人決策前一定先看照片，照片點擊率直接影響排名</td></tr>
+    <tr><td>美業（美睫／美甲／髮廊）</td><td>評論持續性</td><td>高信任決策，評論新鮮度＋數量是主要比較點</td></tr>
+    <tr><td>診所</td><td>負評回覆</td><td>一則沒回的負評，殺傷力比其他行業大；回覆品質就是專業感</td></tr>
+    <tr><td>居家服務（水電／清潔）</td><td>服務範圍＋服務項目</td><td>沒有實體到店，關聯性幾乎全靠檔案欄位</td></tr>
+  </tbody>
+</table>
+
+<figure>
+  <img src="https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=900&auto=format&fit=crop&q=80" alt="地圖與指南針，象徵找出自己行業的優化路線" loading="lazy" />
+  <figcaption>同一份優化清單，不同行業的執行順序完全不同。Photo by <a href="https://unsplash.com/@andrewtneel" target="_blank" rel="noopener">Andrew Neel</a> on Unsplash</figcaption>
+</figure>
+
+<h2>30 天行動清單</h2>
+
+<ul>
+  <li><strong>第 1 週：</strong>主類別改成最精準的；檢查店名沒有塞關鍵字；商家描述放進 3–5 個在地長尾字（例如「板橋 日式美睫」而不只是「美睫」）</li>
+  <li><strong>第 2 週：</strong>把近 90 天沒回的評論全部回完，之後維持 24 小時內回覆</li>
+  <li><strong>第 3 週：</strong>做一張評論邀請 QR code 卡片放結帳處，開始累積穩定評論流</li>
+  <li><strong>第 4 週：</strong>檢查照片：門面／產品／環境／團隊四類是否都有；設計一個客人願意拍照的點</li>
+</ul>
+
+<h2>優化之前，先知道自己現在排第幾</h2>
+
+<p>以上所有動作都有一個前提：你得知道自己現在在哪。「我搜自己店名有出現」不算——客人搜的是「產業＋地區」，而且 Google 會因為你是店主給你看偏高的排名。</p>
+
+<p>adlo 的<a href="/tools/map-visibility">地圖能見度檢測工具</a>可以直接模擬客人視角，量出你在目標關鍵字下的實際地圖排名；搭配 <a href="/check">30 秒商家健檢</a>找出六個維度裡拖後腿的那一項，你的優化順序就出來了。</p>
+
+<div class="cta-box">
+  <p>不確定該從哪一項開始？先用 <a href="/tools/map-visibility">地圖能見度檢測</a>量出你現在的排名，再用 <a href="/check">30 秒健檢</a>找出最弱的維度——兩個都免費，不用註冊。</p>
+</div>
+    `.trim(),
+    faqSchema: [
+      {
+        question: 'Google 地圖排名多久會變動一次？',
+        answer: '沒有固定週期。資料修改（類別、描述）通常數天內反映；評論與照片這類名氣訊號是持續累積的，一般需要 4–8 週才看得出排名變化。這也是為什麼優化要看 30 天以上的趨勢，而不是隔天查排名。',
+      },
+      {
+        question: '店名加上地區和服務關鍵字，真的會被 Google 處罰嗎？',
+        answer: '會。商家名稱必須與實際店面招牌／註冊名稱一致，塞關鍵字違反 Google 商家檔案規範，可能被強制修改名稱，累犯或情節嚴重會停權。關鍵字應該放在商家描述、服務項目與貼文中，而不是店名。',
+      },
+      {
+        question: '評論數量和評分，哪個對地圖排名影響比較大？',
+        answer: '兩者都屬於「名氣」訊號，但持續性比單一數字重要：每月穩定新增評論的商家，表現通常優於總數高但長期沒有新評論的商家。評分方面，4.5 星以上差異不大，低於 4.0 星則會明顯影響點擊率。',
+      },
+      {
+        question: '我的店排名一直卡在第 4 到第 10 名，該怎麼辦？',
+        answer: '這個區間通常代表基本資料已經及格，卡住的是比較性維度——評論回覆率、照片多樣性、評論新鮮度。先用地圖能見度工具確認實際排名，再比對前三名對手：找出「他們弱、你也弱」的維度優先補強，比全面重做有效率。',
+      },
+    ],
+  },
 ];
 
 export function getPostBySlug(slug: string): Post | undefined {
