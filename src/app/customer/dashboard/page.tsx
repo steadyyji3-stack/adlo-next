@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarDays, FileText, MessageSquareText, Newspaper, Star, TrendingUp } from 'lucide-react';
+import { CalendarDays, FileText, MessageSquareText, Newspaper, Star, TrendingUp, UsersRound } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -81,9 +81,14 @@ export default async function CustomerDashboardPage() {
               本頁先彙整已入庫的貼文、評論、排名與月報資料；GBP 洞察 API 串接後會補上曝光、點擊與互動指標。
             </p>
           </div>
-          <Button asChild variant="outline" className="font-bold">
-            <Link href="/onboarding">更新 onboarding</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild className="bg-[#0F6E56] font-bold text-white hover:bg-[#0B5946]">
+              <Link href="/customer/tools/synthetic-consumer"><UsersRound aria-hidden />合成消費者分析</Link>
+            </Button>
+            <Button asChild variant="outline" className="font-bold">
+              <Link href="/onboarding">更新 onboarding</Link>
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
