@@ -261,6 +261,9 @@ function ReviewsCard({ reviews, unansweredCount }: { reviews: GbpReview[]; unans
             </div>
           ))
         )}
+        <Button asChild variant="outline" className="mt-1 w-full font-bold">
+          <Link href="/customer/tools/review-workspace">開啟評論回覆工作區</Link>
+        </Button>
       </CardContent>
     </Card>
   );
