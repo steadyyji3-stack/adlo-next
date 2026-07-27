@@ -1,6 +1,22 @@
 import { z } from 'zod';
 import type { StoreProfile } from '@/lib/store-profile';
 
+export const growthVerificationPlanSchema = z.object({
+  metric: z.enum([
+    'published_asset',
+    'review_count',
+    'photo_count',
+    'messages_sent',
+    'check_score',
+    'local_rank',
+  ]),
+  method: z.enum(['url', 'before_after', 'count', 'confirmation']),
+  direction: z.enum(['increase', 'decrease', 'completion']),
+  label: z.string().trim().min(2).max(60),
+  prompt: z.string().trim().min(4).max(180),
+  unit: z.string().trim().min(1).max(16).optional(),
+}).strict();
+
 export const growthTaskSchema = z.object({
   type: z.enum([
     'gbp_post',
@@ -23,11 +39,20 @@ export const growthTaskSchema = z.object({
     usage: z.string().trim().min(4).max(160),
   })).min(1).max(3),
   successCheck: z.string().trim().min(6).max(200),
+  verification: growthVerificationPlanSchema.optional(),
 }).strict();
 
 export type GrowthTask = z.infer<typeof growthTaskSchema>;
+export type GrowthVerificationPlan = z.infer<typeof growthVerificationPlanSchema>;
 export type GrowthCycleStatus = 'ready' | 'completed';
 export type GrowthGenerationSource = 'groq' | 'template';
+export type GrowthOutcomeStatus =
+  | 'action_verified'
+  | 'verified_improvement'
+  | 'verified_no_change'
+  | 'verified_regression';
+export type GrowthConfidenceLevel = 'low' | 'medium' | 'high';
+export type GrowthNextStrategy = 'continue' | 'adjust' | 'switch' | 'measure';
 
 export interface GrowthBusinessContext {
   storeCity: string | null;
@@ -48,6 +73,47 @@ export interface GrowthCycleFeedback {
   revisions?: GrowthTaskRevision[];
 }
 
+export interface GrowthBaselineSnapshot {
+  capturedAt: string;
+  source: 'store_profile';
+  values: {
+    selectedTagCount: number;
+    channelCount: number;
+    signatureItemCount: number;
+    completedTaskCount: number;
+    verifiedImprovementCount: number;
+    hasWebsite: boolean;
+    hasGbpProfile: boolean;
+  };
+}
+
+export interface GrowthOutcomeEvidence {
+  confirmed?: boolean;
+  url?: string;
+  beforeValue?: number;
+  afterValue?: number;
+  count?: number;
+  note?: string;
+}
+
+export interface GrowthResultSnapshot {
+  submittedAt: string;
+  metric: GrowthVerificationPlan['metric'];
+  method: GrowthVerificationPlan['method'];
+  beforeValue: number | null;
+  afterValue: number | null;
+  delta: number | null;
+  count: number | null;
+  url: string | null;
+  summary: string;
+}
+
+export interface GrowthNextRecommendation {
+  strategy: GrowthNextStrategy;
+  rationale: string;
+  preferredDimension: GrowthTask['scoreDimension'];
+}
+
 export interface CustomerGrowthCycle {
   id: string;
   customer_id: string;
@@ -60,6 +126,11 @@ export interface CustomerGrowthCycle {
   generation_count: number;
   instruction: string | null;
   feedback: GrowthCycleFeedback | null;
+  baseline_snapshot?: GrowthBaselineSnapshot | null;
+  result_snapshot?: GrowthResultSnapshot | null;
+  outcome_status?: GrowthOutcomeStatus | null;
+  confidence_level?: GrowthConfidenceLevel | null;
+  next_recommendation?: GrowthNextRecommendation | null;
   completed_at: string | null;
   created_at: string;
   updated_at: string;

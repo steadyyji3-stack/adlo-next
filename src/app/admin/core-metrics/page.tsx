@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {
   CheckCircle2,
   ClipboardCheck,
-  MessageSquareText,
+  BadgeCheck,
   Repeat2,
   Sparkles,
   Store,
@@ -18,7 +18,7 @@ const funnelIcons = {
   profiled: ClipboardCheck,
   activated: Sparkles,
   completed: CheckCircle2,
-  feedback: MessageSquareText,
+  verified: BadgeCheck,
   week_two: Repeat2,
 };
 
@@ -32,7 +32,7 @@ const stageClasses = {
   profiled: 'border-sky-200 bg-sky-50 text-sky-700',
   activated: 'border-violet-200 bg-violet-50 text-violet-700',
   completed: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  feedback: 'border-amber-200 bg-amber-50 text-amber-700',
+  verified: 'border-amber-200 bg-amber-50 text-amber-700',
   week_two: 'border-teal-200 bg-teal-50 text-teal-700',
 };
 
@@ -86,6 +86,8 @@ export default async function AdminCoreMetricsPage() {
                   <TableHead>目前階段</TableHead>
                   <TableHead className="text-right">取得週數</TableHead>
                   <TableHead className="text-right">完成週數</TableHead>
+                  <TableHead className="text-right">驗收週數</TableHead>
+                  <TableHead className="text-right">改善週數</TableHead>
                   <TableHead>最近活動</TableHead>
                   <TableHead className="text-right">操作</TableHead>
                 </TableRow>
@@ -93,7 +95,7 @@ export default async function AdminCoreMetricsPage() {
               <TableBody>
                 {metrics.customers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="h-32 text-center text-slate-400">
+                    <TableCell colSpan={9} className="h-32 text-center text-slate-400">
                       尚無付費中或試用中的客戶
                     </TableCell>
                   </TableRow>
@@ -117,6 +119,8 @@ export default async function AdminCoreMetricsPage() {
                     </TableCell>
                     <TableCell className="text-right tabular-nums text-slate-700">{customer.generatedWeeks}</TableCell>
                     <TableCell className="text-right tabular-nums text-slate-700">{customer.completedWeeks}</TableCell>
+                    <TableCell className="text-right tabular-nums text-slate-700">{customer.verifiedWeeks}</TableCell>
+                    <TableCell className="text-right tabular-nums text-slate-700">{customer.improvedWeeks}</TableCell>
                     <TableCell className="whitespace-nowrap text-sm text-slate-500">
                       {formatDate(customer.lastActivityAt)}
                     </TableCell>

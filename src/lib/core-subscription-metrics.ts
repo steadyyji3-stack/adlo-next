@@ -4,7 +4,7 @@ import type { CustomerGrowthCycle } from '@/lib/customer-growth-types';
 import type { Customer, Subscription, SubscriptionStatus } from '@/lib/customers';
 import { selectRows } from '@/lib/supabase-rest';
 
-type FunnelStepId = 'subscribed' | 'profiled' | 'activated' | 'completed' | 'feedback' | 'week_two';
+type FunnelStepId = 'subscribed' | 'profiled' | 'activated' | 'completed' | 'verified' | 'week_two';
 type ActiveSubscriptionStatus = Extract<SubscriptionStatus, 'active' | 'trialing'>;
 type ActiveSubscription = Subscription & { status: ActiveSubscriptionStatus };
 
@@ -30,7 +30,8 @@ export interface CoreSubscriptionCustomer {
   stageLabel: string;
   generatedWeeks: number;
   completedWeeks: number;
-  hasFeedback: boolean;
+  verifiedWeeks: number;
+  improvedWeeks: number;
   lastActivityAt: string;
 }
 
@@ -48,7 +49,7 @@ const STAGE_LABELS: Record<FunnelStepId, string> = {
   profiled: '完成店家檔案',
   activated: '取得第一任務',
   completed: '完成任務',
-  feedback: '留下回饋',
+  verified: '完成成果驗收',
   week_two: '第二週回來',
 };
 
@@ -75,14 +76,15 @@ export async function getCoreSubscriptionMetrics(): Promise<CoreSubscriptionMetr
   const customerMetrics = paidCustomers.map((customer) => {
     const cycles = cyclesByCustomer.get(customer.id) ?? [];
     const completedCycles = cycles.filter((cycle) => cycle.status === 'completed');
-    const hasFeedback = completedCycles.some(hasWrittenFeedback);
+    const verifiedWeeks = completedCycles.filter((cycle) => Boolean(cycle.outcome_status)).length;
+    const improvedWeeks = completedCycles.filter((cycle) => cycle.outcome_status === 'verified_improvement').length;
     const distinctWeeks = new Set(cycles.map((cycle) => cycle.week_start)).size;
     const hasProfile = profileCustomerIds.has(customer.id);
     const stage = getCustomerStage({
       hasProfile,
       generatedWeeks: distinctWeeks,
       completedWeeks: completedCycles.length,
-      hasFeedback,
+      verifiedWeeks,
     });
     const subscription = activeSubscriptionByCustomer.get(customer.id)!;
 
@@ -95,7 +97,8 @@ export async function getCoreSubscriptionMetrics(): Promise<CoreSubscriptionMetr
       stageLabel: STAGE_LABELS[stage],
       generatedWeeks: distinctWeeks,
       completedWeeks: completedCycles.length,
-      hasFeedback,
+      verifiedWeeks,
+      improvedWeeks,
       lastActivityAt: latestDate([
         customer.updated_at,
         subscription.updated_at,
@@ -108,7 +111,7 @@ export async function getCoreSubscriptionMetrics(): Promise<CoreSubscriptionMetr
   const profiledCount = customerMetrics.filter((customer) => profileCustomerIds.has(customer.id)).length;
   const activatedCount = customerMetrics.filter((customer) => customer.generatedWeeks >= 1).length;
   const completedCount = customerMetrics.filter((customer) => customer.completedWeeks >= 1).length;
-  const feedbackCount = customerMetrics.filter((customer) => customer.hasFeedback).length;
+  const verifiedCount = customerMetrics.filter((customer) => customer.verifiedWeeks >= 1).length;
   const weekTwoCount = customerMetrics.filter((customer) => customer.generatedWeeks >= 2).length;
 
   return {
@@ -119,7 +122,7 @@ export async function getCoreSubscriptionMetrics(): Promise<CoreSubscriptionMetr
       createStep('profiled', '完成自助 onboarding 的店家資料', profiledCount, paidCount, '占有效訂閱'),
       createStep('activated', '至少產生一週的成長任務', activatedCount, paidCount, '占有效訂閱'),
       createStep('completed', '至少完成一週任務', completedCount, activatedCount, '占已取得任務'),
-      createStep('feedback', '完成後留下有效文字回饋', feedbackCount, completedCount, '占已完成任務'),
+      createStep('verified', '至少一週留下網址或前後數值等結構化證據', verifiedCount, completedCount, '占已完成任務'),
       createStep('week_two', '至少在兩個不同週次取得任務', weekTwoCount, activatedCount, '占已啟用客戶'),
     ],
     customers: customerMetrics,
@@ -136,10 +139,6 @@ function groupCyclesByCustomer(cycles: CustomerGrowthCycle[]) {
   return grouped;
 }
 
-function hasWrittenFeedback(cycle: CustomerGrowthCycle) {
-  return typeof cycle.feedback?.note === 'string' && cycle.feedback.note.trim().length > 0;
-}
-
 function isActiveSubscription(subscription: Subscription): subscription is ActiveSubscription {
   return ACTIVE_SUBSCRIPTION_STATUSES.has(subscription.status);
 }
@@ -148,10 +147,10 @@ function getCustomerStage(input: {
   hasProfile: boolean;
   generatedWeeks: number;
   completedWeeks: number;
-  hasFeedback: boolean;
+  verifiedWeeks: number;
 }): FunnelStepId {
   if (input.generatedWeeks >= 2) return 'week_two';
-  if (input.hasFeedback) return 'feedback';
+  if (input.verifiedWeeks >= 1) return 'verified';
   if (input.completedWeeks >= 1) return 'completed';
   if (input.generatedWeeks >= 1) return 'activated';
   if (input.hasProfile) return 'profiled';
