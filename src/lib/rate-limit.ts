@@ -65,7 +65,16 @@ export async function incrementRateLimit(
   }
 }
 
-/** Email gate 解鎖：記錄 unlocked 30 天 + 清零當前視窗計數 */
+/** Email gate 解鎖：記錄 unlocked 30 天，把當日上限由 3 提升為 10
+ *
+ * ⚠️ 這裡刻意「不」清零 countKey。舊版會 `redis.set(countKey, 0)`，
+ * 造成無限繞過：用完 3 次 → 隨便填 email 解鎖 → 計數歸零 → 再用 10 次
+ * → 再解鎖一次 → 又歸零…（email 不需驗證，同一個可重複使用）。
+ * 攻擊者可藉此把全站 Places / Groq 額度打光，工具對真實訪客整天 429。
+ *
+ * 正確語意（與檔頭註解一致）：解鎖後是「10 次 / 24h 總額」，
+ * 不是「再送 10 次」。已用掉的次數繼續計入。
+ */
 export async function unlockEmailGate(
   ip: string,
   email: string,
@@ -73,13 +82,11 @@ export async function unlockEmailGate(
 ): Promise<void> {
   const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
   const unlockKey = `adlo:${tool}:ip:${normalizedIp}:unlocked`;
-  const countKey = `adlo:${tool}:ip:${normalizedIp}:count`;
   const emailKey = `adlo:${tool}:ip:${normalizedIp}:email`;
 
   await Promise.all([
     redis.set(unlockKey, '1', { ex: 60 * 60 * 24 * 30 }), // 30 days
     redis.set(emailKey, email, { ex: 60 * 60 * 24 * 30 }),
-    redis.set(countKey, 0, { ex: WINDOW_SECONDS }),
   ]);
 }
 
