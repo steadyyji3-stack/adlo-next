@@ -63,6 +63,18 @@ Structured summaries and recommendations may be sent to Groq for the next task.
 Free-form completion notes, customer email, UUID, Stripe data, sessions, and
 credentials are not sent to Groq.
 
+## Customer evidence ledger
+
+`/customer/week` aggregates the existing cycle history into a customer-facing
+ledger. It shows completed weeks, weeks with structured evidence, observed
+improvement weeks, the current completion streak, and the next verification
+milestone.
+
+Verification maturity progresses from an execution record to structured
+evidence, one comparable before/after result, and finally multiple comparable
+weeks. The level describes evidence quality only; it does not claim causation or
+guarantee a business result.
+
 ## Audit
 
 `growth_cycle.complete` stores only task type, outcome status, confidence, metric,

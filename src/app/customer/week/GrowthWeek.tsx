@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Check, ClipboardCheck, Copy, Loader2, RefreshCw, Target } from 'lucide-react';
+import { Check, ClipboardCheck, Copy, Flame, Loader2, RefreshCw, Target, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import type { CustomerGrowthCycle } from '@/lib/customer-growth-types';
 import { verificationPlanForTask } from '@/lib/customer-growth-outcomes';
+import { buildCustomerGrowthProgress } from '@/lib/customer-growth-progress';
 
 export function GrowthWeek({
   initialCycles,
@@ -35,6 +36,8 @@ export function GrowthWeek({
   const current = cycles.find((cycle) => isCurrentWeek(cycle.week_start)) ?? null;
   const currentCompleted = current?.status === 'completed';
   const verification = current ? verificationPlanForTask(current.task) : null;
+  const progress = buildCustomerGrowthProgress(cycles);
+  const pastCycles = cycles.filter((cycle) => cycle.id !== current?.id);
 
   const generate = useCallback(async (instructionOverride?: string) => {
     setState('working'); setMessage('');
@@ -92,6 +95,34 @@ export function GrowthWeek({
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
       <div className="min-w-0">
+        <section className="mb-8 border-y border-slate-200 py-5" aria-labelledby="growth-progress-title">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-extrabold text-[#0F6E56]">累積成效帳本</p>
+              <h2 id="growth-progress-title" className="mt-1 text-lg font-extrabold text-slate-950">
+                {progress.stageLabel}
+              </h2>
+            </div>
+            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">
+              驗證進度 {verificationStageNumber(progress.stage)} / 4
+            </Badge>
+          </div>
+          <div className="mt-5 grid grid-cols-2 border-y border-slate-200 sm:grid-cols-4">
+            <ProgressMetric label="完成週數" value={progress.completedWeeks} />
+            <ProgressMetric label="有證據週數" value={progress.verifiedWeeks} />
+            <ProgressMetric label="觀察改善" value={progress.improvementWeeks} />
+            <ProgressMetric label="連續完成" value={progress.completionStreak} icon={Flame} />
+          </div>
+          <div className="mt-4 flex items-start gap-3 text-sm leading-6 text-slate-600">
+            <TrendingUp className="mt-0.5 h-4 w-4 shrink-0 text-[#1D9E75]" aria-hidden />
+            <p><strong className="text-slate-800">下一個驗收里程碑：</strong>{progress.nextMilestone}</p>
+          </div>
+          {progress.latestRecommendation && (
+            <p className="mt-2 pl-7 text-xs leading-5 text-slate-500">
+              系統目前策略：{strategyLabel(progress.latestRecommendation.strategy)}。{progress.latestRecommendation.rationale}
+            </p>
+          )}
+        </section>
         <section className="border-b border-slate-200 pb-6">
           <p className="text-xs font-extrabold text-[#0F6E56]">本週唯一任務</p>
           <h1 className="mt-2 max-w-3xl text-2xl font-extrabold text-slate-950 sm:text-3xl">
@@ -160,7 +191,7 @@ export function GrowthWeek({
         <Textarea value={instruction} onChange={(event) => setInstruction(event.target.value)} maxLength={300} disabled={currentCompleted} placeholder="例如：不要促銷，改成專業教育角度" className="mt-4 min-h-24 resize-none bg-white" />
         <Button type="button" variant="outline" onClick={() => generate()} disabled={state === 'working' || currentCompleted} className="mt-3 w-full font-bold">{state === 'working' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : currentCompleted ? <Check className="mr-2 h-4 w-4" /> : <RefreshCw className="mr-2 h-4 w-4" />}{currentCompleted ? '本週已完成' : current ? '重新產生' : '產生任務'}</Button>
         {current?.feedback?.revisions?.length ? <div className="mt-4 border-l-2 border-slate-200 pl-3"><p className="text-xs font-bold text-slate-600">已記住 {current.feedback.revisions.length} 個舊版本</p><p className="mt-1 text-xs leading-5 text-slate-400">新版本仍會參考先前任務與你的調整。</p></div> : null}
-        <div className="mt-8 border-t border-slate-200 pt-6"><h2 className="text-sm font-extrabold text-slate-950">過去任務</h2>{cycles.length === 0 ? <p className="mt-3 text-xs text-slate-500">完成第一週後會開始累積。</p> : <div className="mt-3 space-y-4">{cycles.slice(0, 8).map((cycle) => <div key={cycle.id}><p className="text-xs text-slate-400">{formatWeek(cycle.week_start)}</p><p className="mt-1 text-sm font-semibold leading-5 text-slate-700">{cycle.task.title}</p><p className="mt-1 text-xs text-slate-500">{cycle.outcome_status ? outcomeLabel(cycle.outcome_status) : cycle.status === 'completed' ? '已完成（舊版未驗證紀錄）' : '進行中'}</p>{cycle.result_snapshot?.summary ? <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">{cycle.result_snapshot.summary}</p> : cycle.feedback?.note && <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">{cycle.feedback.note}</p>}</div>)}</div>}</div>
+        <div className="mt-8 border-t border-slate-200 pt-6"><h2 className="text-sm font-extrabold text-slate-950">過去成效</h2>{pastCycles.length === 0 ? <p className="mt-3 text-xs text-slate-500">完成第一週後會開始累積。</p> : <div className="mt-3 space-y-5">{pastCycles.slice(0, 8).map((cycle) => <div key={cycle.id}><div className="flex flex-wrap items-center gap-2"><p className="text-xs text-slate-400">{formatWeek(cycle.week_start)}</p>{cycle.confidence_level && <span className="text-xs text-slate-400">證據 {confidenceLabel(cycle.confidence_level)}</span>}</div><p className="mt-1 text-sm font-semibold leading-5 text-slate-700">{cycle.task.title}</p><p className="mt-1 text-xs font-semibold text-slate-500">{cycle.outcome_status ? outcomeLabel(cycle.outcome_status) : cycle.status === 'completed' ? '已完成（舊版未驗證紀錄）' : '進行中'}</p>{cycle.result_snapshot?.summary ? <p className="mt-1 line-clamp-3 text-xs leading-5 text-slate-400">{cycle.result_snapshot.summary}</p> : cycle.feedback?.note && <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">{cycle.feedback.note}</p>}{cycle.next_recommendation && <p className="mt-1 text-xs leading-5 text-slate-500">下一步：{strategyLabel(cycle.next_recommendation.strategy)}</p>}</div>)}</div>}</div>
       </aside>
     </div>
   );
@@ -172,3 +203,6 @@ function isCurrentWeek(value: string) { const now = new Date(); const taipei = n
 function metricValue(value: string) { const normalized = value.trim(); return normalized === '' ? undefined : Number(normalized); }
 function outcomeLabel(value: NonNullable<CustomerGrowthCycle['outcome_status']>) { return ({ action_verified: '動作已驗證', verified_improvement: '觀察到改善', verified_no_change: '暫無變化', verified_regression: '需要換方向' } as const)[value]; }
 function confidenceLabel(value: NonNullable<CustomerGrowthCycle['confidence_level']>) { return ({ low: '低', medium: '中', high: '高' } as const)[value]; }
+function strategyLabel(value: NonNullable<CustomerGrowthCycle['next_recommendation']>['strategy']) { return ({ continue: '延續有效方向', adjust: '調整後再測', switch: '更換成長方向', measure: '先補量測' } as const)[value]; }
+function verificationStageNumber(value: ReturnType<typeof buildCustomerGrowthProgress>['stage']) { return ({ starting: 0, recorded: 1, verified: 2, comparable: 3, repeatable: 4 } as const)[value]; }
+function ProgressMetric({ label, value, icon: Icon }: { label: string; value: number; icon?: typeof Flame }) { return <div className="min-w-0 border-slate-200 px-3 py-3 odd:border-r sm:border-r sm:last:border-r-0"><p className="flex items-center gap-1 text-xs font-semibold text-slate-500">{Icon && <Icon className="h-3.5 w-3.5" aria-hidden />}{label}</p><p className="mt-1 text-xl font-extrabold tabular-nums text-slate-950">{value}<span className="ml-1 text-xs font-semibold text-slate-400">週</span></p></div>; }
