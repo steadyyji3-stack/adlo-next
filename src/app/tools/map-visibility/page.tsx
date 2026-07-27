@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import MapVisibilityFlow from '@/components/map-visibility/MapVisibilityFlow';
 import MapVisibilityFAQ from '@/components/map-visibility/MapVisibilityFAQ';
 import { MAP_VISIBILITY_FAQS } from '@/components/map-visibility/faq-data';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 Google 地圖曝光優化清單｜店家被找到的行動待辦',
@@ -37,6 +38,7 @@ export default function MapVisibilityPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <MapVisibilityFlow />
+      <ToolNextSteps current="map-visibility" />
       <MapVisibilityFAQ />
     </>
   );
