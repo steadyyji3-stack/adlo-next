@@ -233,19 +233,37 @@ export async function completeSelfServeOnboarding(input: {
     onboarding_status: 'approved',
     service_status: hasActiveSubscription ? 'active' : existingCustomer.service_status,
   });
+  if (!customer) {
+    throw new Error('Customer update failed');
+  }
 
-  const submission = await insertRow<OnboardingSubmission>('onboarding_submissions', {
-    customer_id: input.customerId,
-    status: 'approved',
+  const existingSubmission = existingCustomer.onboarding_submissions.find(
+    (submission) => submission.reviewed_by === 'system:self_service',
+  );
+  const submissionData = {
+    status: 'approved' as const,
     ga4_property_id: null,
     meta_page_id: null,
     meta_admin_status: null,
     notes: input.notes || null,
     reviewed_by: 'system:self_service',
     reviewed_at: new Date().toISOString(),
-  });
+  };
+  const submission = existingSubmission
+    ? (await updateRows<OnboardingSubmission>(
+      'onboarding_submissions',
+      { id: existingSubmission.id, customer_id: input.customerId },
+      submissionData,
+    ))[0]
+    : await insertRow<OnboardingSubmission>('onboarding_submissions', {
+      customer_id: input.customerId,
+      ...submissionData,
+    });
+  if (!submission) {
+    throw new Error('Onboarding submission write failed');
+  }
 
-  return { customer, submission, profile };
+  return { customer, submission, profile, submissionCreated: !existingSubmission };
 }
 
 export async function approveCustomerOnboarding(customerId: string, reviewer: string) {

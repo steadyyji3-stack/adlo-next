@@ -39,15 +39,19 @@ Raw customer_id query strings are not trusted.
 - Resolves customerId from the Auth.js session.
 - Persists the Track A StoreProfile shape unchanged in customer_store_profiles.profile.
 - Updates the matching customers contact and store summary fields.
-- Creates an already-approved onboarding_submissions history row.
+- Creates one already-approved onboarding_submissions history row on first completion.
+- Repeated submissions update the same self-service history row instead of creating duplicates.
 - Activates service when the customer has an active or trialing subscription.
-- Writes audit_log action onboarding.complete.
+- Writes audit_log action onboarding.complete on first completion and onboarding.update on later saves.
 - Does not request or store OAuth credentials.
 - Does not require admin review.
 
 ## Response
 
-    { "ok": true, "customer": {}, "submission": {}, "profile": {} }
+    { "ok": true, "customer": {}, "submission": {}, "profile": {}, "submissionCreated": true }
+
+The first completion returns `201`. A later self-service update returns `200`
+with `submissionCreated: false`.
 
 Errors use:
 
