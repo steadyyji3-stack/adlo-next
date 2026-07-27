@@ -6,7 +6,22 @@ import { currentTaipeiGrowthWeekStart } from '@/lib/customer-growth-cycles';
 import { selectRows } from '@/lib/supabase-rest';
 
 const DIGEST_ACTION = 'customer.weekly_digest.sent';
+const DIGEST_FAILED_ACTION = 'customer.weekly_digest.failed';
 const SEND_INTERVAL_MS = 600;
+
+type WeeklyDigestFailureCode =
+  | 'RESEND_API_KEY_MISSING'
+  | 'SITE_URL_INVALID'
+  | 'RESEND_REJECTED'
+  | 'RESEND_RESPONSE_INVALID'
+  | 'SENT_AUDIT_FAILED'
+  | 'UNEXPECTED_FAILURE';
+
+class WeeklyDigestError extends Error {
+  constructor(public readonly code: WeeklyDigestFailureCode) {
+    super(code);
+  }
+}
 
 interface DigestCustomerRow {
   id: string;
@@ -38,6 +53,7 @@ export interface WeeklyDigestResult {
   eligible: number;
   sent: number;
   failed: number;
+  failureReasons: Partial<Record<WeeklyDigestFailureCode, number>>;
   skipped: {
     profileRequired: number;
     currentTaskExists: number;
@@ -46,6 +62,7 @@ export interface WeeklyDigestResult {
 }
 
 export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyDigestResult> {
+  assertWeeklyDigestConfiguration();
   const weekStart = currentTaipeiGrowthWeekStart(now);
   const [
     customers,
@@ -94,22 +111,31 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
 
   let sent = 0;
   let failed = 0;
+  const failureReasons: Partial<Record<WeeklyDigestFailureCode, number>> = {};
   for (const [index, customer] of eligibleCustomers.entries()) {
     try {
       const messageId = await sendWeeklyDigest(customer, weekStart);
-      await writeAuditLog({
-        actor: 'system:weekly-digest',
-        action: DIGEST_ACTION,
-        targetType: 'customer',
-        targetId: customer.id,
-        payload: {
-          week_start: weekStart,
-          provider_message_id: messageId,
-        },
-      });
+      try {
+        await writeAuditLog({
+          actor: 'system:weekly-digest',
+          action: DIGEST_ACTION,
+          targetType: 'customer',
+          targetId: customer.id,
+          payload: {
+            week_start: weekStart,
+            provider_message_id: messageId,
+          },
+        });
+      } catch {
+        throw new WeeklyDigestError('SENT_AUDIT_FAILED');
+      }
       sent += 1;
-    } catch {
+    } catch (error) {
+      const code = getWeeklyDigestFailureCode(error);
       failed += 1;
+      failureReasons[code] = (failureReasons[code] ?? 0) + 1;
+      console.error(`[WeeklyDigest] delivery failed customer=${customer.id} week=${weekStart} code=${code}`);
+      await recordDigestFailure(customer.id, weekStart, code);
     }
 
     if (index < eligibleCustomers.length - 1) {
@@ -123,6 +149,7 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
     eligible: eligibleCustomers.length,
     sent,
     failed,
+    failureReasons,
     skipped: {
       profileRequired: activeCustomers.filter((customer) => !profileCustomerIds.has(customer.id)).length,
       currentTaskExists: activeCustomers.filter((customer) => currentCycleCustomerIds.has(customer.id)).length,
@@ -133,7 +160,7 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
 
 async function sendWeeklyDigest(customer: DigestCustomerRow, weekStart: string) {
   const key = process.env.RESEND_API_KEY;
-  if (!key) throw new Error('RESEND_API_KEY is required for weekly digest');
+  if (!key) throw new WeeklyDigestError('RESEND_API_KEY_MISSING');
 
   const response = await new Resend(key).emails.send(
     {
@@ -147,8 +174,49 @@ async function sendWeeklyDigest(customer: DigestCustomerRow, weekStart: string) 
     },
   );
 
-  if (response.error) throw new Error('Resend weekly digest failed');
+  if (response.error) throw new WeeklyDigestError('RESEND_REJECTED');
+  if (!response.data?.id) throw new WeeklyDigestError('RESEND_RESPONSE_INVALID');
   return response.data.id;
+}
+
+function assertWeeklyDigestConfiguration() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new WeeklyDigestError('RESEND_API_KEY_MISSING');
+  }
+
+  try {
+    const url = new URL(siteUrl());
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
+      throw new Error('unsafe site URL');
+    }
+  } catch {
+    throw new WeeklyDigestError('SITE_URL_INVALID');
+  }
+}
+
+export function getWeeklyDigestFailureCode(error: unknown): WeeklyDigestFailureCode {
+  return error instanceof WeeklyDigestError ? error.code : 'UNEXPECTED_FAILURE';
+}
+
+async function recordDigestFailure(
+  customerId: string,
+  weekStart: string,
+  errorCode: WeeklyDigestFailureCode,
+) {
+  try {
+    await writeAuditLog({
+      actor: 'system:weekly-digest',
+      action: DIGEST_FAILED_ACTION,
+      targetType: 'customer',
+      targetId: customerId,
+      payload: {
+        week_start: weekStart,
+        error_code: errorCode,
+      },
+    });
+  } catch {
+    console.error(`[WeeklyDigest] failed audit unavailable customer=${customerId} week=${weekStart} code=${errorCode}`);
+  }
 }
 
 function weeklyDigestEmail(customer: DigestCustomerRow) {

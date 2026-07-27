@@ -1,5 +1,8 @@
 import { timingSafeEqual } from 'node:crypto';
-import { runCustomerWeeklyDigest } from '@/lib/customer-weekly-digest';
+import {
+  getWeeklyDigestFailureCode,
+  runCustomerWeeklyDigest,
+} from '@/lib/customer-weekly-digest';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -16,10 +19,11 @@ export async function GET(request: Request) {
       { ok: result.failed === 0, ...result },
       { status: result.failed === 0 ? 200 : 500 },
     );
-  } catch {
-    console.error('[WeeklyDigest] cron run failed');
+  } catch (error) {
+    const errorCode = getWeeklyDigestFailureCode(error);
+    console.error(`[WeeklyDigest] cron run failed code=${errorCode}`);
     return Response.json(
-      { ok: false, error: { code: 'WEEKLY_DIGEST_FAILED' } },
+      { ok: false, error: { code: 'WEEKLY_DIGEST_FAILED', reason: errorCode } },
       { status: 500 },
     );
   }

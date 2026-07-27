@@ -3,8 +3,10 @@ import { apiError, apiOk } from '@/lib/api-response';
 import { writeAuditLog } from '@/lib/audit-log';
 import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { generateWeeklyGrowthTask } from '@/lib/customer-growth-agent';
+import { acquireGrowthGenerationLease } from '@/lib/customer-growth-lock';
 import {
   completeCustomerGrowthCycle,
+  currentTaipeiGrowthWeekStart,
   getCurrentCustomerGrowthCycle,
   listCustomerGrowthCycles,
   saveCustomerGrowthCycle,
@@ -42,47 +44,60 @@ export async function POST(request: Request) {
     if (body === null) return apiError('INVALID_JSON', '請求格式不正確', 400);
     const parsed = generateSchema.safeParse(body);
     if (!parsed.success) return apiError('VALIDATION_FAILED', '調整指示不可超過 300 字', 400);
-    const [profile, current, history] = await Promise.all([
-      getCustomerStoreProfile(access.customerId),
-      getCurrentCustomerGrowthCycle(access.customerId),
-      listCustomerGrowthCycles(access.customerId),
-    ]);
-    if (!profile) return apiError('STORE_PROFILE_REQUIRED', '請先完成店家檔案', 409);
-    if (current?.status === 'completed') {
-      return apiError('GROWTH_CYCLE_ALREADY_COMPLETED', '本週任務已完成，下週會產生新任務', 409);
+    const weekStart = currentTaipeiGrowthWeekStart();
+    const lease = await acquireGrowthGenerationLease(access.customerId, weekStart);
+    if (lease.status === 'busy') {
+      return apiError('GROWTH_GENERATION_IN_PROGRESS', '本週任務正在準備，請稍後再試', 409);
     }
-    const generationCount = (current?.generation_count ?? 0) + 1;
-    if (generationCount > 4) return apiError('WEEKLY_GENERATION_LIMIT', '本週已調整 3 次，下週會產生新任務', 429);
+    if (lease.status === 'unavailable') {
+      return apiError('GROWTH_GENERATION_UNAVAILABLE', '本週任務服務暫時忙碌，請稍後再試', 503);
+    }
 
-    const generated = await generateWeeklyGrowthTask({
-      profile,
-      history,
-      instruction: parsed.data.instruction,
-      business: {
-        storeCity: access.customer.store_city,
-        hasWebsite: Boolean(access.customer.website_url),
-        hasGbpProfile: Boolean(access.customer.gbp_url),
-        signatureItems: access.customer.signature_items ?? [],
-      },
-    });
-    const cycle = await saveCustomerGrowthCycle({
-      customerId: access.customerId,
-      profile,
-      task: generated.task,
-      evidence: generated.evidence,
-      source: generated.source,
-      instruction: parsed.data.instruction,
-      generationCount,
-      previousCycle: current,
-    });
-    await writeAuditLog({
-      actor: `customer:${access.customerId}`,
-      action: current ? 'growth_cycle.regenerate' : 'growth_cycle.generate',
-      targetType: 'growth_cycle',
-      targetId: cycle.id,
-      payload: { week_start: cycle.week_start, task_type: cycle.task.type, source: generated.source },
-    });
-    return apiOk({ cycle }, current ? 200 : 201);
+    try {
+      const [profile, current, history] = await Promise.all([
+        getCustomerStoreProfile(access.customerId),
+        getCurrentCustomerGrowthCycle(access.customerId),
+        listCustomerGrowthCycles(access.customerId),
+      ]);
+      if (!profile) return apiError('STORE_PROFILE_REQUIRED', '請先完成店家檔案', 409);
+      if (current?.status === 'completed') {
+        return apiError('GROWTH_CYCLE_ALREADY_COMPLETED', '本週任務已完成，下週會產生新任務', 409);
+      }
+      const generationCount = (current?.generation_count ?? 0) + 1;
+      if (generationCount > 4) return apiError('WEEKLY_GENERATION_LIMIT', '本週已調整 3 次，下週會產生新任務', 429);
+
+      const generated = await generateWeeklyGrowthTask({
+        profile,
+        history,
+        instruction: parsed.data.instruction,
+        business: {
+          storeCity: access.customer.store_city,
+          hasWebsite: Boolean(access.customer.website_url),
+          hasGbpProfile: Boolean(access.customer.gbp_url),
+          signatureItems: access.customer.signature_items ?? [],
+        },
+      });
+      const cycle = await saveCustomerGrowthCycle({
+        customerId: access.customerId,
+        profile,
+        task: generated.task,
+        evidence: generated.evidence,
+        source: generated.source,
+        instruction: parsed.data.instruction,
+        generationCount,
+        previousCycle: current,
+      });
+      await writeAuditLog({
+        actor: `customer:${access.customerId}`,
+        action: current ? 'growth_cycle.regenerate' : 'growth_cycle.generate',
+        targetType: 'growth_cycle',
+        targetId: cycle.id,
+        payload: { week_start: cycle.week_start, task_type: cycle.task.type, source: generated.source },
+      });
+      return apiOk({ cycle }, current ? 200 : 201);
+    } finally {
+      await lease.release();
+    }
   } catch (error) {
     console.error('[GrowthCycle] generate failed', error instanceof Error ? error.message : 'unknown error');
     return apiError('GROWTH_CYCLE_GENERATE_FAILED', '產生本週任務失敗', 500);
