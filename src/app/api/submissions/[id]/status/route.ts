@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { readSubmissions, writeSubmissions } from '@/lib/submissions';
 import { SubmissionStatus } from '@/lib/types';
+import { isAdminRequest } from '@/lib/admin-auth';
 
 const VALID_STATUSES: SubmissionStatus[] = ['new', 'contacted', 'done'];
 
@@ -8,6 +9,10 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!isAdminRequest(req)) {
+    return NextResponse.json({ error: '請先登入後台' }, { status: 401 });
+  }
+
   try {
     const { id } = await params;
     const { status } = await req.json();
