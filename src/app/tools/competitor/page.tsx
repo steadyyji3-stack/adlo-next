@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import CompetitorFlow from '@/components/competitor/CompetitorFlow';
 import CompetitorFAQ from '@/components/competitor/CompetitorFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 競爭對手雷達圖｜你 vs 同區 3 家，30 秒看清差距',
@@ -22,6 +23,7 @@ export default function CompetitorPage() {
   return (
     <>
       <CompetitorFlow />
+      <ToolNextSteps current="competitor" />
       <CompetitorFAQ />
     </>
   );

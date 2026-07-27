@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import ReviewReplyFlow from '@/components/review-reply/ReviewReplyFlow';
 import ReviewReplyFAQ from '@/components/review-reply/ReviewReplyFAQ';
 import { REVIEW_REPLY_FAQS } from '@/components/review-reply/faq-data';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費評論回覆產生器｜Google 評論 3 種回覆，好評負評都能回',
@@ -37,6 +38,7 @@ export default function ReviewReplyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <ReviewReplyFlow />
+      <ToolNextSteps current="review-reply" />
       <ReviewReplyFAQ />
     </>
   );

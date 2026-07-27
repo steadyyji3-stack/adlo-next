@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import ReviewLinkFlow from '@/components/review-link/ReviewLinkFlow';
 import ReviewLinkFAQ from '@/components/review-link/ReviewLinkFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費評論收集連結 + QR Code + 訊息模板｜3 秒產出全套素材',
@@ -22,6 +23,7 @@ export default function ReviewLinkPage() {
   return (
     <>
       <ReviewLinkFlow />
+      <ToolNextSteps current="review-link" />
       <ReviewLinkFAQ />
     </>
   );

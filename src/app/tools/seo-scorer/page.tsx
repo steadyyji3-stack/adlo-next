@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import SeoScorerFlow from '@/components/seo-scorer/SeoScorerFlow';
 import SeoScorerFAQ from '@/components/seo-scorer/SeoScorerFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 SEO 文章計分器｜貼 URL 即時拿 10 維度分數 + 3 個最該先改',
@@ -22,6 +23,7 @@ export default function SeoScorerPage() {
   return (
     <>
       <SeoScorerFlow />
+      <ToolNextSteps current="seo-scorer" />
       <SeoScorerFAQ />
     </>
   );
