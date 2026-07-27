@@ -911,6 +911,76 @@ export const danKoeIssues: DanKoeIssue[] = [
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────
+     Issue #12  |  2026-W30  |  專注，是這個時代最稀有的技能
+  ───────────────────────────────────────────────────────────── */
+  {
+    week: '2026-w30',
+    issueNumber: 12,
+    theme: '專注，正在變成地表最稀有的技能——而它可以練',
+    publishedAt: '2026-07-24',
+    summary:
+      'AI 讓「做出東西」變得零成本，於是稀缺的不再是產能，是專注。本期 5 則 Dan Koe 原文，全部出自他官網 how-to-master-your-focus 與官方 Substack，皆可查證。核心是：專注不是天賦，是可練的技能。落地到台灣店家——與其每天被通知拉著跑、行銷做一半就分心，不如每天一小時把 Google 商家、內容、客人關係做深。1 小時無干擾的專注，抵得過 8 小時被切碎的忙。',
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&auto=format&fit=crop&q=80',
+      alt: '一個人盤腿靜坐、專注呼吸——象徵把注意力收回到一件事上',
+      credit: 'Jared Rice',
+      creditUrl: 'https://unsplash.com/@jareddrice',
+    },
+    posts: [
+      {
+        id: 'w30-01',
+        original: `Focus is becoming the rarest skill on the planet. Talent, intelligence, marketing, prompting, vibe coding, and whatever else doesn't matter as much as being able to channel your attention for an extended period of time into one useful thing that you want to see in the world.`,
+        translation:
+          '專注正在變成地表最稀有的技能。才華、智商、行銷、下 prompt、憑感覺寫程式，這些都比不上一件事：能把你的注意力，長時間灌注在一件你真正想做出來的事情上。',
+        insight:
+          '這句話對台灣店家是一記當頭棒喝。你缺的從來不是「再學一個行銷技巧」——你缺的是坐下來把一件事做完的整段時間。今天發限動、明天跟風做 Reels、後天又想弄 LINE 群，每個都做三天。與其這樣，不如選一件（多數店家答案是 Google 商家）連續做滿一季。稀缺的不是方法，是專注。',
+        xUrl: 'https://substack.com/@thedankoe/note/c-213741865',
+        postedAt: '2026-02-12',
+      },
+      {
+        id: 'w30-02',
+        original: `There is one thing that separates human beings the most from other species: Depth of focus.`,
+        translation:
+          '人類和其他物種最大的差別，就是專注的深度。',
+        insight:
+          '深度，是小店對抗連鎖與平台的唯一武器。大公司有預算買廣告買曝光，但它沒辦法像你一樣，記得熟客上次剪的長度、知道哪桌客人不吃香菜。這種深度來自你把注意力真正放在「人」上。把這份深度寫進商家檔案、貼文、評論回覆——那是演算法也複製不走的東西。',
+        xUrl: 'https://thedankoe.com/letters/how-to-master-your-focus/',
+        postedAt: '2022-07-09',
+      },
+      {
+        id: 'w30-03',
+        original: `Narrow, unconscious focus leads to stress, anxiety, reactivity, and annoyance.`,
+        translation:
+          '狹窄而無意識的專注，會帶來壓力、焦慮、被動反應和煩躁。',
+        insight:
+          'Dan Koe 說的「無意識的專注」，就是老闆最熟悉的狀態：手機一響就看、訊息一來就回、被每一件小事牽著走，一天過完卻說不出做了什麼重要的事。這不是專注，是被劫持。試試把「回覆客訊」集中在固定兩個時段處理，其餘時間讓通知靜音——你會發現行銷任務終於推得動了。',
+        xUrl: 'https://thedankoe.com/letters/how-to-master-your-focus/',
+        postedAt: '2022-07-09',
+      },
+      {
+        id: 'w30-04',
+        original: `You'd be surprised how much you can get done with 1 hour of uninterrupted focus.`,
+        translation:
+          '你會很驚訝，一小時不被打斷的專注，能完成多少事。',
+        insight:
+          '很多店家覺得「經營網路行銷」是個沒完沒了的大工程，所以一直拖。其實不是。一小時不被打斷，你可以：更新完整商家資訊、上傳 10 張分類照片、回完一週的評論、寫好三則貼文。關鍵字是「不被打斷」。挑店裡最冷的那個時段，門口掛個牌子，一週給自己一個這樣的小時。',
+        xUrl: 'https://thedankoe.com/letters/how-to-master-your-focus/',
+        postedAt: '2022-07-09',
+      },
+      {
+        id: 'w30-05',
+        original: `Focus, in my definition, is conscious attention. You can get 8 hours of work done in 2.`,
+        translation:
+          '我對專注的定義是：有意識的注意力。你可以用 2 小時，完成原本要花 8 小時的工作。',
+        insight:
+          '「用 2 小時做完 8 小時的事」不是雞湯，是把注意力集中的直接結果。落到經營上：與其每天零碎地滑手機看同行、隨手發點什麼，不如每週固定一段有意識的時間，一次把商家經營、內容、客人回覆做深做透。做一次、做對，效果撐好幾個月，把行銷變成可累積的資產，而不是每天重來的勞動。',
+        xUrl: 'https://thedankoe.com/letters/how-to-master-your-focus/',
+        postedAt: '2022-07-09',
+      },
+    ],
+  },
 ];
 
 export function getAllIssues(): DanKoeIssue[] {

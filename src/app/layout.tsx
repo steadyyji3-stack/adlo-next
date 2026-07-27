@@ -9,8 +9,15 @@ import ClickTracker from '@/components/tracking/ClickTracker';
 // .trim() 防禦：env 值若夾帶換行/空白（例如貼進 Vercel 時多了 \n），
 // 會讓 @next/third-parties 內嵌的 GTM/GA script 字串斷行 → SyntaxError →
 // 整棵 hydration 中斷 → 依賴 client JS 的 Hero（framer-motion）卡在 opacity:0。
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID?.trim();
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID?.trim();
+// GTM/GA4 ID 為公開識別碼（見 docs/gtm-setup-guide.md）。
+// 環境變數優先；未設定時只在 production 使用預設值，避免 preview/本機資料污染正式報表。
+const IS_PROD_DEPLOY =
+  process.env.VERCEL_ENV === 'production' ||
+  (!process.env.VERCEL_ENV && process.env.NODE_ENV === 'production');
+const GA_ID =
+  process.env.NEXT_PUBLIC_GA_ID?.trim() || (IS_PROD_DEPLOY ? 'G-NJ13ZSMK7W' : undefined);
+const GTM_ID =
+  process.env.NEXT_PUBLIC_GTM_ID?.trim() || (IS_PROD_DEPLOY ? 'GTM-WN4QZF7D' : undefined);
 
 const inter = Inter({
   subsets: ['latin'],

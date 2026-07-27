@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import LineBroadcastFlow from '@/components/line-broadcast/LineBroadcastFlow';
 import LineBroadcastFAQ from '@/components/line-broadcast/LineBroadcastFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 LINE 推播文案產生器｜下週 7 天 LINE OA 推播 3 秒寫完',
@@ -22,6 +23,7 @@ export default function LineBroadcastPage() {
   return (
     <main>
       <LineBroadcastFlow />
+      <ToolNextSteps current="line-broadcast" />
       <LineBroadcastFAQ />
     </main>
   );

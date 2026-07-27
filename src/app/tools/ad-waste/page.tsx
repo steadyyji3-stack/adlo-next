@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import AdWasteFlow from '@/components/ad-waste/AdWasteFlow';
 import AdWasteFAQ from '@/components/ad-waste/AdWasteFAQ';
 import { AD_WASTE_FAQS } from '@/components/ad-waste/faq-data';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費 Google 廣告浪費估算器｜30 秒看你每月漏掉多少錢',
@@ -37,6 +38,7 @@ export default function AdWastePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <AdWasteFlow />
+      <ToolNextSteps current="ad-waste" />
       <AdWasteFAQ />
     </>
   );

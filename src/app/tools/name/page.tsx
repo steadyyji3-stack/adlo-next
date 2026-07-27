@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import NameGeneratorFlow from '@/components/name-generator/NameGeneratorFlow';
 import NameGeneratorFAQ from '@/components/name-generator/NameGeneratorFAQ';
+import ToolNextSteps from '@/components/shared/ToolNextSteps';
 
 export const metadata: Metadata = {
   title: '免費店名 Slogan 產生器｜15 組命名 + 10 組 slogan，每組附說明',
@@ -22,6 +23,7 @@ export default function NameGeneratorPage() {
   return (
     <>
       <NameGeneratorFlow />
+      <ToolNextSteps current="name" />
       <NameGeneratorFAQ />
     </>
   );
