@@ -6,6 +6,7 @@ import {
   sendBillingLifecycleEmail,
   type BillingLifecycleMessage,
 } from '@/lib/billing-lifecycle-email';
+import { getInvoiceSubscriptionId } from '@/lib/billing-lifecycle';
 import {
   getCustomerDetail,
   getSubscriptionByStripeId,
@@ -301,14 +302,6 @@ async function handleSubscriptionUpdated(
       accessUntil: syncedSubscription.current_period_end,
     });
   }
-}
-
-function getInvoiceSubscriptionId(invoice: Stripe.Invoice) {
-  const source = invoice as Stripe.Invoice & {
-    subscription?: string | { id?: string } | null;
-  };
-  if (typeof source.subscription === 'string') return source.subscription;
-  return source.subscription?.id ?? null;
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {

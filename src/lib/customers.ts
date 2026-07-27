@@ -1,4 +1,5 @@
 import 'server-only';
+import { serviceStatusForSubscription } from '@/lib/billing-lifecycle';
 import { insertRow, selectRows, updateRows, upsertRow } from '@/lib/supabase-rest';
 
 export type OnboardingStatus = 'not_started' | 'pending_review' | 'approved' | 'needs_revision' | 'rejected';
@@ -155,18 +156,19 @@ export async function syncExistingSubscription(input: {
     },
   );
 
-  await updateCustomer(existing.customer_id, {
-    service_status: serviceStatusForSubscription(input.status),
-  });
+  const [customer] = await selectRows<Pick<Customer, 'onboarding_status' | 'service_status'>>(
+    'customers',
+    { id: existing.customer_id },
+    { select: 'onboarding_status,service_status', limit: 1 },
+  );
+  if (customer) {
+    const nextServiceStatus = serviceStatusForSubscription(input.status, customer.onboarding_status);
+    if (customer.service_status !== nextServiceStatus) {
+      await updateCustomer(existing.customer_id, { service_status: nextServiceStatus });
+    }
+  }
 
   return subscription ?? null;
-}
-
-function serviceStatusForSubscription(status: SubscriptionStatus): ServiceStatus {
-  // Keep access during Stripe's configured payment-recovery grace period.
-  if (status === 'active' || status === 'trialing' || status === 'past_due') return 'active';
-  if (status === 'cancelled') return 'cancelled';
-  return 'paused';
 }
 
 export async function listCustomers(filters: { status?: string; plan?: string } = {}) {

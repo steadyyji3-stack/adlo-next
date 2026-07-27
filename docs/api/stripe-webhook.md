@@ -49,14 +49,14 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 
 `invoice.payment_succeeded`:
 
-- Finds the local subscription from the invoice subscription id when Stripe provides it.
+- Finds the local subscription from Stripe v22's `invoice.parent.subscription_details.subscription`, with compatibility for legacy `invoice.subscription` events.
 - Retrieves the Stripe subscription and syncs status, plan, current period, trial end, and cancellation timestamp.
 - Writes `audit_log` action `stripe.invoice.payment_succeeded`.
 - If this invoice recovers a failed payment, sends an idempotent payment-recovered email.
 
 `invoice.payment_failed`:
 
-- Finds the local subscription from the invoice subscription id when Stripe provides it.
+- Finds the local subscription from the current or legacy Stripe invoice shape.
 - Sets local subscription status to `past_due`.
 - Keeps the related customer service status active while Stripe reports `past_due`, so one failed charge does not immediately remove access.
 - Writes `audit_log` action `stripe.invoice.payment_failed`.
@@ -75,6 +75,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Configure Stripe Smart Retries / revenue recovery to use the approved seven-day recovery window.
 - `past_due` keeps product access during that recovery window.
 - `unpaid`, `paused`, or `cancelled` changes the customer service status away from active.
+- Active, trialing, and past-due billing states do not bypass onboarding: only an approved customer becomes active; pending onboarding/review states remain gated.
 - Email links never contain a customer id, Stripe portal session URL, or reusable customer credential.
 - Resend idempotency keys use the Stripe invoice or subscription reference so webhook retries do not duplicate customer email.
 - Trial-ending reminders are keyed by Stripe subscription id plus trial end date and are not sent for subscriptions already scheduled to cancel.
