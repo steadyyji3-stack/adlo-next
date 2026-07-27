@@ -16,18 +16,22 @@ const onboardingSchema = z.object({
   lineId: z.string().trim().max(80).optional(),
   signatureItems: z.array(z.string().trim().min(1).max(80)).min(1).max(5),
   notes: z.string().trim().max(1200).optional(),
-});
+}).strict();
 
 export async function POST(request: NextRequest) {
   try {
-    const parsed = onboardingSchema.safeParse(await request.json());
-    if (!parsed.success) {
-      return apiError('VALIDATION_FAILED', parsed.error.issues[0]?.message ?? '表單資料不完整', 400);
-    }
-
     const customerId = await getCustomerIdFromSession();
     if (!customerId) {
       return apiError('UNAUTHORIZED', '請先登入客戶後台', 401);
+    }
+
+    const body = await readJson(request);
+    if (body === null) {
+      return apiError('INVALID_JSON', '請求格式不正確', 400);
+    }
+    const parsed = onboardingSchema.safeParse(body);
+    if (!parsed.success) {
+      return apiError('VALIDATION_FAILED', parsed.error.issues[0]?.message ?? '表單資料不完整', 400);
     }
 
     const existingCustomer = await getCustomerDetail(customerId);
@@ -42,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     await writeAuditLog({
       actor: `customer:${customerId}`,
-      action: 'onboarding.complete',
+      action: result.submissionCreated ? 'onboarding.complete' : 'onboarding.update',
       targetType: 'customer',
       targetId: customerId,
       payload: {
@@ -59,11 +63,20 @@ export async function POST(request: NextRequest) {
         customer: result.customer,
         submission: result.submission,
         profile: result.profile,
+        submissionCreated: result.submissionCreated,
       },
-      201,
+      result.submissionCreated ? 201 : 200,
     );
   } catch (error) {
     console.error('[Onboarding] submit failed', error instanceof Error ? error.message : 'unknown error');
     return apiError('ONBOARDING_SUBMIT_FAILED', '送出 onboarding 表單失敗', 500);
+  }
+}
+
+async function readJson(request: Request) {
+  try {
+    return await request.json() as unknown;
+  } catch {
+    return null;
   }
 }

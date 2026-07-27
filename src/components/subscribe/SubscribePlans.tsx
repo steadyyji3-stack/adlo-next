@@ -224,7 +224,7 @@ export default function SubscribePlans() {
                   登記開台 Waitlist
                 </h3>
                 <p className="text-sm text-slate-500">
-                  60 天後正式開台 · 首月 6 折 · 可隨時取消
+                  開台前寄信通知 · 首月 6 折 · 可隨時取消
                 </p>
               </div>
 
