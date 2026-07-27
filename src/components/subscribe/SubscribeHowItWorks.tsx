@@ -8,7 +8,7 @@ const steps = [
   },
   {
     icon: Rocket,
-    title: '開台啟動（60 天後）',
+    title: '開台啟動',
     body: 'adlo 金流上線後，一鍵完成扣款與首次設定，不用合約、不綁約。',
   },
   {

@@ -5,7 +5,7 @@ export default function SubscribeHero() {
     <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 via-white to-emerald-50/50 py-20 sm:py-28">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <Badge className="bg-[#E1F5EE] text-[#0F6E56] border-[#1D9E75]/30 text-xs font-bold mb-5">
-          開台 Waitlist · 60 天後正式上線
+          開台 Waitlist · 名額預留中
         </Badge>
         <h1
           className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-5 leading-[1.15]"
