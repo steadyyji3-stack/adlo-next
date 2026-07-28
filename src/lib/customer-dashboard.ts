@@ -3,6 +3,10 @@ import { selectRows } from '@/lib/supabase-rest';
 import { getCustomerDetail, type CustomerDetail } from '@/lib/customers';
 import { currentTaipeiGrowthWeekStart, listCustomerGrowthCycles } from '@/lib/customer-growth-cycles';
 import { getCustomerStoreProfile } from '@/lib/customer-store-profile';
+import {
+  buildCustomerInstantDeliverable,
+  type CustomerInstantDeliverable,
+} from '@/lib/customer-instant-value';
 import { buildCustomerQuickstart, type CustomerQuickstart } from '@/lib/customer-quickstart';
 import type { CustomerGrowthCycle } from '@/lib/customer-growth-types';
 
@@ -71,6 +75,7 @@ export interface CustomerDashboardData {
   reviews: GbpReview[];
   rankings: KeywordRanking[];
   reports: MonthlyReport[];
+  instantDeliverable: CustomerInstantDeliverable | null;
   quickstart: CustomerQuickstart;
   kpis: {
     postsThisMonth: number;
@@ -106,6 +111,12 @@ export async function getCustomerDashboardData(customerId: string): Promise<Cust
     reviews: reviews.slice(0, 8),
     rankings: rankings.slice(0, 12),
     reports,
+    instantDeliverable: storeProfile ? buildCustomerInstantDeliverable({
+      profile: storeProfile,
+      city: customer.store_city,
+      signatureItems: customer.signature_items,
+      reviewUrl: customer.gbp_url,
+    }) : null,
     quickstart: buildCustomerQuickstart(storeProfile, growthCycles),
     kpis: buildDashboardKpis(posts, reviews, rankings),
   };

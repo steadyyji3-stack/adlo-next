@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { getCustomerDashboardData, type GbpPost, type GbpReview, type KeywordRanking, type MonthlyReport } from '@/lib/customer-dashboard';
 import { QuickstartGuide } from './QuickstartGuide';
+import { InstantValuePanel } from './InstantValuePanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,8 +54,17 @@ export default async function CustomerDashboardPage() {
     return <CustomerGate title="找不到客戶資料" body="你的登入 session 沒有對應到 adlo 客戶。請確認使用訂閱 email 登入。" />;
   }
 
-  const { customer, latestSubscription, currentGrowthCycle, posts, reviews, rankings, reports, kpis, quickstart } = dashboard;
+  const { customer, latestSubscription, currentGrowthCycle, posts, reviews, rankings, reports, instantDeliverable, kpis, quickstart } = dashboard;
   const hasPerformanceData = posts.length > 0 || reviews.length > 0 || rankings.length > 0 || reports.length > 0;
+  const currentTaskDeliverable = currentGrowthCycle?.task.deliverables[0];
+  const readyDeliverable = currentTaskDeliverable
+    ? {
+        label: '本週完成品',
+        title: currentTaskDeliverable.label,
+        content: currentTaskDeliverable.content,
+        usage: currentTaskDeliverable.usage,
+      }
+    : instantDeliverable;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -95,6 +105,13 @@ export default async function CustomerDashboardPage() {
         </div>
 
         <QuickstartGuide quickstart={quickstart} currentCycle={currentGrowthCycle} />
+
+        {readyDeliverable && (
+          <InstantValuePanel
+            deliverable={readyDeliverable}
+            isWeeklyDeliverable={Boolean(currentTaskDeliverable)}
+          />
+        )}
 
         <section className="flex flex-col gap-5 border-y border-slate-200 bg-white px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="min-w-0">
