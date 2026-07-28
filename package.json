@@ -9,7 +9,6 @@
     "lint": "eslint",
     "test": "node --import tsx --test 'src/**/*.test.ts'",
     "typecheck": "tsc --noEmit",
-    "test:billing": "tsx --test src/lib/billing-lifecycle.test.ts",
     "verify": "npm run lint && npm run typecheck && npm run build",
     "prepare": "git config core.hooksPath scripts/git-hooks 2>/dev/null || true"
   },
