@@ -5,8 +5,8 @@ import {
   checkReviewDraftQuota,
   createCustomerReviewDraft,
   generateReviewDraft,
-  incrementReviewDraftQuota,
   listCustomerReviewDrafts,
+  reserveReviewDraftQuota,
   reviewDraftInputSchema,
   ReviewWorkspaceError,
 } from '@/lib/customer-review-workspace';
@@ -24,7 +24,7 @@ export async function GET() {
     if ('response' in access) return access.response;
 
     const drafts = await listCustomerReviewDrafts(access.customerId);
-    let quota = { allowed: true, count: 0, limit: 20, resetAt: Date.now() + 86_400_000 };
+    let quota = null;
     try {
       quota = await checkReviewDraftQuota(access.customerId);
     } catch (error) {
@@ -32,7 +32,7 @@ export async function GET() {
     }
     return apiOk({
       drafts,
-      quota: { count: quota.count, limit: quota.limit, resetAt: quota.resetAt },
+      quota: quota ? { count: quota.count, limit: quota.limit, resetAt: quota.resetAt } : null,
     });
   } catch (error) {
     console.error('[ReviewWorkspace] list failed', error instanceof Error ? error.message : 'unknown error');
@@ -53,11 +53,13 @@ export async function POST(request: Request) {
     // Fail before incurring model cost when the migration has not been applied.
     await listCustomerReviewDrafts(access.customerId, 1);
 
-    let quota = { allowed: true, count: 0, limit: 20, resetAt: Date.now() + 86_400_000 };
+    let quota;
     try {
-      quota = await checkReviewDraftQuota(access.customerId);
+      // Reserve one request atomically before incurring model cost.
+      quota = await reserveReviewDraftQuota(access.customerId);
     } catch (error) {
       console.error('[ReviewWorkspace] quota unavailable', error instanceof Error ? error.message : 'unknown error');
+      return apiError('RATE_LIMIT_UNAVAILABLE', '暫時無法確認今日使用額度，請稍後再試', 503);
     }
     if (!quota.allowed) {
       return apiError('RATE_LIMIT', '今日 20 則評論草稿額度已用完，請於額度重置後再試', 429);
@@ -70,12 +72,6 @@ export async function POST(request: Request) {
       variants: generated.variants,
       tips: generated.tips,
     });
-
-    try {
-      await incrementReviewDraftQuota(access.customerId);
-    } catch (error) {
-      console.error('[ReviewWorkspace] quota increment failed', error instanceof Error ? error.message : 'unknown error');
-    }
 
     await writeAuditLog({
       actor: `customer:${access.customerId}`,
@@ -93,7 +89,7 @@ export async function POST(request: Request) {
 
     return apiOk({
       draft,
-      quota: { count: quota.count + 1, limit: quota.limit, resetAt: quota.resetAt },
+      quota: { count: quota.count, limit: quota.limit, resetAt: quota.resetAt },
     }, 201);
   } catch (error) {
     if (error instanceof ReviewWorkspaceError) {

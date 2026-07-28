@@ -244,11 +244,36 @@ export async function checkReviewDraftQuota(customerId: string): Promise<ReviewD
   };
 }
 
-export async function incrementReviewDraftQuota(customerId: string) {
+export async function reserveReviewDraftQuota(customerId: string): Promise<ReviewDraftQuota> {
   const redis = reviewQuotaRedis();
   const key = reviewQuotaKey(customerId);
   const next = await redis.incr(key);
-  if (next === 1) await redis.expire(key, DAY_SECONDS);
+  if (next === 1) {
+    try {
+      await redis.expire(key, DAY_SECONDS);
+    } catch (error) {
+      await redis.del(key).catch(() => undefined);
+      throw error;
+    }
+  }
+
+  const ttl = await redis.ttl(key);
+  if (next > DAILY_LIMIT) {
+    await redis.decr(key).catch(() => undefined);
+    return {
+      allowed: false,
+      count: DAILY_LIMIT,
+      limit: DAILY_LIMIT,
+      resetAt: Date.now() + (ttl > 0 ? ttl * 1_000 : DAY_SECONDS * 1_000),
+    };
+  }
+
+  return {
+    allowed: true,
+    count: next,
+    limit: DAILY_LIMIT,
+    resetAt: Date.now() + (ttl > 0 ? ttl * 1_000 : DAY_SECONDS * 1_000),
+  };
 }
 
 function reviewQuotaRedis() {

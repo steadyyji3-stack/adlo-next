@@ -29,7 +29,7 @@ Generates three reply variants and stores the first variant as the selected draf
 }
 ```
 
-The paid quota is 20 successful generations per customer per 24-hour window. A Redis outage is logged without exposing customer text and currently fails open so paid delivery is not blocked.
+The paid quota is 20 generation requests per customer per 24-hour window. The server reserves quota atomically before calling Groq, so concurrent requests cannot bypass the cost cap. If Redis is unavailable, generation fails closed with `503 RATE_LIMIT_UNAVAILABLE`; the log contains no customer text.
 
 ### `PATCH /api/me/review-drafts/:id`
 
@@ -53,3 +53,13 @@ Deletes one draft owned by the signed-in customer. Deletion is permanent.
 - The UI tells customers to remove non-public personal data before generation.
 - Audit payloads contain only lengths, rating, variant count, token usage, status, and record IDs. They do not include review text, reply text, credentials, or tokens.
 - Generated content is an editable draft. No endpoint publishes to Google or another third party.
+
+## Customer journey
+
+The default interface keeps one clear action on screen at a time:
+
+1. Paste a public review and choose its star rating. Reviewer name, store type, and owner notes stay optional.
+2. Choose one of three tones, edit the final wording, and confirm it.
+3. Copy the reply and publish it manually in Google Business Profile.
+
+Privacy guidance and past drafts remain available on demand without blocking the main path. Draft history is server-backed and follows the customer across sessions and devices.

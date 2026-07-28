@@ -34,11 +34,11 @@ export default async function ReviewWorkspacePage() {
         <div className="mb-8 border-b border-slate-200 pb-7">
           <div className="mb-3 flex items-center gap-2 text-[#0F6E56]">
             <MessageSquareText className="h-5 w-5" aria-hidden />
-            <span className="text-xs font-extrabold uppercase">Review Workspace</span>
+            <span className="text-xs font-extrabold">付費自助工具</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">評論回覆工作區</h1>
+          <h1 className="text-3xl font-extrabold text-slate-950 sm:text-4xl">把一則評論變成可直接貼上的回覆</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
-            貼入公開評論，取得三種台灣口吻的回覆草稿；選擇、編輯、儲存與複製都在同一頁完成。
+            貼上客人的公開評論，選一個合適語氣，確認後複製到 Google 商家。adlo 不會自動發布。
           </p>
         </div>
 
