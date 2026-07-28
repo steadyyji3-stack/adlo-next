@@ -33,11 +33,24 @@ The requested hostname must match the customer's `customers.website_url` hostnam
 
 The successful scan writes `customer.site_optimizer.scan` to `audit_log`. The payload contains only customer id, hostname, page count, coverage, and industry mode. Page HTML and generated content are not stored.
 
+## Paid history and comparison
+
+Each successful scan also appends one immutable row to `customer_site_optimizer_scans`. The row stores only:
+
+- customer id, registered hostname, public target URL, industry mode, and coverage;
+- overall score, page count, and scan time;
+- a versioned JSON snapshot containing page paths, page scores, and deterministic check ids, labels, and statuses.
+
+Raw HTML, generated copy, FAQ drafts, JSON-LD output, OAuth credentials, and customer secrets are not persisted in scan history. RLS is enabled and no `anon` or `authenticated` Data API policies are granted; server routes use the service role only after Auth.js session checks.
+
+The API returns the latest 12 same-hostname history entries and compares the new scan with the immediately previous scan. A check is called resolved only when the same page path and check id move from `warn` or `fail` to `pass`. Missing pages are excluded rather than treated as fixed. The comparison separately reports partial improvements, regressions, and non-passing checks first observed on new pages or new check ids.
+
 ## Response
 
 The success response includes:
 
 - `overallScore` and representative page checks.
+- latest 12 score-history points and a structured previous-versus-current comparison.
 - prioritized fixes with affected paths.
 - title, meta description, H1, and content-section blueprints.
 - `LocalBusiness` subtype JSON-LD built only from stored customer data.
@@ -65,7 +78,7 @@ Clinic mode sets `requiresHumanReview: true`, excludes efficacy guarantees and f
 ## Infrastructure
 
 - New environment variables: none.
-- New database schema or migration: none.
+- Database migration: `20260728_customer_site_optimizer_scans.sql`.
 - New OAuth scope: none.
 - Runtime: Node.js, `maxDuration = 60`.
 - Parser dependency: `cheerio@1.2.0` (requires Node.js `>=20.18.1`).

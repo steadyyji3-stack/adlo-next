@@ -6,6 +6,7 @@ import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { getCustomerStoreProfile } from '@/lib/customer-store-profile';
 import { getCustomerDetail } from '@/lib/customers';
 import { classifySiteIndustry } from '@/lib/customer-site-optimizer';
+import { getSiteOptimizerHistoryState } from '@/lib/customer-site-optimizer-history';
 import { SiteOptimizer } from './SiteOptimizer';
 
 export const dynamic = 'force-dynamic';
@@ -20,6 +21,9 @@ export default async function CustomerSiteOptimizerPage() {
 
   const canUse = Boolean(customer?.subscriptions.some((subscription) => paidStatuses.has(subscription.status)));
   const industryMode = classifySiteIndustry(profile?.industry || customer?.industry);
+  const historyState = canUse && customer?.website_url
+    ? await loadHistory(customerId!, customer.website_url)
+    : { history: [], comparison: null, available: true };
 
   return (
     <div className="min-h-screen bg-[#F7F8FA] text-slate-950">
@@ -59,11 +63,24 @@ export default async function CustomerSiteOptimizerPage() {
             initialUrl={customer.website_url}
             storeName={profile.storeName}
             industryMode={industryMode}
+            initialHistory={historyState.history}
+            initialComparison={historyState.comparison}
+            historyAvailable={historyState.available}
           />
         )}
       </main>
     </div>
   );
+}
+
+async function loadHistory(customerId: string, websiteUrl: string) {
+  try {
+    const hostname = new URL(websiteUrl).hostname;
+    const state = await getSiteOptimizerHistoryState(customerId, hostname);
+    return { ...state, available: true };
+  } catch {
+    return { history: [], comparison: null, available: false };
+  }
 }
 
 function Gate({ title, body, href, action }: { title: string; body: string; href: string; action: string }) {

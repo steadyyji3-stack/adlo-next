@@ -23,16 +23,26 @@ import type {
   SiteIndustryMode,
   SiteOptimizationReport,
 } from '@/lib/customer-site-optimizer';
+import type {
+  SiteOptimizerComparison,
+  SiteOptimizerHistoryEntry,
+} from '@/lib/customer-site-optimizer-comparison';
+import { SiteOptimizerHistory } from './SiteOptimizerHistory';
 
 interface SiteOptimizerProps {
   initialUrl: string;
   storeName: string;
   industryMode: SiteIndustryMode;
+  initialHistory: SiteOptimizerHistoryEntry[];
+  initialComparison: SiteOptimizerComparison | null;
+  historyAvailable: boolean;
 }
 
 interface ApiResponse {
   ok: boolean;
   report?: SiteOptimizationReport;
+  history?: SiteOptimizerHistoryEntry[];
+  comparison?: SiteOptimizerComparison | null;
   error?: { code: string; message: string };
 }
 
@@ -55,8 +65,18 @@ const statusClasses: Record<SiteCheckStatus, string> = {
   fail: 'border-rose-200 bg-rose-50 text-rose-700',
 };
 
-export function SiteOptimizer({ initialUrl, storeName, industryMode }: SiteOptimizerProps) {
+export function SiteOptimizer({
+  initialUrl,
+  storeName,
+  industryMode,
+  initialHistory,
+  initialComparison,
+  historyAvailable: initialHistoryAvailable,
+}: SiteOptimizerProps) {
   const [report, setReport] = useState<SiteOptimizationReport | null>(null);
+  const [history, setHistory] = useState(initialHistory);
+  const [comparison, setComparison] = useState(initialComparison);
+  const [historyAvailable, setHistoryAvailable] = useState(initialHistoryAvailable);
   const [error, setError] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -74,6 +94,9 @@ export function SiteOptimizer({ initialUrl, storeName, industryMode }: SiteOptim
       const data = await response.json() as ApiResponse;
       if (!response.ok || !data.report) throw new Error(data.error?.message ?? '掃描失敗，請稍後再試');
       setReport(data.report);
+      setHistory(data.history ?? []);
+      setComparison(data.comparison ?? null);
+      setHistoryAvailable(true);
     } catch (scanError) {
       setError(scanError instanceof Error ? scanError.message : '掃描失敗，請稍後再試');
     } finally {
@@ -143,6 +166,12 @@ export function SiteOptimizer({ initialUrl, storeName, industryMode }: SiteOptim
           </div>
         )}
       </section>
+
+      <SiteOptimizerHistory
+        history={history}
+        comparison={comparison}
+        available={historyAvailable}
+      />
 
       {!report && !isScanning && (
         <section className="grid gap-6 border-b border-slate-200 pb-9 md:grid-cols-3">

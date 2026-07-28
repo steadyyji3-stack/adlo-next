@@ -11,6 +11,7 @@ import {
 } from '@/lib/customer-site-optimizer';
 import { reserveSiteOptimizerQuota } from '@/lib/customer-site-optimizer-quota';
 import { normalizeSiteUrl } from '@/lib/customer-site-optimizer-security';
+import { saveSiteOptimizerScan } from '@/lib/customer-site-optimizer-history';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -70,6 +71,7 @@ export async function POST(request: Request) {
       customer,
       profile,
     });
+    const historyState = await saveSiteOptimizerScan({ customerId, report });
 
     await writeAuditLog({
       actor: `customer:${customerId}`,
@@ -78,13 +80,20 @@ export async function POST(request: Request) {
       targetId: customerId,
       payload: {
         hostname: report.hostname,
+        scanId: historyState.scanId,
         pageCount: report.pages.length,
         coverage: report.coverage,
         industryMode: report.industryMode,
+        previousScanId: historyState.comparison?.previousScanId ?? null,
+        scoreDelta: historyState.comparison?.scoreDelta ?? null,
       },
     });
 
-    return apiOk({ report });
+    return apiOk({
+      report,
+      history: historyState.history,
+      comparison: historyState.comparison,
+    });
   } catch (error) {
     if (error instanceof SiteOptimizerError) {
       return apiError(error.code, error.message, error.status);
