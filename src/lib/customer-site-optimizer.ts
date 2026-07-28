@@ -7,6 +7,12 @@ import { isIP } from 'node:net';
 import * as cheerio from 'cheerio';
 import type { CustomerDetail } from '@/lib/customers';
 import type { StoreProfile } from '@/lib/store-profile';
+import {
+  hostnameForLookup,
+  isPublicSiteIp,
+  normalizeSiteUrl,
+  serializeJsonLd,
+} from '@/lib/customer-site-optimizer-security';
 
 const MAX_PAGES = 8;
 const MAX_REDIRECTS = 3;
@@ -131,7 +137,7 @@ export function isRelatedHostname(left: string, right: string) {
 }
 
 export async function optimizeCustomerSite(input: OptimizeSiteInput): Promise<SiteOptimizationReport> {
-  const requestedUrl = normalizeHttpUrl(input.targetUrl);
+  const requestedUrl = safeNormalizeHttpUrl(input.targetUrl);
   const homepage = await fetchText(requestedUrl, {
     allowedHostname: requestedUrl.hostname,
     maxBytes: MAX_HTML_BYTES,
@@ -191,18 +197,12 @@ export async function optimizeCustomerSite(input: OptimizeSiteInput): Promise<Si
   };
 }
 
-function normalizeHttpUrl(value: string) {
-  let url: URL;
+function safeNormalizeHttpUrl(value: string) {
   try {
-    url = new URL(value);
+    return normalizeSiteUrl(value);
   } catch {
     throw new SiteOptimizerError('INVALID_URL', '請輸入完整的 https:// 網址');
   }
-  if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
-    throw new SiteOptimizerError('INVALID_URL', '只支援不含帳號密碼的公開 http 或 https 網址');
-  }
-  url.hash = '';
-  return url;
 }
 
 async function discoverPageUrls(siteRoot: URL, allowedHostname: string) {
@@ -263,7 +263,7 @@ function safeSitemapUrl(value: string, base: URL, allowedHostname: string) {
 }
 
 async function fetchText(initialUrl: URL, options: FetchOptions): Promise<FetchedDocument> {
-  let currentUrl = normalizeHttpUrl(initialUrl.toString());
+  let currentUrl = safeNormalizeHttpUrl(initialUrl.toString());
 
   for (let redirectCount = 0; redirectCount <= MAX_REDIRECTS; redirectCount += 1) {
     if (!isRelatedHostname(currentUrl.hostname, options.allowedHostname)) {
@@ -277,7 +277,7 @@ async function fetchText(initialUrl: URL, options: FetchOptions): Promise<Fetche
         if (!response.location || redirectCount === MAX_REDIRECTS) {
           throw new SiteOptimizerError('TOO_MANY_REDIRECTS', '網站重新導向次數過多', 422);
         }
-        currentUrl = normalizeHttpUrl(new URL(response.location, currentUrl).toString());
+        currentUrl = safeNormalizeHttpUrl(new URL(response.location, currentUrl).toString());
         continue;
       }
 
@@ -304,7 +304,7 @@ async function fetchText(initialUrl: URL, options: FetchOptions): Promise<Fetche
 }
 
 async function resolvePublicDestination(url: URL) {
-  const hostname = url.hostname.toLowerCase();
+  const hostname = hostnameForLookup(url.hostname.toLowerCase());
   if (hostname === 'localhost' || hostname.endsWith('.localhost') || hostname.endsWith('.local')) {
     throw new SiteOptimizerError('PRIVATE_DESTINATION', '不支援內部網路或本機網址', 403);
   }
@@ -314,7 +314,7 @@ async function resolvePublicDestination(url: URL) {
     ? [{ address: hostname, family: literalFamily }]
     : await lookup(hostname, { all: true, verbatim: true }).catch(() => []);
 
-  if (addresses.length === 0 || addresses.some(({ address }) => !isPublicIp(address))) {
+  if (addresses.length === 0 || addresses.some(({ address }) => !isPublicSiteIp(address))) {
     throw new SiteOptimizerError('PRIVATE_DESTINATION', '網址解析到非公開網路，已停止掃描', 403);
   }
   const destination = addresses[0];
@@ -373,50 +373,12 @@ function requestPinned(
     request.setTimeout(REQUEST_TIMEOUT_MS, () => {
       request.destroy(new SiteOptimizerError('SITE_TIMEOUT', '網站回應逾時，請稍後再試', 504));
     });
+    const deadline = setTimeout(() => {
+      request.destroy(new SiteOptimizerError('SITE_TIMEOUT', '網站回應逾時，請稍後再試', 504));
+    }, REQUEST_TIMEOUT_MS);
+    request.on('close', () => clearTimeout(deadline));
     request.on('error', reject);
     request.end();
-  });
-}
-
-function isPublicIp(address: string) {
-  const family = isIP(address);
-  if (family === 4) return isPublicIpv4(address);
-  if (family !== 6) return false;
-
-  const normalized = address.toLowerCase();
-  if (normalized.includes('.')) {
-    const embedded = normalized.slice(normalized.lastIndexOf(':') + 1);
-    return !normalized.startsWith('::ffff:') && isPublicIpv4(embedded);
-  }
-  if (
-    normalized === '::' ||
-    normalized === '::1' ||
-    normalized.startsWith('fc') ||
-    normalized.startsWith('fd') ||
-    /^fe[89ab]/.test(normalized) ||
-    normalized.startsWith('ff') ||
-    normalized.startsWith('2001:db8') ||
-    normalized.startsWith('2001:2:') ||
-    normalized.startsWith('2001:10:') ||
-    normalized.startsWith('2002:') ||
-    normalized.startsWith('::ffff:')
-  ) return false;
-  return true;
-}
-
-function isPublicIpv4(address: string) {
-  const parts = address.split('.').map(Number);
-  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return false;
-  const value = (((parts[0] * 256 + parts[1]) * 256 + parts[2]) * 256 + parts[3]) >>> 0;
-  const blockedRanges: Array<[number, number]> = [
-    [0x00000000, 8], [0x0a000000, 8], [0x64400000, 10], [0x7f000000, 8],
-    [0xa9fe0000, 16], [0xac100000, 12], [0xc0000000, 24], [0xc0000200, 24],
-    [0xc0a80000, 16], [0xc6120000, 15], [0xc6336400, 24], [0xcb007100, 24],
-    [0xe0000000, 4], [0xf0000000, 4],
-  ];
-  return !blockedRanges.some(([network, prefix]) => {
-    const mask = prefix === 0 ? 0 : (0xffffffff << (32 - prefix)) >>> 0;
-    return (value & mask) === (network & mask);
   });
 }
 
@@ -611,7 +573,7 @@ function buildOptimizationPack(input: {
   }
 
   return {
-    schemaMarkup: `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`,
+    schemaMarkup: `<script type="application/ld+json">\n${serializeJsonLd(schema)}\n</script>`,
     missingBusinessFields,
     pageBlueprints: buildPageBlueprints(industryMode, storeName, city, primaryService, services),
     faqDrafts: buildFaqDrafts(industryMode, storeName, customer.phone),

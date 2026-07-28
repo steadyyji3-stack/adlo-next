@@ -128,7 +128,7 @@ export function SiteOptimizer({ initialUrl, storeName, industryMode }: SiteOptim
               <Badge variant="outline" className="border-slate-200 bg-white text-slate-600">{modeLabels[industryMode]}</Badge>
             </div>
             <Input id="site-url" value={initialUrl} readOnly className="h-12 border-slate-300 bg-white font-medium text-slate-700" />
-            <p className="mt-2 text-xs leading-5 text-slate-500">為保護服務與他人網站，只掃描 onboarding 已登記的公開網域。</p>
+            <p className="mt-2 text-xs leading-5 text-slate-500">為保護服務與他人網站，只掃描 onboarding 已登記的公開網域；每位客戶每日最多產生 5 次。</p>
           </div>
           <Button onClick={runScan} disabled={isScanning} size="lg" className="h-12 bg-[#0F6E56] px-6 font-extrabold text-white hover:bg-[#0B5946]">
             {isScanning ? <LoaderCircle className="animate-spin" aria-hidden /> : <WandSparkles aria-hidden />}

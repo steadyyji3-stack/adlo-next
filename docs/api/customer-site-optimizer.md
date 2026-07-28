@@ -21,11 +21,14 @@ The requested hostname must match the customer's `customers.website_url` hostnam
 ## Behavior
 
 - Fetches public `http` or `https` pages only.
+- Rejects URL credentials, custom ports, and oversized URLs; only standard HTTP/HTTPS ports are allowed.
 - Attempts `/sitemap.xml`, then audits at most eight same-site representative pages.
 - Limits redirects, response time, HTML size, sitemap size, and sitemap nesting.
 - Resolves every requested or redirected hostname, rejects private, loopback, link-local, reserved, multicast, and documentation IP ranges, then pins the HTTP connection to the validated public IP to prevent DNS rebinding.
+- Allows five scan attempts per paid customer per 24-hour window. Redis errors fail closed before any website request.
 - Parses HTML and XML with Cheerio instead of regular expressions.
 - Produces deterministic restaurant, clinic, retail, or general local-business recommendations from the customer's stored profile.
+- Escapes HTML-significant characters in generated JSON-LD so customer data cannot break the script boundary when pasted into a website.
 - Returns recommendations only. It never logs into a CMS, changes a website, publishes content, or requests Google OAuth access.
 
 The successful scan writes `customer.site_optimizer.scan` to `audit_log`. The payload contains only customer id, hostname, page count, coverage, and industry mode. Page HTML and generated content are not stored.
@@ -53,6 +56,8 @@ Clinic mode sets `requiresHumanReview: true`, excludes efficacy guarantees and f
 | `PRIVATE_DESTINATION` | 403 | DNS or literal IP resolves to a blocked network |
 | `STORE_PROFILE_REQUIRED` | 409 | Server-side store profile is missing |
 | `WEBSITE_REQUIRED` | 409 | Onboarding website URL is missing |
+| `DAILY_LIMIT_REACHED` | 429 | Five scan attempts have been used in the current window |
+| `QUOTA_UNAVAILABLE` | 503 | Redis quota enforcement is unavailable; scan is denied |
 | `SITE_FETCH_FAILED` | 422 | Public site cannot be read |
 | `CONTENT_TOO_LARGE` | 422 | Response exceeds the configured size cap |
 | `SITE_TIMEOUT` | 504 | Public site did not respond in time |
