@@ -52,12 +52,12 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Finds the local subscription from Stripe v22's `invoice.parent.subscription_details.subscription`, with compatibility for legacy `invoice.subscription` events.
 - Retrieves the Stripe subscription and syncs status, plan, current period, trial end, and cancellation timestamp.
 - Writes `audit_log` action `stripe.invoice.payment_succeeded`.
-- If this invoice recovers a failed payment, sends an idempotent payment-recovered email.
+- If this invoice previously triggered a payment-attention email, had more than one attempt, or recovers a local failed state, sends an idempotent payment-recovered email. This still works when an earlier subscription update already restored the local status to active.
 
 `invoice.payment_failed`:
 
 - Finds the local subscription from the current or legacy Stripe invoice shape.
-- Sets local subscription status to `past_due`.
+- Retrieves the latest Stripe subscription and syncs its current state instead of forcing `past_due`; a delayed failure event cannot regress an already recovered subscription.
 - Keeps the related customer service status active while Stripe reports `past_due`, so one failed charge does not immediately remove access.
 - Writes `audit_log` action `stripe.invoice.payment_failed`.
 - Sends an idempotent payment-attention email linking to the authenticated customer billing page.
@@ -78,6 +78,7 @@ Verifies `stripe-signature` with `STRIPE_WEBHOOK_SECRET`.
 - Active, trialing, and past-due billing states do not bypass onboarding: only an approved customer becomes active; pending onboarding/review states remain gated.
 - Email links never contain a customer id, Stripe portal session URL, or reusable customer credential.
 - Resend idempotency keys use the Stripe invoice or subscription reference so webhook retries do not duplicate customer email.
+- Before every send, `audit_log` is queried by the exact customer, notification action, and Stripe reference. Deduplication does not depend on scanning only the customer's most recent audit rows.
 - Trial-ending reminders are keyed by Stripe subscription id plus trial end date and are not sent for subscriptions already scheduled to cancel.
 
 ## Safety

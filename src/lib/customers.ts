@@ -1,5 +1,7 @@
 import 'server-only';
 import { serviceStatusForSubscription } from '@/lib/billing-lifecycle';
+import type { StoreProfileInput } from '@/lib/store-profile';
+import { saveCustomerStoreProfile } from '@/lib/customer-store-profile';
 import { insertRow, selectRows, updateRows, upsertRow } from '@/lib/supabase-rest';
 
 export type OnboardingStatus = 'not_started' | 'pending_review' | 'approved' | 'needs_revision' | 'rejected';
@@ -214,45 +216,73 @@ export async function updateCustomer(id: string, data: Partial<Pick<
   return customer ?? null;
 }
 
-export async function createOnboardingSubmission(input: {
+export async function completeSelfServeOnboarding(input: {
   customerId: string;
-  gbpUrl: string;
+  storeProfile: StoreProfileInput;
+  gbpUrl?: string;
   websiteUrl?: string;
-  storeName: string;
   storeAddress?: string;
   storeCity?: string;
   phone?: string;
   lineId?: string;
-  industry?: string;
   signatureItems: string[];
-  ga4PropertyId?: string;
-  metaPageId?: string;
   notes?: string;
 }) {
+  const existingCustomer = await getCustomerDetail(input.customerId);
+  if (!existingCustomer) {
+    throw new Error('Customer not found');
+  }
+
+  const hasServiceAccess = existingCustomer.subscriptions.some(
+    (subscription) => subscription.status === 'active'
+      || subscription.status === 'trialing'
+      || subscription.status === 'past_due',
+  );
+  const profile = await saveCustomerStoreProfile(input.customerId, input.storeProfile);
   const customer = await updateCustomer(input.customerId, {
-    store_name: input.storeName,
+    store_name: profile.storeName,
     store_address: input.storeAddress || null,
     store_city: input.storeCity || null,
     phone: input.phone || null,
     line_id: input.lineId || null,
-    gbp_url: input.gbpUrl,
+    gbp_url: input.gbpUrl || null,
     website_url: input.websiteUrl || null,
-    industry: input.industry || null,
+    industry: profile.industry,
     signature_items: input.signatureItems,
-    onboarding_status: 'pending_review',
-    service_status: 'pending_review',
+    onboarding_status: 'approved',
+    service_status: hasServiceAccess ? 'active' : existingCustomer.service_status,
   });
+  if (!customer) {
+    throw new Error('Customer update failed');
+  }
 
-  const submission = await insertRow<OnboardingSubmission>('onboarding_submissions', {
-    customer_id: input.customerId,
-    status: 'pending_review',
-    ga4_property_id: input.ga4PropertyId || null,
-    meta_page_id: input.metaPageId || null,
-    meta_admin_status: input.metaPageId ? 'invited' : null,
+  const existingSubmission = existingCustomer.onboarding_submissions.find(
+    (submission) => submission.reviewed_by === 'system:self_service',
+  );
+  const submissionData = {
+    status: 'approved' as const,
+    ga4_property_id: null,
+    meta_page_id: null,
+    meta_admin_status: null,
     notes: input.notes || null,
-  });
+    reviewed_by: 'system:self_service',
+    reviewed_at: new Date().toISOString(),
+  };
+  const submission = existingSubmission
+    ? (await updateRows<OnboardingSubmission>(
+      'onboarding_submissions',
+      { id: existingSubmission.id, customer_id: input.customerId },
+      submissionData,
+    ))[0]
+    : await insertRow<OnboardingSubmission>('onboarding_submissions', {
+      customer_id: input.customerId,
+      ...submissionData,
+    });
+  if (!submission) {
+    throw new Error('Onboarding submission write failed');
+  }
 
-  return { customer, submission };
+  return { customer, submission, profile, submissionCreated: !existingSubmission };
 }
 
 export async function approveCustomerOnboarding(customerId: string, reviewer: string) {

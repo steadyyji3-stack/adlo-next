@@ -4,6 +4,7 @@ import type Stripe from 'stripe';
 import {
   getInvoiceSubscriptionId,
   serviceStatusForSubscription,
+  shouldNotifyPaymentRecovered,
 } from './billing-lifecycle';
 
 test('reads a subscription id from the current Stripe invoice parent shape', () => {
@@ -45,4 +46,27 @@ test('terminal billing states override onboarding state', () => {
   assert.equal(serviceStatusForSubscription('incomplete', 'approved'), 'paused');
   assert.equal(serviceStatusForSubscription('paused', 'approved'), 'paused');
   assert.equal(serviceStatusForSubscription('cancelled', 'approved'), 'cancelled');
+});
+
+test('payment recovery follows prior customer attention even after subscription state already synced', () => {
+  assert.equal(shouldNotifyPaymentRecovered({
+    previousStatus: 'active',
+    attemptCount: 1,
+    hadPaymentAttention: true,
+  }), true);
+  assert.equal(shouldNotifyPaymentRecovered({
+    previousStatus: 'past_due',
+    attemptCount: 1,
+    hadPaymentAttention: false,
+  }), true);
+  assert.equal(shouldNotifyPaymentRecovered({
+    previousStatus: 'active',
+    attemptCount: 2,
+    hadPaymentAttention: false,
+  }), true);
+  assert.equal(shouldNotifyPaymentRecovered({
+    previousStatus: 'active',
+    attemptCount: 1,
+    hadPaymentAttention: false,
+  }), false);
 });

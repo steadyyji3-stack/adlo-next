@@ -47,6 +47,9 @@ export default async function AdminCustomersPage({
             <p className="mt-1 text-sm text-slate-500">Stripe 成交後客戶、onboarding 狀態與服務狀態。</p>
           </div>
           <div className="flex flex-wrap items-center gap-4">
+            <Link href="/admin/core-metrics" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
+              核心漏斗
+            </Link>
             <Link href="/admin/copy-library" className="text-sm font-bold text-[#1D9E75] underline-offset-4 hover:underline">
               文案庫
             </Link>

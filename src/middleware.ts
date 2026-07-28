@@ -17,7 +17,12 @@ export default auth((request) => {
 
   if (isLoginPage) return NextResponse.next();
 
-  if (token !== process.env.ADMIN_SECRET) {
+  // fail-closed：ADMIN_SECRET 未設定時一律導回登入頁。
+  // 舊版只比 `token !== process.env.ADMIN_SECRET`，env 漏設（例如 preview
+  // 環境沒配、或未來改名）時 `undefined !== undefined` 為 false，
+  // 沒帶 cookie 也會被放行，整個 /admin 頁面全開。
+  const secret = process.env.ADMIN_SECRET;
+  if (!secret || token !== secret) {
     const loginUrl = new URL('/admin/login', request.url);
     return NextResponse.redirect(loginUrl);
   }

@@ -6,7 +6,11 @@ import {
   sendBillingLifecycleEmail,
   type BillingLifecycleMessage,
 } from '@/lib/billing-lifecycle-email';
-import { getInvoiceSubscriptionId } from '@/lib/billing-lifecycle';
+import {
+  getInvoiceSubscriptionId,
+  serviceStatusForSubscription,
+  shouldNotifyPaymentRecovered,
+} from '@/lib/billing-lifecycle';
 import {
   getCustomerDetail,
   getSubscriptionByStripeId,
@@ -14,9 +18,7 @@ import {
   updateCustomer,
   upsertCheckoutCustomer,
   upsertSubscription,
-  type Customer,
   type PlanId,
-  type ServiceStatus,
   type SubscriptionStatus,
 } from '@/lib/customers';
 import { getStripe } from '@/lib/stripe';
@@ -167,7 +169,10 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     cancelledAt: subscriptionInput.cancelledAt,
   });
 
-  const nextServiceStatus = checkoutServiceStatus(customer, subscriptionInput.status);
+  const nextServiceStatus = serviceStatusForSubscription(
+    subscriptionInput.status,
+    customer.onboarding_status,
+  );
   if (customer.service_status !== nextServiceStatus) {
     await updateCustomer(customer.id, { service_status: nextServiceStatus });
   }
@@ -236,17 +241,6 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   }
 }
 
-function checkoutServiceStatus(
-  customer: Pick<Customer, 'onboarding_status'>,
-  subscriptionStatus: SubscriptionStatus,
-): ServiceStatus {
-  if (subscriptionStatus === 'cancelled') return 'cancelled';
-  if (subscriptionStatus === 'active' || subscriptionStatus === 'trialing' || subscriptionStatus === 'past_due') {
-    return customer.onboarding_status === 'approved' ? 'active' : 'pending_onboarding';
-  }
-  return 'paused';
-}
-
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const syncedSubscription = await syncExistingSubscription({
     ...subscriptionSyncInput(subscription),
@@ -307,10 +301,9 @@ async function handleSubscriptionUpdated(
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
   const localSubscription = stripeSubscriptionId
-    ? await syncExistingSubscription({
-      stripeSubscriptionId,
-      status: 'past_due',
-    })
+    ? await syncExistingSubscription(
+      subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)),
+    )
     : null;
 
   await writeAuditLog({
@@ -394,6 +387,13 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const previousSubscription = stripeSubscriptionId
     ? await getSubscriptionByStripeId(stripeSubscriptionId)
     : null;
+  const hadPaymentAttention = previousSubscription
+    ? await hasBillingEmailBeenSent(
+      previousSubscription.customer_id,
+      'billing.email.payment_attention_required.sent',
+      invoice.id,
+    )
+    : false;
   const localSubscription = stripeSubscriptionId
     ? await syncExistingSubscription(subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)))
     : null;
@@ -410,9 +410,11 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     },
   });
 
-  const recoveredFromFailure = previousSubscription
-    && ['past_due', 'incomplete', 'unpaid'].includes(previousSubscription.status);
-  if (localSubscription && (recoveredFromFailure || invoice.attempt_count > 1)) {
+  if (localSubscription && shouldNotifyPaymentRecovered({
+    previousStatus: previousSubscription?.status ?? null,
+    attemptCount: invoice.attempt_count,
+    hadPaymentAttention,
+  })) {
     await sendSubscriptionNotification(localSubscription, {
       type: 'payment_recovered',
       invoiceId: invoice.id,
@@ -443,12 +445,16 @@ async function sendSubscriptionNotification(
 }
 
 async function hasBillingEmailBeenSent(customerId: string, action: string, referenceId: string) {
-  const previousSends = await selectRows<BillingEmailAuditRow>(
+  const [previousSend] = await selectRows<BillingEmailAuditRow>(
     'audit_log',
-    { action, target_id: customerId },
-    { select: 'payload', order: 'created_at.desc', limit: 20 },
+    {
+      action,
+      target_id: customerId,
+      'payload->>stripe_reference_id': referenceId,
+    },
+    { select: 'id', limit: 1 },
   );
-  return previousSends.some((row) => row.payload?.stripe_reference_id === referenceId);
+  return Boolean(previousSend);
 }
 
 async function auditBillingEmailSent(
@@ -472,7 +478,7 @@ async function auditBillingEmailSent(
 }
 
 interface BillingEmailAuditRow {
-  payload: Record<string, unknown> | null;
+  id: string;
 }
 
 function billingEmailAuditAction(message: BillingLifecycleMessage) {

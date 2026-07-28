@@ -30,3 +30,15 @@ export function serviceStatusForSubscription(
   if (onboardingStatus === 'rejected') return 'paused';
   return 'pending_onboarding';
 }
+
+export function shouldNotifyPaymentRecovered(input: {
+  previousStatus: SubscriptionStatus | null;
+  attemptCount: number;
+  hadPaymentAttention: boolean;
+}) {
+  return input.hadPaymentAttention
+    || input.attemptCount > 1
+    || input.previousStatus === 'past_due'
+    || input.previousStatus === 'incomplete'
+    || input.previousStatus === 'unpaid';
+}
