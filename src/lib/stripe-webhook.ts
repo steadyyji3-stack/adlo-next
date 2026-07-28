@@ -3,13 +3,26 @@ import { Resend } from 'resend';
 import type Stripe from 'stripe';
 import { apiError } from '@/lib/api-response';
 import {
+  sendBillingLifecycleEmail,
+  type BillingLifecycleMessage,
+} from '@/lib/billing-lifecycle-email';
+import {
+  getInvoiceSubscriptionId,
+  serviceStatusForSubscription,
+  shouldNotifyPaymentRecovered,
+} from '@/lib/billing-lifecycle';
+import {
+  getCustomerDetail,
+  getSubscriptionByStripeId,
   syncExistingSubscription,
+  updateCustomer,
   upsertCheckoutCustomer,
   upsertSubscription,
   type PlanId,
   type SubscriptionStatus,
 } from '@/lib/customers';
 import { getStripe } from '@/lib/stripe';
+import { selectRows } from '@/lib/supabase-rest';
 import { writeAuditLog } from '@/lib/audit-log';
 
 export const stripeWebhookRuntime = 'nodejs';
@@ -21,9 +34,10 @@ function getResend() {
 }
 
 function welcomeEmail(planName: string, customerName: string, onboardingUrl?: string, trialEnd?: string | null) {
-  const name = customerName || '您好';
+  const name = escapeHtml(customerName || '您好');
+  const safePlanName = escapeHtml(planName);
   const onboardingBlock = onboardingUrl
-    ? `<p style="margin:24px 0;"><a href="${onboardingUrl}" style="display:inline-block;background:#1D9E75;color:#fff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700;">填寫 5 分鐘 onboarding 表單</a></p>`
+    ? `<p style="margin:24px 0;"><a href="${escapeHtml(onboardingUrl)}" style="display:inline-block;background:#1D9E75;color:#fff;text-decoration:none;border-radius:10px;padding:12px 18px;font-weight:700;">填寫 5 分鐘 onboarding 表單</a></p>`
     : '';
   const trialBlock = trialEnd
     ? `<p style="color:#475569;line-height:1.7;">首月免費已啟用，試用期至 <strong>${new Date(trialEnd).toLocaleDateString('zh-TW')}</strong>。你可以隨時在 Stripe Customer Portal 取消訂閱。</p>`
@@ -41,7 +55,7 @@ function welcomeEmail(planName: string, customerName: string, onboardingUrl?: st
     </div>
     <div style="padding:32px;">
       <h2 style="color:#0f172a;font-size:20px;margin:0 0 16px;">${name}，歡迎加入</h2>
-      <p style="color:#475569;line-height:1.7;">你已成功訂閱 <strong style="color:#1D9E75;">${planName}</strong>，感謝你的信任。</p>
+      <p style="color:#475569;line-height:1.7;">你已成功訂閱 <strong style="color:#1D9E75;">${safePlanName}</strong>，感謝你的信任。</p>
       ${trialBlock}
       <p style="color:#475569;line-height:1.7;">下一步請填寫 onboarding 表單，我們會用這些資料建立你的第一個月執行計畫。</p>
       ${onboardingBlock}
@@ -114,14 +128,13 @@ function subscriptionSyncInput(subscription: Stripe.Subscription) {
   };
 }
 
-function buildCustomerLoginUrl(origin: string, email: string, nextPath = '/onboarding') {
+function buildCustomerLoginUrl(origin: string, nextPath = '/onboarding') {
   const url = new URL('/customer/login', origin);
-  url.searchParams.set('email', email);
   url.searchParams.set('next', nextPath);
   return url.toString();
 }
 
-async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: NextRequest) {
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const stripe = getStripe();
   const email = session.customer_email ?? session.customer_details?.email;
   const stripeCustomerId = typeof session.customer === 'string' ? session.customer : session.customer?.id;
@@ -156,6 +169,14 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
     cancelledAt: subscriptionInput.cancelledAt,
   });
 
+  const nextServiceStatus = serviceStatusForSubscription(
+    subscriptionInput.status,
+    customer.onboarding_status,
+  );
+  if (customer.service_status !== nextServiceStatus) {
+    await updateCustomer(customer.id, { service_status: nextServiceStatus });
+  }
+
   await writeAuditLog({
     actor: 'system:stripe',
     action: 'stripe.checkout.completed',
@@ -169,25 +190,55 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, req: Ne
     },
   });
 
-  const origin = req.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
-  const onboardingUrl = buildCustomerLoginUrl(origin, email, '/onboarding');
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://adlo.tw';
+  const onboardingUrl = buildCustomerLoginUrl(origin, '/onboarding');
+  const deliveryEmail = customer.email;
+  const deliveryName = customer.name || customerName;
 
-  await getResend().emails.send({
-    from: 'adlo 系統通知 <hello@adlo.tw>',
-    to: email,
-    subject: `歡迎加入 adlo — ${planName} 訂閱確認`,
-    html: welcomeEmail(planName, customerName, onboardingUrl, subscriptionInput.trialEnd),
-  });
+  const customerEmailAction = 'billing.email.checkout_welcome.sent';
+  if (!await hasBillingEmailBeenSent(customer.id, customerEmailAction, session.id)) {
+    const customerEmail = await getResend().emails.send(
+      {
+        from: 'adlo 系統通知 <hello@adlo.tw>',
+        to: deliveryEmail,
+        subject: `歡迎加入 adlo — ${emailSubjectName(planName)} 訂閱確認`,
+        html: welcomeEmail(planName, deliveryName, onboardingUrl, subscriptionInput.trialEnd),
+      },
+      { idempotencyKey: `checkout/customer-welcome/${session.id}` },
+    );
+    if (customerEmail.error) throw new Error('Resend checkout customer email failed');
+    await auditBillingEmailSent(
+      customer.id,
+      customerEmailAction,
+      'checkout_welcome',
+      customerEmail.data.id,
+      session.id,
+    );
+  }
 
-  await getResend().emails.send({
-    from: 'adlo 系統通知 <hello@adlo.tw>',
-    to: 'adlo.hello.tw@gmail.com',
-    subject: `新訂單成立 — ${planName}`,
-    html: `<p><strong>方案：</strong>${planName}</p>
-           <p><strong>客戶信箱：</strong>${email}</p>
-           <p><strong>客戶姓名：</strong>${customerName}</p>
-           <p><strong>Customer ID：</strong>${customer.id}</p>`,
-  });
+  const adminEmailAction = 'billing.email.checkout_admin_notification.sent';
+  if (!await hasBillingEmailBeenSent(customer.id, adminEmailAction, session.id)) {
+    const adminEmail = await getResend().emails.send(
+      {
+        from: 'adlo 系統通知 <hello@adlo.tw>',
+        to: 'adlo.hello.tw@gmail.com',
+        subject: `新訂單成立 — ${emailSubjectName(planName)}`,
+        html: `<p><strong>方案：</strong>${escapeHtml(planName)}</p>
+               <p><strong>客戶信箱：</strong>${escapeHtml(deliveryEmail)}</p>
+               <p><strong>客戶姓名：</strong>${escapeHtml(deliveryName)}</p>
+               <p><strong>Customer ID：</strong>${escapeHtml(customer.id)}</p>`,
+      },
+      { idempotencyKey: `checkout/admin-notification/${session.id}` },
+    );
+    if (adminEmail.error) throw new Error('Resend checkout admin email failed');
+    await auditBillingEmailSent(
+      customer.id,
+      adminEmailAction,
+      'checkout_admin_notification',
+      adminEmail.data.id,
+      session.id,
+    );
+  }
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
@@ -208,9 +259,18 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
       local_subscription_found: Boolean(syncedSubscription),
     },
   });
+
+  await sendSubscriptionNotification(syncedSubscription, {
+    type: 'subscription_ended',
+    subscriptionId: subscription.id,
+    endedAt: syncedSubscription?.cancelled_at ?? new Date().toISOString(),
+  });
 }
 
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+async function handleSubscriptionUpdated(
+  subscription: Stripe.Subscription,
+  previousAttributes?: Partial<Stripe.Subscription>,
+) {
   const syncedSubscription = await syncExistingSubscription(subscriptionSyncInput(subscription));
 
   await writeAuditLog({
@@ -224,23 +284,26 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       local_subscription_found: Boolean(syncedSubscription),
     },
   });
-}
 
-function getInvoiceSubscriptionId(invoice: Stripe.Invoice) {
-  const source = invoice as Stripe.Invoice & {
-    subscription?: string | { id?: string } | null;
-  };
-  if (typeof source.subscription === 'string') return source.subscription;
-  return source.subscription?.id ?? null;
+  if (
+    subscription.cancel_at_period_end
+    && previousAttributes?.cancel_at_period_end === false
+    && syncedSubscription
+  ) {
+    await sendSubscriptionNotification(syncedSubscription, {
+      type: 'cancellation_scheduled',
+      subscriptionId: subscription.id,
+      accessUntil: syncedSubscription.current_period_end,
+    });
+  }
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
   const localSubscription = stripeSubscriptionId
-    ? await syncExistingSubscription({
-      stripeSubscriptionId,
-      status: 'past_due',
-    })
+    ? await syncExistingSubscription(
+      subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)),
+    )
     : null;
 
   await writeAuditLog({
@@ -254,10 +317,83 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       local_subscription_found: Boolean(localSubscription),
     },
   });
+
+  if (localSubscription) {
+    await sendSubscriptionNotification(localSubscription, {
+      type: 'payment_attention_required',
+      invoiceId: invoice.id,
+    });
+  }
+}
+
+async function handleInvoicePaymentActionRequired(invoice: Stripe.Invoice) {
+  const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
+  const localSubscription = stripeSubscriptionId
+    ? await syncExistingSubscription(
+      subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)),
+    )
+    : null;
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.invoice.payment_action_required',
+    targetType: 'subscription',
+    targetId: localSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: stripeSubscriptionId,
+      invoice_id: invoice.id,
+      local_subscription_found: Boolean(localSubscription),
+    },
+  });
+
+  if (localSubscription) {
+    await sendSubscriptionNotification(localSubscription, {
+      type: 'payment_attention_required',
+      invoiceId: invoice.id,
+    });
+  }
+}
+
+async function handleSubscriptionTrialWillEnd(subscription: Stripe.Subscription) {
+  const syncedSubscription = await syncExistingSubscription(subscriptionSyncInput(subscription));
+
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action: 'stripe.subscription.trial_will_end',
+    targetType: 'subscription',
+    targetId: syncedSubscription?.id ?? null,
+    payload: {
+      stripe_subscription_id: subscription.id,
+      trial_end: subscription.trial_end
+        ? toIsoFromUnix(subscription.trial_end, new Date())
+        : null,
+      cancel_at_period_end: subscription.cancel_at_period_end,
+      local_subscription_found: Boolean(syncedSubscription),
+    },
+  });
+
+  if (syncedSubscription && subscription.trial_end && !subscription.cancel_at_period_end) {
+    await sendSubscriptionNotification(syncedSubscription, {
+      type: 'trial_ending',
+      subscriptionId: subscription.id,
+      trialEndsAt: syncedSubscription.trial_end
+        ?? toIsoFromUnix(subscription.trial_end, new Date()),
+    });
+  }
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const stripeSubscriptionId = getInvoiceSubscriptionId(invoice);
+  const previousSubscription = stripeSubscriptionId
+    ? await getSubscriptionByStripeId(stripeSubscriptionId)
+    : null;
+  const hadPaymentAttention = previousSubscription
+    ? await hasBillingEmailBeenSent(
+      previousSubscription.customer_id,
+      'billing.email.payment_attention_required.sent',
+      invoice.id,
+    )
+    : false;
   const localSubscription = stripeSubscriptionId
     ? await syncExistingSubscription(subscriptionSyncInput(await getStripe().subscriptions.retrieve(stripeSubscriptionId)))
     : null;
@@ -273,6 +409,91 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
       local_subscription_found: Boolean(localSubscription),
     },
   });
+
+  if (localSubscription && shouldNotifyPaymentRecovered({
+    previousStatus: previousSubscription?.status ?? null,
+    attemptCount: invoice.attempt_count,
+    hadPaymentAttention,
+  })) {
+    await sendSubscriptionNotification(localSubscription, {
+      type: 'payment_recovered',
+      invoiceId: invoice.id,
+    });
+  }
+}
+
+async function sendSubscriptionNotification(
+  subscription: Awaited<ReturnType<typeof syncExistingSubscription>>,
+  message: BillingLifecycleMessage,
+) {
+  if (!subscription) return;
+  const customer = await getCustomerDetail(subscription.customer_id);
+  if (!customer) return;
+
+  const action = billingEmailAuditAction(message);
+  const referenceId = billingReferenceId(message);
+  if (await hasBillingEmailBeenSent(customer.id, action, referenceId)) return;
+
+  const providerMessageId = await sendBillingLifecycleEmail(customer, message);
+  await auditBillingEmailSent(
+    customer.id,
+    action,
+    message.type,
+    providerMessageId,
+    referenceId,
+  );
+}
+
+async function hasBillingEmailBeenSent(customerId: string, action: string, referenceId: string) {
+  const [previousSend] = await selectRows<BillingEmailAuditRow>(
+    'audit_log',
+    {
+      action,
+      target_id: customerId,
+      'payload->>stripe_reference_id': referenceId,
+    },
+    { select: 'id', limit: 1 },
+  );
+  return Boolean(previousSend);
+}
+
+async function auditBillingEmailSent(
+  customerId: string,
+  action: string,
+  notificationType: string,
+  providerMessageId: string,
+  referenceId: string,
+) {
+  await writeAuditLog({
+    actor: 'system:stripe',
+    action,
+    targetType: 'customer',
+    targetId: customerId,
+    payload: {
+      notification_type: notificationType,
+      provider_message_id: providerMessageId,
+      stripe_reference_id: referenceId,
+    },
+  });
+}
+
+interface BillingEmailAuditRow {
+  id: string;
+}
+
+function billingEmailAuditAction(message: BillingLifecycleMessage) {
+  return `billing.email.${message.type}.sent`;
+}
+
+function billingReferenceId(message: BillingLifecycleMessage) {
+  if ('invoiceId' in message) return message.invoiceId;
+  if (message.type === 'trial_ending') {
+    return `${message.subscriptionId}/${message.trialEndsAt.slice(0, 10)}`;
+  }
+  if (message.type === 'cancellation_scheduled') {
+    return `${message.subscriptionId}/${message.accessUntil.slice(0, 10)}`;
+  }
+  return message.subscriptionId;
 }
 
 export async function handleStripeWebhook(req: NextRequest) {
@@ -291,13 +512,22 @@ export async function handleStripeWebhook(req: NextRequest) {
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session, req);
+        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
         break;
       case 'customer.subscription.deleted':
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
         break;
       case 'customer.subscription.updated':
-        await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+        await handleSubscriptionUpdated(
+          event.data.object as Stripe.Subscription,
+          event.data.previous_attributes as Partial<Stripe.Subscription> | undefined,
+        );
+        break;
+      case 'customer.subscription.trial_will_end':
+        await handleSubscriptionTrialWillEnd(event.data.object as Stripe.Subscription);
+        break;
+      case 'invoice.payment_action_required':
+        await handleInvoicePaymentActionRequired(event.data.object as Stripe.Invoice);
         break;
       case 'invoice.payment_failed':
         await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
@@ -314,4 +544,18 @@ export async function handleStripeWebhook(req: NextRequest) {
   }
 
   return NextResponse.json({ received: true });
+}
+
+function escapeHtml(value: string) {
+  return value.replace(/[&<>'"]/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  })[character] ?? character);
+}
+
+function emailSubjectName(value: string) {
+  return value.replace(/[\r\n]+/g, ' ').trim() || '訂閱方案';
 }

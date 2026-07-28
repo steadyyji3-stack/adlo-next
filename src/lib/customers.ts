@@ -1,4 +1,5 @@
 import 'server-only';
+import { serviceStatusForSubscription } from '@/lib/billing-lifecycle';
 import type { StoreProfileInput } from '@/lib/store-profile';
 import { saveCustomerStoreProfile } from '@/lib/customer-store-profile';
 import { insertRow, selectRows, updateRows, upsertRow } from '@/lib/supabase-rest';
@@ -69,15 +70,29 @@ export async function upsertCheckoutCustomer(input: {
   name: string;
   storeName: string;
 }) {
+  const email = input.email.trim().toLowerCase();
+  const [stripeMatch, emailMatch] = await Promise.all([
+    selectRows<Customer>('customers', { stripe_customer_id: input.stripeCustomerId }, { limit: 1 }),
+    selectRows<Customer>('customers', { email }, { limit: 1 }),
+  ]);
+  const existing = stripeMatch[0] ?? emailMatch[0];
+  if (existing) {
+    if (existing.stripe_customer_id === input.stripeCustomerId) return existing;
+    const [updated] = await updateRows<Customer>(
+      'customers',
+      { id: existing.id },
+      { stripe_customer_id: input.stripeCustomerId },
+    );
+    return updated ?? existing;
+  }
+
   return upsertRow<Customer>(
     'customers',
     {
       stripe_customer_id: input.stripeCustomerId,
-      email: input.email,
+      email,
       name: input.name,
       store_name: input.storeName,
-      onboarding_status: 'not_started',
-      service_status: 'pending_onboarding',
     },
     'stripe_customer_id',
   );
@@ -143,17 +158,19 @@ export async function syncExistingSubscription(input: {
     },
   );
 
-  await updateCustomer(existing.customer_id, {
-    service_status: serviceStatusForSubscription(input.status),
-  });
+  const [customer] = await selectRows<Pick<Customer, 'onboarding_status' | 'service_status'>>(
+    'customers',
+    { id: existing.customer_id },
+    { select: 'onboarding_status,service_status', limit: 1 },
+  );
+  if (customer) {
+    const nextServiceStatus = serviceStatusForSubscription(input.status, customer.onboarding_status);
+    if (customer.service_status !== nextServiceStatus) {
+      await updateCustomer(existing.customer_id, { service_status: nextServiceStatus });
+    }
+  }
 
   return subscription ?? null;
-}
-
-function serviceStatusForSubscription(status: SubscriptionStatus): ServiceStatus {
-  if (status === 'active' || status === 'trialing') return 'active';
-  if (status === 'cancelled') return 'cancelled';
-  return 'paused';
 }
 
 export async function listCustomers(filters: { status?: string; plan?: string } = {}) {
@@ -216,8 +233,10 @@ export async function completeSelfServeOnboarding(input: {
     throw new Error('Customer not found');
   }
 
-  const hasActiveSubscription = existingCustomer.subscriptions.some(
-    (subscription) => subscription.status === 'active' || subscription.status === 'trialing',
+  const hasServiceAccess = existingCustomer.subscriptions.some(
+    (subscription) => subscription.status === 'active'
+      || subscription.status === 'trialing'
+      || subscription.status === 'past_due',
   );
   const profile = await saveCustomerStoreProfile(input.customerId, input.storeProfile);
   const customer = await updateCustomer(input.customerId, {
@@ -231,7 +250,7 @@ export async function completeSelfServeOnboarding(input: {
     industry: profile.industry,
     signature_items: input.signatureItems,
     onboarding_status: 'approved',
-    service_status: hasActiveSubscription ? 'active' : existingCustomer.service_status,
+    service_status: hasServiceAccess ? 'active' : existingCustomer.service_status,
   });
   if (!customer) {
     throw new Error('Customer update failed');
