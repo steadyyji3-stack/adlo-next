@@ -1,7 +1,9 @@
 import 'server-only';
 import { selectRows } from '@/lib/supabase-rest';
 import { getCustomerDetail, type CustomerDetail } from '@/lib/customers';
-import { getCurrentCustomerGrowthCycle } from '@/lib/customer-growth-cycles';
+import { currentTaipeiGrowthWeekStart, listCustomerGrowthCycles } from '@/lib/customer-growth-cycles';
+import { getCustomerStoreProfile } from '@/lib/customer-store-profile';
+import { buildCustomerQuickstart, type CustomerQuickstart } from '@/lib/customer-quickstart';
 import type { CustomerGrowthCycle } from '@/lib/customer-growth-types';
 
 const DASHBOARD_AGGREGATE_LIMIT = 120;
@@ -69,6 +71,7 @@ export interface CustomerDashboardData {
   reviews: GbpReview[];
   rankings: KeywordRanking[];
   reports: MonthlyReport[];
+  quickstart: CustomerQuickstart;
   kpis: {
     postsThisMonth: number;
     postedThisMonth: number;
@@ -83,13 +86,17 @@ export async function getCustomerDashboardData(customerId: string): Promise<Cust
   const customer = await getCustomerDetail(customerId);
   if (!customer) return null;
 
-  const [posts, reviews, rankings, reports, currentGrowthCycle] = await Promise.all([
+  const [posts, reviews, rankings, reports, storeProfile, growthCycles] = await Promise.all([
     listCustomerPosts(customerId, DASHBOARD_AGGREGATE_LIMIT),
     listCustomerReviews(customerId, DASHBOARD_AGGREGATE_LIMIT),
     listCustomerRankings(customerId, DASHBOARD_AGGREGATE_LIMIT),
     listCustomerReports(customerId, 6),
-    getCurrentCustomerGrowthCycle(customerId),
+    getCustomerStoreProfile(customerId),
+    listCustomerGrowthCycles(customerId),
   ]);
+  const currentGrowthCycle = growthCycles.find(
+    (cycle) => cycle.week_start === currentTaipeiGrowthWeekStart(),
+  ) ?? null;
 
   return {
     customer,
@@ -99,6 +106,7 @@ export async function getCustomerDashboardData(customerId: string): Promise<Cust
     reviews: reviews.slice(0, 8),
     rankings: rankings.slice(0, 12),
     reports,
+    quickstart: buildCustomerQuickstart(storeProfile, growthCycles),
     kpis: buildDashboardKpis(posts, reviews, rankings),
   };
 }
