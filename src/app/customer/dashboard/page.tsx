@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { CalendarDays, FileText, MessageSquareText, Newspaper, Star, Target, TrendingUp } from 'lucide-react';
+import { CalendarDays, CreditCard, FileText, MessageSquareText, Newspaper, Star, Target, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { getCustomerDashboardData, type GbpPost, type GbpReview, type KeywordRanking, type MonthlyReport } from '@/lib/customer-dashboard';
+import { QuickstartGuide } from './QuickstartGuide';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +53,8 @@ export default async function CustomerDashboardPage() {
     return <CustomerGate title="找不到客戶資料" body="你的登入 session 沒有對應到 adlo 客戶。請確認使用訂閱 email 登入。" />;
   }
 
-  const { customer, latestSubscription, currentGrowthCycle, posts, reviews, rankings, reports, kpis } = dashboard;
+  const { customer, latestSubscription, currentGrowthCycle, posts, reviews, rankings, reports, kpis, quickstart } = dashboard;
+  const hasPerformanceData = posts.length > 0 || reviews.length > 0 || rankings.length > 0 || reports.length > 0;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -61,23 +63,25 @@ export default async function CustomerDashboardPage() {
           <Link href="/customer/dashboard" className="text-xl font-extrabold tracking-tight text-slate-950">
             adlo
           </Link>
-          <div className="flex items-center gap-3">
+          <nav className="flex items-center gap-1 sm:gap-2" aria-label="客戶後台">
+            <Button asChild variant="ghost" size="sm" className="font-bold"><Link href="/customer/week"><Target className="h-4 w-4" aria-hidden /><span className="hidden sm:inline">本週任務</span></Link></Button>
+            <Button asChild variant="ghost" size="sm" className="font-bold"><Link href="/customer/billing"><CreditCard className="h-4 w-4" aria-hidden /><span className="hidden sm:inline">訂閱</span></Link></Button>
             <Badge variant="outline" className={statusClasses[customer.service_status]}>
               {serviceStatusLabels[customer.service_status] ?? customer.service_status}
             </Badge>
             <span className="hidden text-sm font-semibold text-slate-700 sm:inline">{customer.store_name}</span>
-          </div>
+          </nav>
         </div>
       </header>
 
       <main className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="mb-2 text-xs font-extrabold uppercase tracking-widest text-[#0F6E56]">Customer Dashboard</p>
+            <p className="mb-2 text-xs font-extrabold text-[#0F6E56]">店家後台</p>
             <h1 className="text-2xl font-extrabold text-slate-900 md:text-3xl">
               {customer.store_name} <span className="text-[#1D9E75]">{formatMonth(new Date())}</span>
             </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">先完成本週唯一任務，再查看已累積的內容、評論、排名與月報。</p>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">不用研究行銷術語。這週先完成一件事，其他交給系統持續整理。</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild variant="outline" className="font-bold">
@@ -86,10 +90,12 @@ export default async function CustomerDashboardPage() {
           </div>
         </div>
 
+        <QuickstartGuide quickstart={quickstart} currentCycle={currentGrowthCycle} />
+
         <section className="flex flex-col gap-5 border-y border-slate-200 bg-white px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <p className="text-xs font-extrabold text-[#0F6E56]">本週唯一任務</p>
+              <p className="text-xs font-extrabold text-[#0F6E56]">這週只做這件事</p>
               {currentGrowthCycle && (
                 <Badge variant="outline" className={currentGrowthCycle.status === 'completed'
                   ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
@@ -118,18 +124,28 @@ export default async function CustomerDashboardPage() {
           <Button asChild className="shrink-0 bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">
             <Link href={currentGrowthCycle ? '/customer/week' : '/customer/week?generate=1'}>
               <Target className="mr-2 h-4 w-4" aria-hidden />
-              {currentGrowthCycle?.status === 'completed' ? '查看本週成果' : currentGrowthCycle ? '繼續本週任務' : '產生本週任務'}
+              {currentGrowthCycle?.status === 'completed' ? '查看本週成果' : currentGrowthCycle ? '繼續完成' : '立即幫我準備'}
             </Link>
           </Button>
         </section>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <KpiCard icon={Newspaper} label="本月 GBP 貼文" value={`${kpis.postedThisMonth}/${kpis.postsThisMonth}`} helper="已發布 / 本月總數" />
-          <KpiCard icon={Star} label="新評論" value={String(kpis.newReviewsThisMonth)} helper={kpis.averageRating ? `平均 ${kpis.averageRating.toFixed(1)} 星` : '尚無本月評論'} />
-          <KpiCard icon={TrendingUp} label="關鍵字平均排名" value={kpis.averageRank ? `#${kpis.averageRank.toFixed(1)}` : '-'} helper="最近一次追蹤" />
-        </div>
+        {hasPerformanceData ? (
+          <div>
+            <div className="mb-4"><h2 className="text-lg font-extrabold text-slate-950">最近的店家變化</h2><p className="mt-1 text-sm text-slate-500">只顯示目前已有紀錄的資料。</p></div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <KpiCard icon={Newspaper} label="Google 地圖貼文" value={`${kpis.postedThisMonth}/${kpis.postsThisMonth}`} helper="本月已發布 / 已準備" />
+              <KpiCard icon={Star} label="本月新評論" value={String(kpis.newReviewsThisMonth)} helper={kpis.averageRating ? `平均 ${kpis.averageRating.toFixed(1)} 星` : '有資料後會顯示平均星等'} />
+              <KpiCard icon={TrendingUp} label="客人搜尋時的位置" value={kpis.averageRank ? `第 ${kpis.averageRank.toFixed(1)} 名` : '-'} helper="最近一次搜尋追蹤" />
+            </div>
+          </div>
+        ) : (
+          <section className="border-y border-slate-200 py-6">
+            <h2 className="text-base font-extrabold text-slate-900">完成第一個任務後，這裡會開始記錄變化</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">目前沒有需要判讀的數字。先完成上方任務，系統會逐步整理貼文、評論、搜尋位置與每月成果。</p>
+          </section>
+        )}
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {hasPerformanceData && <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="flex flex-col gap-6 lg:col-span-2">
             <PostsCard posts={posts} />
             <RankingsCard rankings={rankings} />
@@ -139,7 +155,7 @@ export default async function CustomerDashboardPage() {
             <ReviewsCard reviews={reviews} unansweredCount={kpis.unansweredReviews} />
             <ReportsCard reports={reports} />
           </aside>
-        </div>
+        </div>}
       </main>
     </div>
   );
@@ -182,12 +198,12 @@ function PostsCard({ posts }: { posts: GbpPost[] }) {
   return (
     <Card className="border-slate-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-lg font-extrabold text-slate-900">近期 GBP 貼文</CardTitle>
-        <CardDescription>已排程、草稿與發布紀錄。</CardDescription>
+        <CardTitle className="text-lg font-extrabold text-slate-900">Google 地圖貼文</CardTitle>
+        <CardDescription>近期已準備與發布的內容。</CardDescription>
       </CardHeader>
       <CardContent>
         {posts.length === 0 ? (
-          <EmptyState text="尚無貼文資料，GBP 自動化 PR 完成後會開始累積。" />
+          <EmptyState text="完成第一個內容任務後，這裡會開始累積。" />
         ) : (
           <Table>
             <TableHeader>
@@ -223,12 +239,12 @@ function RankingsCard({ rankings }: { rankings: KeywordRanking[] }) {
   return (
     <Card className="border-slate-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-lg font-extrabold text-slate-900">Local SEO 排名</CardTitle>
-        <CardDescription>最近一次關鍵字排名追蹤。</CardDescription>
+        <CardTitle className="text-lg font-extrabold text-slate-900">客人搜尋時，你的店出現的位置</CardTitle>
+        <CardDescription>最近一次搜尋位置紀錄。</CardDescription>
       </CardHeader>
       <CardContent>
         {rankings.length === 0 ? (
-          <EmptyState text="尚無排名資料，Local SEO tracking PR 完成後會顯示趨勢。" />
+          <EmptyState text="完成第一次搜尋追蹤後，這裡會顯示變化。" />
         ) : (
           <Table>
             <TableHeader>
@@ -314,7 +330,7 @@ function ReportsCard({ reports }: { reports: MonthlyReport[] }) {
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {reports.length === 0 ? (
-          <EmptyState text="尚無月報，月報產生工具會在後續 PR 補上。" />
+          <EmptyState text="累積第一個完整月份後，這裡會出現每月成果。" />
         ) : (
           reports.map((report) => (
             <a key={report.id} href={report.pdf_url} className="rounded-lg border border-slate-200 p-3 text-sm font-semibold text-slate-800 hover:border-emerald-200 hover:bg-emerald-50/40">

@@ -16,10 +16,10 @@ export default async function OnboardingPage() {
     <main className="min-h-screen bg-slate-50 px-6 py-10">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8">
-          <p className="mb-2 text-xs font-extrabold uppercase tracking-widest text-[#0F6E56]">adlo onboarding</p>
-          <h1 className="text-3xl font-extrabold text-slate-900 md:text-4xl">開始建立你的成交後服務</h1>
+          <p className="mb-2 text-xs font-extrabold text-[#0F6E56]">第一次設定 · 約 5 分鐘</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 md:text-4xl">讓系統先認識你的店</h1>
           <p className="mt-3 text-sm leading-relaxed text-slate-600 md:text-base">
-            填完後會立即建立店家檔案並同步到客戶後台，不需要等待人工審核，也不會要求 Google 帳號授權。
+            一次只回答一小段。完成後會立即準備第一個任務，不需要等待人工審核。
           </p>
         </div>
 
