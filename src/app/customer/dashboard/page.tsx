@@ -94,7 +94,15 @@ export default async function CustomerDashboardPage() {
                 <Badge variant="outline" className={currentGrowthCycle.status === 'completed'
                   ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
                   : 'border-amber-200 bg-amber-50 text-amber-700'}>
-                  {currentGrowthCycle.status === 'completed' ? '已完成' : '進行中'}
+                  {currentGrowthCycle.outcome_status === 'verified_improvement'
+                    ? '觀察到改善'
+                    : currentGrowthCycle.outcome_status === 'verified_no_change'
+                      ? '暫無變化'
+                      : currentGrowthCycle.outcome_status === 'verified_regression'
+                        ? '需要換方向'
+                        : currentGrowthCycle.status === 'completed'
+                          ? '已完成，未驗證'
+                          : '進行中'}
                 </Badge>
               )}
             </div>
@@ -102,7 +110,9 @@ export default async function CustomerDashboardPage() {
               {currentGrowthCycle?.task.title ?? '產生第一個店家成長任務'}
             </h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
-              {currentGrowthCycle?.task.objective ?? '系統會依店家檔案與過去紀錄，準備一件 5–30 分鐘可完成的行動。'}
+              {currentGrowthCycle?.result_snapshot?.summary
+                ?? currentGrowthCycle?.task.objective
+                ?? '系統會依店家檔案與過去紀錄，準備一件 5–30 分鐘可完成的行動。'}
             </p>
           </div>
           <Button asChild className="shrink-0 bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">

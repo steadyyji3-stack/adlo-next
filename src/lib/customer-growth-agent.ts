@@ -7,6 +7,7 @@ import {
   type GrowthBusinessContext,
   type GrowthTask,
 } from '@/lib/customer-growth-types';
+import { withVerificationPlan } from '@/lib/customer-growth-outcomes';
 import type { StoreProfile } from '@/lib/store-profile';
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -26,7 +27,7 @@ export async function generateWeeklyGrowthTask(input: {
 }): Promise<AgentResult> {
   const evidence = buildEvidence(input.profile, input.history, input.business);
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return fallbackTask(input.profile, input.history, input.business, evidence);
+  if (!apiKey) return verifiedAgentResult(fallbackTask(input.profile, input.history, input.business, evidence));
 
   try {
     const response = await fetch(GROQ_URL, {
@@ -47,7 +48,10 @@ export async function generateWeeklyGrowthTask(input: {
               type: cycle.task.type,
               title: cycle.task.title,
               status: cycle.status,
-              resultNote: cycle.feedback?.note ?? null,
+              outcomeStatus: cycle.outcome_status ?? null,
+              confidenceLevel: cycle.confidence_level ?? null,
+              resultSummary: cycle.result_snapshot?.summary ?? null,
+              nextRecommendation: cycle.next_recommendation?.rationale ?? null,
             })),
             instruction: input.instruction || null,
           }) },
@@ -62,14 +66,14 @@ export async function generateWeeklyGrowthTask(input: {
     const content = data.choices?.[0]?.message?.content;
     if (!content) throw new Error('Groq response empty');
     const task = growthTaskSchema.parse(JSON.parse(content));
-    return { task, evidence, source: 'groq' };
+    return { task: withVerificationPlan(task), evidence, source: 'groq' };
   } catch (error) {
     console.error('[GrowthAgent] AI generation failed, using template', error instanceof Error ? error.message : 'unknown error');
-    return fallbackTask(input.profile, input.history, input.business, evidence);
+    return verifiedAgentResult(fallbackTask(input.profile, input.history, input.business, evidence));
   }
 }
 
-const systemPrompt = `你是台灣在地店家的每週成長店長。只能根據輸入的 evidence 提出一個 5-30 分鐘能完成的任務，不得虛構分數、排名、評論、客戶案例、工期、價格或成效；未知內容用方括號標示待店家補寫。任務類型只能是 gbp_post、line_broadcast、review_request、case_post、quote_clarity、photo_refresh、service_page。recentTasks 的 resultNote 是客戶實際回饋；優先延續有效做法，避免重複客戶明確表示不適合的任務。回傳符合以下欄位的純 JSON：type、title、objective、whyNow、scoreDimension、estimatedMinutes、steps（2-4項）、deliverables（1-3項，每項 label/content/usage）、successCheck。文案用台灣繁中、直接自然，不使用「賦能、打造、卓越、優質」。若使用者有 instruction，調整語氣或角度，但仍只能交付一個任務。`;
+const systemPrompt = `你是台灣在地店家的每週成長店長。只能根據輸入的 evidence 提出一個 5-30 分鐘能完成的任務，不得虛構分數、排名、評論、客戶案例、工期、價格或成效；未知內容用方括號標示待店家補寫。任務類型只能是 gbp_post、line_broadcast、review_request、case_post、quote_clarity、photo_refresh、service_page。recentTasks 的 outcomeStatus、resultSummary 與 nextRecommendation 是結構化驗收結果；改善時可延續方向，無變化時調整做法，退步時切換面向，且不得把前後差異宣稱為單一因果。回傳符合以下欄位的純 JSON：type、title、objective、whyNow、scoreDimension、estimatedMinutes、steps（2-4項）、deliverables（1-3項，每項 label/content/usage）、successCheck。不要自行回傳 verification，系統會用任務類型配置驗收方式。文案用台灣繁中、直接自然，不使用「賦能、打造、卓越、優質」。若使用者有 instruction，調整語氣或角度，但仍只能交付一個任務。`;
 
 function buildEvidence(
   profile: StoreProfile,
@@ -89,8 +93,13 @@ function buildEvidence(
   }
   const completed = history.filter((cycle) => cycle.status === 'completed').length;
   evidence.push(`系統內已有 ${history.length} 週任務，其中 ${completed} 週已完成`);
-  const latestResultNote = history.find((cycle) => cycle.feedback?.note)?.feedback?.note;
-  if (latestResultNote) evidence.push(`最近一次客戶結果回饋：${latestResultNote}`);
+  const latestOutcome = history.find((cycle) => cycle.outcome_status && cycle.result_snapshot);
+  if (latestOutcome?.result_snapshot) {
+    evidence.push(`最近一次結構化驗收：${latestOutcome.result_snapshot.summary}`);
+  }
+  if (latestOutcome?.next_recommendation) {
+    evidence.push(`上次系統下一步：${latestOutcome.next_recommendation.rationale}`);
+  }
   return evidence;
 }
 
@@ -114,7 +123,7 @@ function fallbackTask(
   if (['裝潢', '裝修', '安裝', '維修'].includes(profile.industry)) {
     return renovationFallbackTask(profile, history, business, evidence);
   }
-  const nextType = ['gbp_post', 'line_broadcast', 'review_request'][history.length % 3];
+  const nextType = nextGeneralTaskType(history);
   const industry = Object.hasOwn(INDUSTRY_TAGS, profile.industry)
     ? profile.industry
     : '其他' as Industry;
@@ -162,6 +171,24 @@ function fallbackTask(
     deliverables: [{ label: post.title, content: post.content, usage: `建議 ${post.bestTime} 發布；圖片：${post.imageHint}` }],
     successCheck: '貼文已發布，內容、營業資訊與圖片都符合店家真實現況。',
   } };
+}
+
+function verifiedAgentResult(result: AgentResult): AgentResult {
+  return { ...result, task: withVerificationPlan(result.task) };
+}
+
+function nextGeneralTaskType(history: CustomerGrowthCycle[]) {
+  const candidates = ['gbp_post', 'line_broadcast', 'review_request'] as const;
+  const latest = history.find((cycle) => cycle.status === 'completed');
+  if (!latest) return candidates[history.length % candidates.length];
+
+  if (latest.outcome_status === 'verified_improvement' && candidates.includes(latest.task.type as typeof candidates[number])) {
+    return latest.task.type as typeof candidates[number];
+  }
+
+  const offset = latest.outcome_status === 'verified_no_change' || latest.outcome_status === 'verified_regression' ? 1 : 0;
+  const available = candidates.filter((type) => type !== latest.task.type);
+  return available[(history.length + offset) % available.length];
 }
 
 function renovationFallbackTask(

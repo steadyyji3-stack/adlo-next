@@ -2,7 +2,12 @@ import 'server-only';
 import type { StoreProfile } from '@/lib/store-profile';
 import type {
   CustomerGrowthCycle,
+  GrowthBaselineSnapshot,
+  GrowthConfidenceLevel,
   GrowthGenerationSource,
+  GrowthNextRecommendation,
+  GrowthOutcomeStatus,
+  GrowthResultSnapshot,
   GrowthTask,
 } from '@/lib/customer-growth-types';
 import { selectRows, updateRows, upsertRow } from '@/lib/supabase-rest';
@@ -33,6 +38,15 @@ export async function getCurrentCustomerGrowthCycle(customerId: string) {
   return cycle ?? null;
 }
 
+export async function getCustomerGrowthCycle(customerId: string, cycleId: string) {
+  const [cycle] = await selectRows<CustomerGrowthCycle>(
+    'customer_growth_cycles',
+    { id: cycleId, customer_id: customerId },
+    { limit: 1 },
+  );
+  return cycle ?? null;
+}
+
 export async function saveCustomerGrowthCycle(input: {
   customerId: string;
   profile: StoreProfile;
@@ -41,6 +55,7 @@ export async function saveCustomerGrowthCycle(input: {
   source: GrowthGenerationSource;
   instruction?: string;
   generationCount: number;
+  baseline: GrowthBaselineSnapshot;
   previousCycle?: CustomerGrowthCycle | null;
 }) {
   const revisions = input.previousCycle
@@ -65,6 +80,11 @@ export async function saveCustomerGrowthCycle(input: {
       profile_snapshot: input.profile,
       generation_source: input.source,
       generation_count: input.generationCount,
+      baseline_snapshot: input.baseline,
+      result_snapshot: null,
+      outcome_status: null,
+      confidence_level: null,
+      next_recommendation: null,
       instruction: input.instruction || null,
       feedback: revisions.length
         ? { ...input.previousCycle?.feedback, revisions }
@@ -78,7 +98,13 @@ export async function saveCustomerGrowthCycle(input: {
 export async function completeCustomerGrowthCycle(
   customerId: string,
   cycleId: string,
-  note?: string,
+  outcome: {
+    result: GrowthResultSnapshot;
+    status: GrowthOutcomeStatus;
+    confidence: GrowthConfidenceLevel;
+    recommendation: GrowthNextRecommendation;
+    note?: string;
+  },
 ) {
   const [existing] = await selectRows<CustomerGrowthCycle>(
     'customer_growth_cycles',
@@ -88,13 +114,17 @@ export async function completeCustomerGrowthCycle(
   if (!existing) return null;
   const [cycle] = await updateRows<CustomerGrowthCycle>(
     'customer_growth_cycles',
-    { id: cycleId, customer_id: customerId },
+    { id: cycleId, customer_id: customerId, status: 'ready' },
     {
       status: 'completed',
       feedback: {
         ...(existing.feedback ?? {}),
-        ...(note ? { note } : {}),
+        ...(outcome.note ? { note: outcome.note } : {}),
       },
+      result_snapshot: outcome.result,
+      outcome_status: outcome.status,
+      confidence_level: outcome.confidence,
+      next_recommendation: outcome.recommendation,
       completed_at: new Date().toISOString(),
     },
   );

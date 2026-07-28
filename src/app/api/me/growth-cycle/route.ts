@@ -5,8 +5,13 @@ import { getCustomerIdFromSession } from '@/lib/customer-auth';
 import { generateWeeklyGrowthTask } from '@/lib/customer-growth-agent';
 import { acquireGrowthGenerationLease } from '@/lib/customer-growth-lock';
 import {
+  buildGrowthBaselineSnapshot,
+  evaluateGrowthOutcome,
+} from '@/lib/customer-growth-outcomes';
+import {
   completeCustomerGrowthCycle,
   currentTaipeiGrowthWeekStart,
+  getCustomerGrowthCycle,
   getCurrentCustomerGrowthCycle,
   listCustomerGrowthCycles,
   saveCustomerGrowthCycle,
@@ -19,7 +24,17 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 const generateSchema = z.object({ instruction: z.string().trim().max(300).optional() }).strict();
-const completeSchema = z.object({ cycleId: z.string().uuid(), note: z.string().trim().max(300).optional() }).strict();
+const completeSchema = z.object({
+  cycleId: z.string().uuid(),
+  evidence: z.object({
+    confirmed: z.boolean().optional(),
+    url: z.string().trim().max(500).optional(),
+    beforeValue: z.number().finite().min(0).max(1_000_000).optional(),
+    afterValue: z.number().finite().min(0).max(1_000_000).optional(),
+    count: z.number().finite().min(0).max(1_000_000).optional(),
+    note: z.string().trim().max(300).optional(),
+  }).strict(),
+}).strict();
 
 export async function GET() {
   try {
@@ -85,6 +100,12 @@ export async function POST(request: Request) {
         source: generated.source,
         instruction: parsed.data.instruction,
         generationCount,
+        baseline: buildGrowthBaselineSnapshot({ profile, business: {
+          storeCity: access.customer.store_city,
+          hasWebsite: Boolean(access.customer.website_url),
+          hasGbpProfile: Boolean(access.customer.gbp_url),
+          signatureItems: access.customer.signature_items ?? [],
+        }, history }),
         previousCycle: current,
       });
       await writeAuditLog({
@@ -112,18 +133,30 @@ export async function PATCH(request: Request) {
     if (body === null) return apiError('INVALID_JSON', '請求格式不正確', 400);
     const parsed = completeSchema.safeParse(body);
     if (!parsed.success) return apiError('VALIDATION_FAILED', '完成資料格式不正確', 400);
-    const cycle = await completeCustomerGrowthCycle(
-      access.customerId,
-      parsed.data.cycleId,
-      parsed.data.note,
-    );
-    if (!cycle) return apiError('GROWTH_CYCLE_NOT_FOUND', '找不到本週任務', 404);
+    const existing = await getCustomerGrowthCycle(access.customerId, parsed.data.cycleId);
+    if (!existing) return apiError('GROWTH_CYCLE_NOT_FOUND', '找不到本週任務', 404);
+    if (existing.status === 'completed') return apiOk({ cycle: existing, alreadyCompleted: true });
+    const evaluation = evaluateGrowthOutcome(existing.task, parsed.data.evidence);
+    if (!evaluation.ok) return apiError('GROWTH_EVIDENCE_REQUIRED', evaluation.message, 400);
+    const cycle = await completeCustomerGrowthCycle(access.customerId, parsed.data.cycleId, evaluation);
+    if (!cycle) {
+      const latest = await getCustomerGrowthCycle(access.customerId, parsed.data.cycleId);
+      if (latest?.status === 'completed') return apiOk({ cycle: latest, alreadyCompleted: true });
+      return apiError('GROWTH_CYCLE_NOT_FOUND', '找不到本週任務', 404);
+    }
     await writeAuditLog({
       actor: `customer:${access.customerId}`,
       action: 'growth_cycle.complete',
       targetType: 'growth_cycle',
       targetId: cycle.id,
-      payload: { week_start: cycle.week_start, task_type: cycle.task.type },
+      payload: {
+        week_start: cycle.week_start,
+        task_type: cycle.task.type,
+        outcome_status: evaluation.status,
+        confidence_level: evaluation.confidence,
+        metric: evaluation.result.metric,
+        delta: evaluation.result.delta,
+      },
     });
     return apiOk({ cycle });
   } catch (error) {

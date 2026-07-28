@@ -3,6 +3,11 @@ import 'server-only';
 import { Resend } from 'resend';
 import { writeAuditLog } from '@/lib/audit-log';
 import { currentTaipeiGrowthWeekStart } from '@/lib/customer-growth-cycles';
+import type {
+  GrowthNextRecommendation,
+  GrowthOutcomeStatus,
+  GrowthResultSnapshot,
+} from '@/lib/customer-growth-types';
 import { selectRows } from '@/lib/supabase-rest';
 
 const DIGEST_ACTION = 'customer.weekly_digest.sent';
@@ -42,6 +47,13 @@ interface CurrentGrowthCycleRow {
   customer_id: string;
 }
 
+interface DigestOutcomeRow {
+  customer_id: string;
+  outcome_status: GrowthOutcomeStatus | null;
+  result_snapshot: GrowthResultSnapshot | null;
+  next_recommendation: GrowthNextRecommendation | null;
+}
+
 interface DigestAuditRow {
   target_id: string | null;
   payload: Record<string, unknown> | null;
@@ -71,6 +83,7 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
     pastDueSubscriptions,
     profiles,
     currentCycles,
+    completedOutcomes,
     sentAudits,
   ] = await Promise.all([
     selectRows<DigestCustomerRow>('customers', undefined, {
@@ -82,6 +95,11 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
     selectRows<DigestSubscriptionRow>('subscriptions', { status: 'past_due' }, { select: 'customer_id' }),
     selectRows<CustomerStoreProfileRow>('customer_store_profiles', undefined, { select: 'customer_id' }),
     selectRows<CurrentGrowthCycleRow>('customer_growth_cycles', { week_start: weekStart }, { select: 'customer_id' }),
+    selectRows<DigestOutcomeRow>('customer_growth_cycles', { status: 'completed' }, {
+      select: 'customer_id,outcome_status,result_snapshot,next_recommendation',
+      order: 'week_start.desc',
+      limit: 1000,
+    }),
     selectRows<DigestAuditRow>('audit_log', { actor: 'system:weekly-digest', action: DIGEST_ACTION }, {
       select: 'target_id,payload',
       order: 'created_at.desc',
@@ -96,6 +114,13 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
   ]);
   const profileCustomerIds = new Set(profiles.map((profile) => profile.customer_id));
   const currentCycleCustomerIds = new Set(currentCycles.map((cycle) => cycle.customer_id));
+  const latestOutcomeByCustomer = new Map<string, DigestOutcomeRow>();
+  for (const outcome of completedOutcomes) {
+    if (!outcome.outcome_status || !outcome.result_snapshot) continue;
+    if (!latestOutcomeByCustomer.has(outcome.customer_id)) {
+      latestOutcomeByCustomer.set(outcome.customer_id, outcome);
+    }
+  }
   const sentCustomerIds = new Set(
     sentAudits
       .filter((audit) => audit.payload?.week_start === weekStart)
@@ -114,7 +139,11 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
   const failureReasons: Partial<Record<WeeklyDigestFailureCode, number>> = {};
   for (const [index, customer] of eligibleCustomers.entries()) {
     try {
-      const messageId = await sendWeeklyDigest(customer, weekStart);
+      const messageId = await sendWeeklyDigest(
+        customer,
+        weekStart,
+        latestOutcomeByCustomer.get(customer.id) ?? null,
+      );
       try {
         await writeAuditLog({
           actor: 'system:weekly-digest',
@@ -158,7 +187,11 @@ export async function runCustomerWeeklyDigest(now = new Date()): Promise<WeeklyD
   };
 }
 
-async function sendWeeklyDigest(customer: DigestCustomerRow, weekStart: string) {
+async function sendWeeklyDigest(
+  customer: DigestCustomerRow,
+  weekStart: string,
+  latestOutcome: DigestOutcomeRow | null,
+) {
   const key = process.env.RESEND_API_KEY;
   if (!key) throw new WeeklyDigestError('RESEND_API_KEY_MISSING');
 
@@ -166,8 +199,10 @@ async function sendWeeklyDigest(customer: DigestCustomerRow, weekStart: string) 
     {
       from: 'adlo 系統通知 <hello@adlo.tw>',
       to: customer.email,
-      subject: `${emailSubjectName(customer.store_name)}：本週成長任務入口已開啟`,
-      html: weeklyDigestEmail(customer),
+      subject: latestOutcome?.outcome_status === 'verified_improvement'
+        ? `${emailSubjectName(customer.store_name)}：上週觀察到改善，本週下一步已準備`
+        : `${emailSubjectName(customer.store_name)}：本週成長任務入口已開啟`,
+      html: weeklyDigestEmail(customer, latestOutcome),
     },
     {
       idempotencyKey: `weekly-growth/${weekStart}/${customer.id}`,
@@ -219,12 +254,18 @@ async function recordDigestFailure(
   }
 }
 
-function weeklyDigestEmail(customer: DigestCustomerRow) {
+function weeklyDigestEmail(customer: DigestCustomerRow, latestOutcome: DigestOutcomeRow | null) {
   const taskUrl = new URL('/customer/week', siteUrl());
   taskUrl.searchParams.set('generate', '1');
   const billingUrl = new URL('/customer/billing', siteUrl());
   const name = escapeHtml(customer.name || customer.store_name);
   const storeName = escapeHtml(customer.store_name);
+  const outcomeSummary = latestOutcome?.result_snapshot?.summary
+    ? escapeHtml(latestOutcome.result_snapshot.summary)
+    : null;
+  const nextRationale = latestOutcome?.next_recommendation?.rationale
+    ? escapeHtml(latestOutcome.next_recommendation.rationale)
+    : null;
 
   return `
 <!DOCTYPE html>
@@ -238,6 +279,7 @@ function weeklyDigestEmail(customer: DigestCustomerRow) {
     </div>
     <div style="padding:32px;">
       <p style="color:#334155;font-size:16px;line-height:1.75;margin:0 0 16px;">${name} 您好，</p>
+      ${outcomeSummary ? `<div style="border-left:4px solid #1D9E75;background:#f0fdf4;padding:14px 16px;margin:0 0 18px;"><p style="color:#166534;font-size:13px;font-weight:700;margin:0 0 6px;">上週驗收結果</p><p style="color:#334155;font-size:14px;line-height:1.7;margin:0;">${outcomeSummary}</p>${nextRationale ? `<p style="color:#64748b;font-size:13px;line-height:1.7;margin:8px 0 0;">下一步：${nextRationale}</p>` : ''}</div>` : ''}
       <p style="color:#475569;font-size:16px;line-height:1.75;margin:0 0 16px;">本週任務入口已開啟。系統會依你的店家檔案與前幾週紀錄，準備一件約 15–30 分鐘可完成的在地成長行動。</p>
       <p style="margin:28px 0;"><a href="${taskUrl.toString()}" style="display:inline-block;background:#1D9E75;color:#ffffff;text-decoration:none;padding:13px 20px;font-weight:700;">取得本週任務</a></p>
       <p style="color:#64748b;font-size:14px;line-height:1.7;margin:0;">不需要記密碼。若登入狀態已到期，系統會請你用訂閱 email 取得一次性登入連結。</p>
