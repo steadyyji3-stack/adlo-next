@@ -112,3 +112,49 @@ export function getClientIp(headers: Headers): string {
     'unknown'
   );
 }
+
+// ── Admin 登入防爆破 ────────────────────────────────────────────────
+const LOGIN_MAX_ATTEMPTS = 5;
+const LOGIN_WINDOW_SECONDS = 60 * 15; // 15 分鐘
+
+export interface LoginAttemptResult {
+  allowed: boolean;
+  remaining: number;
+  retryAfterSeconds: number;
+}
+
+/** 檢查該 IP 是否還能嘗試登入（不遞增）。
+ *  Redis 失敗時 fail-closed：拒絕登入。
+ *  理由：/admin 是後台入口，Redis 掛掉時「擋住登入」的代價遠低於
+ *  「開放無限嘗試」。這與免費工具的 fail-open 取捨相反，是刻意的。
+ */
+export async function checkLoginAttempts(ip: string): Promise<LoginAttemptResult> {
+  const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
+  const key = `adlo:admin:login-fail:${normalizedIp}`;
+
+  const [count, ttl] = await Promise.all([
+    redis.get<number>(key),
+    redis.ttl(key),
+  ]);
+  const attempts = count ?? 0;
+
+  return {
+    allowed: attempts < LOGIN_MAX_ATTEMPTS,
+    remaining: Math.max(0, LOGIN_MAX_ATTEMPTS - attempts),
+    retryAfterSeconds: ttl > 0 ? ttl : LOGIN_WINDOW_SECONDS,
+  };
+}
+
+/** 登入失敗後呼叫，遞增失敗計數 */
+export async function recordLoginFailure(ip: string): Promise<void> {
+  const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
+  const key = `adlo:admin:login-fail:${normalizedIp}`;
+  const next = await redis.incr(key);
+  if (next === 1) await redis.expire(key, LOGIN_WINDOW_SECONDS);
+}
+
+/** 登入成功後呼叫，清除失敗計數 */
+export async function clearLoginFailures(ip: string): Promise<void> {
+  const normalizedIp = ip.replace(/[^\d.:a-fA-F]/g, '').slice(0, 64) || 'unknown';
+  await redis.del(`adlo:admin:login-fail:${normalizedIp}`);
+}
