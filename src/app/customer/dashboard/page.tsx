@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarDays, FileText, MessageSquareText, Newspaper, Star, TrendingUp } from 'lucide-react';
+import { CalendarDays, FileText, MessageSquareText, Newspaper, Star, Target, TrendingUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -52,7 +52,7 @@ export default async function CustomerDashboardPage() {
     return <CustomerGate title="找不到客戶資料" body="你的登入 session 沒有對應到 adlo 客戶。請確認使用訂閱 email 登入。" />;
   }
 
-  const { customer, latestSubscription, posts, reviews, rankings, reports, kpis } = dashboard;
+  const { customer, latestSubscription, currentGrowthCycle, posts, reviews, rankings, reports, kpis } = dashboard;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -77,17 +77,44 @@ export default async function CustomerDashboardPage() {
             <h1 className="text-2xl font-extrabold text-slate-900 md:text-3xl">
               {customer.store_name} <span className="text-[#1D9E75]">{formatMonth(new Date())}</span>
             </h1>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">
-              本頁先彙整已入庫的貼文、評論、排名與月報資料；GBP 洞察 API 串接後會補上曝光、點擊與互動指標。
-            </p>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500">先完成本週唯一任務，再查看已累積的內容、評論、排名與月報。</p>
           </div>
-          <Button asChild variant="outline" className="font-bold">
-            <Link href="/onboarding">更新 onboarding</Link>
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="font-bold">
+              <Link href="/onboarding">更新店家檔案</Link>
+            </Button>
+          </div>
         </div>
 
+        <section className="flex flex-col gap-5 border-y border-slate-200 bg-white px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-xs font-extrabold text-[#0F6E56]">本週唯一任務</p>
+              {currentGrowthCycle && (
+                <Badge variant="outline" className={currentGrowthCycle.status === 'completed'
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                  : 'border-amber-200 bg-amber-50 text-amber-700'}>
+                  {currentGrowthCycle.status === 'completed' ? '已完成' : '進行中'}
+                </Badge>
+              )}
+            </div>
+            <h2 className="mt-2 text-lg font-extrabold text-slate-950 sm:text-xl">
+              {currentGrowthCycle?.task.title ?? '產生第一個店家成長任務'}
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+              {currentGrowthCycle?.task.objective ?? '系統會依店家檔案與過去紀錄，準備一件 5–30 分鐘可完成的行動。'}
+            </p>
+          </div>
+          <Button asChild className="shrink-0 bg-[#1D9E75] font-bold text-white hover:bg-[#168060]">
+            <Link href={currentGrowthCycle ? '/customer/week' : '/customer/week?generate=1'}>
+              <Target className="mr-2 h-4 w-4" aria-hidden />
+              {currentGrowthCycle?.status === 'completed' ? '查看本週成果' : currentGrowthCycle ? '繼續本週任務' : '產生本週任務'}
+            </Link>
+          </Button>
+        </section>
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <KpiCard icon={Newspaper} label="本月 GBP 貼文" value={`${kpis.postedThisMonth}/${kpis.postsThisMonth}`} helper="已發布 / 已排程" />
+          <KpiCard icon={Newspaper} label="本月 GBP 貼文" value={`${kpis.postedThisMonth}/${kpis.postsThisMonth}`} helper="已發布 / 本月總數" />
           <KpiCard icon={Star} label="新評論" value={String(kpis.newReviewsThisMonth)} helper={kpis.averageRating ? `平均 ${kpis.averageRating.toFixed(1)} 星` : '尚無本月評論'} />
           <KpiCard icon={TrendingUp} label="關鍵字平均排名" value={kpis.averageRank ? `#${kpis.averageRank.toFixed(1)}` : '-'} helper="最近一次追蹤" />
         </div>
@@ -304,9 +331,17 @@ function EmptyState({ text }: { text: string }) {
 }
 
 function formatDate(value: string) {
-  return new Date(value).toLocaleDateString('zh-TW', { month: '2-digit', day: '2-digit' });
+  return new Date(value).toLocaleDateString('zh-TW', {
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'Asia/Taipei',
+  });
 }
 
 function formatMonth(value: Date) {
-  return value.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long' });
+  return value.toLocaleDateString('zh-TW', {
+    year: 'numeric',
+    month: 'long',
+    timeZone: 'Asia/Taipei',
+  });
 }

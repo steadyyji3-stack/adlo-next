@@ -1,6 +1,10 @@
 import 'server-only';
 import { selectRows } from '@/lib/supabase-rest';
 import { getCustomerDetail, type CustomerDetail } from '@/lib/customers';
+import { getCurrentCustomerGrowthCycle } from '@/lib/customer-growth-cycles';
+import type { CustomerGrowthCycle } from '@/lib/customer-growth-types';
+
+const DASHBOARD_AGGREGATE_LIMIT = 120;
 
 export interface GbpPost {
   id: string;
@@ -60,6 +64,7 @@ export interface MonthlyReport {
 export interface CustomerDashboardData {
   customer: CustomerDetail;
   latestSubscription: CustomerDetail['subscriptions'][number] | null;
+  currentGrowthCycle: CustomerGrowthCycle | null;
   posts: GbpPost[];
   reviews: GbpReview[];
   rankings: KeywordRanking[];
@@ -78,19 +83,21 @@ export async function getCustomerDashboardData(customerId: string): Promise<Cust
   const customer = await getCustomerDetail(customerId);
   if (!customer) return null;
 
-  const [posts, reviews, rankings, reports] = await Promise.all([
-    listCustomerPosts(customerId, 8),
-    listCustomerReviews(customerId, 8),
-    listCustomerRankings(customerId, 12),
+  const [posts, reviews, rankings, reports, currentGrowthCycle] = await Promise.all([
+    listCustomerPosts(customerId, DASHBOARD_AGGREGATE_LIMIT),
+    listCustomerReviews(customerId, DASHBOARD_AGGREGATE_LIMIT),
+    listCustomerRankings(customerId, DASHBOARD_AGGREGATE_LIMIT),
     listCustomerReports(customerId, 6),
+    getCurrentCustomerGrowthCycle(customerId),
   ]);
 
   return {
     customer,
     latestSubscription: customer.subscriptions[0] ?? null,
-    posts,
-    reviews,
-    rankings,
+    currentGrowthCycle,
+    posts: posts.slice(0, 8),
+    reviews: reviews.slice(0, 8),
+    rankings: rankings.slice(0, 12),
     reports,
     kpis: buildDashboardKpis(posts, reviews, rankings),
   };
@@ -146,5 +153,14 @@ function average(values: number[]) {
 function isSameMonth(value: string | null, date: Date) {
   if (!value) return false;
   const parsed = new Date(value);
-  return parsed.getFullYear() === date.getFullYear() && parsed.getMonth() === date.getMonth();
+  if (Number.isNaN(parsed.getTime())) return false;
+  return taipeiMonthKey(parsed) === taipeiMonthKey(date);
+}
+
+function taipeiMonthKey(value: Date) {
+  return value.toLocaleDateString('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    timeZone: 'Asia/Taipei',
+  });
 }
