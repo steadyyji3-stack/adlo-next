@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generatePromptViaGroq, type PromptGeneratorInput } from '@/lib/groq';
 import { checkRateLimit, incrementRateLimit, getClientIp } from '@/lib/rate-limit';
+import { checkCostCap } from '@/lib/cost-cap';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -60,6 +61,18 @@ export async function POST(req: NextRequest) {
     }
 
     const ip = getClientIp(req.headers);
+    const userAgent = req.headers.get('user-agent') ?? '';
+
+    // 0. UA 過濾 + 每 IP 每分鐘 burst 上限（保護 Groq 配額）
+    //    這三支端點每次呼叫都是 max_tokens 高的 Groq request，是全站最貴的端點，
+    //    先前卻只有 24h 計數、沒有 burst 上限，可被 curl 全速打爆。
+    const cap = await checkCostCap(ip, userAgent, TOOL);
+    if (!cap.allowed) {
+      return NextResponse.json(
+        { error: cap.reason, message: cap.message },
+        { status: cap.reason === 'BOT_UA' ? 403 : 429 },
+      );
+    }
 
     // Rate limit check
     let rl;

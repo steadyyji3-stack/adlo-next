@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { unlockEmailGate, getClientIp } from '@/lib/rate-limit';
+import { checkCostCap } from '@/lib/cost-cap';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -24,6 +25,17 @@ export async function POST(req: NextRequest) {
   }
 
   const ip = getClientIp(req.headers);
+  const userAgent = req.headers.get('user-agent') ?? '';
+
+  // 這是未驗證的寫入端點，先前完全沒有速率限制。
+  // 加上 UA 過濾 + 每 IP 每分鐘 burst 上限，避免被腳本刷。
+  const cap = await checkCostCap(ip, userAgent, 'check-unlock');
+  if (!cap.allowed) {
+    return NextResponse.json(
+      { error: cap.reason, message: cap.message },
+      { status: cap.reason === 'BOT_UA' ? 403 : 429 },
+    );
+  }
 
   try {
     await unlockEmailGate(ip, email);
@@ -39,6 +51,6 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     ok: true,
     limit: 10,
-    message: '已解鎖！現在你還有 10 次查詢',
+    message: '已解鎖！今日額度提升為 10 次',
   });
 }

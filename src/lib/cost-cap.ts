@@ -43,6 +43,20 @@ const SUSPICIOUS_UA_PATTERNS = [
 ];
 
 // ── Types ───────────────────────────────────────────────────────────────
+/** 掛 cost-cap 的工具。
+ *  - Places API 計費組（吃全站日/月上限）：check、competitor
+ *  - 非 Places 組（只吃 UA 過濾 + burst）：post-writer、seo-scorer 及 Groq 三支
+ */
+export type CostCapTool =
+  | 'check'
+  | 'check-unlock'
+  | 'competitor'
+  | 'post-writer'
+  | 'seo-scorer'
+  | 'review-reply'
+  | 'name-generator'
+  | 'prompt-generator';
+
 export type CostCapReason =
   | 'BOT_UA'
   | 'IP_BURST'
@@ -93,7 +107,7 @@ function isSuspiciousUA(ua: string): boolean {
 export async function checkCostCap(
   ip: string,
   userAgent: string,
-  tool: 'check' | 'post-writer' | 'competitor' | 'seo-scorer' = 'check',
+  tool: CostCapTool = 'check',
 ): Promise<CostCapResult> {
   const normIp = normalizeIp(ip);
 
@@ -137,8 +151,18 @@ export async function checkCostCap(
 
   // 3. Global cost cap 套用範圍：/check 與 /competitor 都吃 Places API 付費
   // /post-writer 走 Groq free tier，不需要全站總量限制
-  // /post-writer (Groq free tier) 跟 /seo-scorer (純 fetch HTML, 無外部 API) 都不消耗 Places API 預算
-  if (tool === 'post-writer' || tool === 'seo-scorer') {
+  // 不消耗 Places API 預算者在此早退，只保留 UA 過濾 + burst 上限：
+  //  - post-writer / review-reply / name-generator / prompt-generator：Groq free tier
+  //  - seo-scorer：純 fetch HTML，無外部付費 API
+  const NON_PLACES_TOOLS: CostCapTool[] = [
+    'post-writer',
+    'seo-scorer',
+    'check-unlock',
+    'review-reply',
+    'name-generator',
+    'prompt-generator',
+  ];
+  if (NON_PLACES_TOOLS.includes(tool)) {
     return {
       allowed: true,
       stats: { burstCount, dailyCount: 0, monthlyCount: 0, monthlyLimit: 0 },
