@@ -6,6 +6,7 @@ import {
   reviewDraftUpdateSchema,
   updateCustomerReviewDraft,
 } from '@/lib/customer-review-workspace';
+import { getCustomerDetail } from '@/lib/customers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -14,10 +15,12 @@ interface ReviewDraftRouteContext {
   params: Promise<{ id: string }>;
 }
 
+const paidStatuses = new Set(['active', 'trialing', 'past_due']);
+
 export async function PATCH(request: Request, context: ReviewDraftRouteContext) {
   try {
-    const customerId = await getCustomerIdFromSession();
-    if (!customerId) return apiError('UNAUTHORIZED', '請先登入客戶後台', 401);
+    const access = await getPaidCustomerAccess();
+    if ('response' in access) return access.response;
 
     const parsed = reviewDraftUpdateSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
@@ -26,7 +29,7 @@ export async function PATCH(request: Request, context: ReviewDraftRouteContext) 
 
     const { id } = await context.params;
     const draft = await updateCustomerReviewDraft({
-      customerId,
+      customerId: access.customerId,
       draftId: id,
       selectedReply: parsed.data.selectedReply,
       status: parsed.data.status,
@@ -34,7 +37,7 @@ export async function PATCH(request: Request, context: ReviewDraftRouteContext) 
     if (!draft) return apiError('REVIEW_DRAFT_NOT_FOUND', '找不到評論草稿', 404);
 
     await writeAuditLog({
-      actor: `customer:${customerId}`,
+      actor: `customer:${access.customerId}`,
       action: 'customer.review_draft.update',
       targetType: 'customer_review_draft',
       targetId: draft.id,
@@ -53,15 +56,15 @@ export async function PATCH(request: Request, context: ReviewDraftRouteContext) 
 
 export async function DELETE(_request: Request, context: ReviewDraftRouteContext) {
   try {
-    const customerId = await getCustomerIdFromSession();
-    if (!customerId) return apiError('UNAUTHORIZED', '請先登入客戶後台', 401);
+    const access = await getPaidCustomerAccess();
+    if ('response' in access) return access.response;
 
     const { id } = await context.params;
-    const draft = await deleteCustomerReviewDraft(customerId, id);
+    const draft = await deleteCustomerReviewDraft(access.customerId, id);
     if (!draft) return apiError('REVIEW_DRAFT_NOT_FOUND', '找不到評論草稿', 404);
 
     await writeAuditLog({
-      actor: `customer:${customerId}`,
+      actor: `customer:${access.customerId}`,
       action: 'customer.review_draft.delete',
       targetType: 'customer_review_draft',
       targetId: draft.id,
@@ -73,4 +76,17 @@ export async function DELETE(_request: Request, context: ReviewDraftRouteContext
     console.error('[ReviewWorkspace] delete failed', error instanceof Error ? error.message : 'unknown error');
     return apiError('REVIEW_DRAFT_DELETE_FAILED', '刪除評論草稿失敗', 500);
   }
+}
+
+async function getPaidCustomerAccess() {
+  const customerId = await getCustomerIdFromSession();
+  if (!customerId) return { response: apiError('UNAUTHORIZED', '請先登入客戶後台', 401) };
+
+  const customer = await getCustomerDetail(customerId);
+  if (!customer) return { response: apiError('CUSTOMER_NOT_FOUND', '找不到客戶資料', 404) };
+  if (!customer.subscriptions.some((subscription) => paidStatuses.has(subscription.status))) {
+    return { response: apiError('SUBSCRIPTION_REQUIRED', '需要有效訂閱才能使用評論工作區', 402) };
+  }
+
+  return { customerId };
 }

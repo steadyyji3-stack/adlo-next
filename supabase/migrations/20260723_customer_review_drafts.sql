@@ -26,3 +26,7 @@ before update on customer_review_drafts
 for each row execute function set_updated_at();
 
 alter table customer_review_drafts enable row level security;
+
+-- Server routes use the service role only after Auth.js customer-session checks.
+-- No anon or authenticated Data API policies are intentionally granted.
+revoke all on table customer_review_drafts from anon, authenticated;

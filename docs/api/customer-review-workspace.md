@@ -5,7 +5,7 @@ Track B paid feature for drafting, editing, saving, copying, and deleting review
 ## Prerequisites
 
 - Auth.js customer session from the email magic-link flow.
-- Customer subscription status is `active`, `trialing`, or `past_due` for list and generation access.
+- Customer subscription status is `active`, `trialing`, or `past_due` for every endpoint.
 - Apply `supabase/migrations/20260723_customer_review_drafts.sql` before testing.
 - Existing environment variables: `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `UPSTASH_REDIS_REST_URL`, and `UPSTASH_REDIS_REST_TOKEN`.
 
@@ -48,7 +48,7 @@ Deletes one draft owned by the signed-in customer. Deletion is permanent.
 
 ## Data and security
 
-- RLS is enabled with no anon or authenticated Data API policy. Server routes use the service role only after Auth.js authorization.
+- RLS is enabled, `anon` and `authenticated` privileges are revoked, and no Data API policy is created. Server routes use the service role only after Auth.js authorization and subscription checks.
 - Review text and owner notes are sent to Groq and stored in `customer_review_drafts`.
 - The UI tells customers to remove non-public personal data before generation.
 - Audit payloads contain only lengths, rating, variant count, token usage, status, and record IDs. They do not include review text, reply text, credentials, or tokens.
