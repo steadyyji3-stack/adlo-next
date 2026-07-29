@@ -1,25 +1,25 @@
-import { PackageCheck, Rocket, LineChart, RefreshCw } from 'lucide-react';
+import { Store, ListChecks, ClipboardCheck, RefreshCw } from 'lucide-react';
 
 const steps = [
   {
-    icon: PackageCheck,
-    title: '登記 Waitlist',
-    body: '選好方案，留下 email。開台前一週我們會寄信通知，首月 6 折自動套用。',
+    icon: Store,
+    title: '5 分鐘建檔',
+    body: '四個短畫面填完店家資料、客群與招牌項目。不需要 SEO 知識，也不用交出 Google 帳號。',
   },
   {
-    icon: Rocket,
-    title: '開台啟動',
-    body: 'adlo 金流上線後，一鍵完成扣款與首次設定，不用合約、不綁約。',
+    icon: ListChecks,
+    title: '拿到本週任務',
+    body: '系統依你的店家狀況，每週只給一件最值得做的事。趕時間就用 10 分鐘簡化版。',
   },
   {
-    icon: LineChart,
-    title: '每週工具 + 每月月報',
-    body: '你平常用 adlo 免費工具累積的分數歷程，自動併入客戶月報，省你回顧時間。',
+    icon: ClipboardCheck,
+    title: '完成並留下結果',
+    body: '記下你做了什麼、前後數字如何。這些會累積成只有你有的歷史紀錄。',
   },
   {
     icon: RefreshCw,
-    title: '隨時調整 / 取消',
-    body: '方案升降級或取消，後台一鍵完成。我們靠做得好留客，不靠合約鎖客。',
+    title: '系統調整下一週',
+    body: '有改善就延續，沒變化就換方向。不是每週給你一樣的通用建議。',
   },
 ];
 
@@ -32,7 +32,7 @@ export default function SubscribeHowItWorks() {
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-3"
             style={{ fontFamily: 'var(--font-manrope)' }}
           >
-            從 Waitlist 到正式開台，四個步驟
+            訂閱之後，每週長這樣
           </h2>
           <p className="text-slate-600">
             不綁約、不押金、不強推——我們靠結果續訂，不靠合約。
