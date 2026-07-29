@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarDays, CreditCard, FileText, MessageSquareText, Newspaper, Star, Target, TrendingUp, WandSparkles } from 'lucide-react';
+import { CalendarDays, CreditCard, FileText, History, MessageSquareText, Newspaper, Star, Target, TrendingUp, WandSparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -97,6 +97,9 @@ export default async function CustomerDashboardPage() {
           <div className="flex flex-wrap gap-2">
             <Button asChild className="bg-[#0F6E56] font-bold text-white hover:bg-[#0B5946]">
               <Link href="/customer/tools/site-optimizer"><WandSparkles aria-hidden />網站優化</Link>
+            </Button>
+            <Button asChild variant="outline" className="font-bold">
+              <Link href="/customer/history"><History aria-hidden />成果歷史</Link>
             </Button>
             <Button asChild variant="outline" className="font-bold">
               <Link href="/onboarding">更新店家檔案</Link>
