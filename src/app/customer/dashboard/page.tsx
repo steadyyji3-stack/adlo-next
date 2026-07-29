@@ -65,6 +65,7 @@ export default async function CustomerDashboardPage() {
           </Link>
           <nav className="flex items-center gap-1 sm:gap-2" aria-label="客戶後台">
             <Button asChild variant="ghost" size="sm" className="font-bold"><Link href="/customer/week"><Target className="h-4 w-4" aria-hidden /><span className="hidden sm:inline">本週任務</span></Link></Button>
+            <Button asChild variant="ghost" size="sm" className="font-bold"><Link href="/customer/tools/review-workspace"><MessageSquareText className="h-4 w-4" aria-hidden /><span className="hidden sm:inline">回覆評論</span></Link></Button>
             <Button asChild variant="ghost" size="sm" className="font-bold"><Link href="/customer/billing"><CreditCard className="h-4 w-4" aria-hidden /><span className="hidden sm:inline">訂閱</span></Link></Button>
             <Badge variant="outline" className={statusClasses[customer.service_status]}>
               {serviceStatusLabels[customer.service_status] ?? customer.service_status}
@@ -317,6 +318,9 @@ function ReviewsCard({ reviews, unansweredCount }: { reviews: GbpReview[]; unans
             </div>
           ))
         )}
+        <Button asChild variant="outline" className="mt-1 w-full font-bold">
+          <Link href="/customer/tools/review-workspace">開啟評論回覆工作區</Link>
+        </Button>
       </CardContent>
     </Card>
   );
