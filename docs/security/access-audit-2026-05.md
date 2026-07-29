@@ -123,3 +123,37 @@ Vercel 自動偵測 main push → auto-deploy production
 
 _落地日期：2026-05-08_
 _落地人：Kael (assisted)，由 Lorenzo (sole) CONFIRM_
+
+---
+
+## 7. 第二階段：雙軌權限制度（同日落地）
+
+PR #1 落地原始 4 層防線後，Lorenzo 發現「全部走 Lorenzo review」會拖慢日常生產（SEO 文章、UI 更新、免費工具開發等高頻動作）。決議分流：
+
+- **Track A**（SEO 文章 / UI / 免費工具 / 公開名單）→ agent 自合（CI 過即上線）
+- **Track B**（金流 / 客戶資料 / 客戶 API / 客戶歷史 / 安全）→ Lorenzo 親自 review + merge
+
+詳細政策見 `docs/security/access-policy.md`。
+
+### 第二階段新增 artifacts
+
+| 檔案 | 用途 |
+|------|------|
+| `docs/security/access-policy.md` | 雙軌路徑清單 + workflow + PR title convention |
+| `.github/CODEOWNERS` | Track B 路徑自動 request `@steadyyji3-stack` review |
+| `.claude/settings.json` v2 | 加 `_dual_track` 註解 + allow `gh pr merge --auto --squash` |
+
+### 雙保險設計
+
+1. **Agent 自律**：依 access-policy.md，Track B PR 永不執行 `gh pr merge --auto`
+2. **GitHub 自動 review request**：CODEOWNERS 命中 → Lorenzo 收到通知
+
+當 agent 自律失效（誤判），CODEOWNERS 仍會在 GitHub UI 提示 Lorenzo——不會悄悄 merge。
+
+### 為何不開 require_code_owner_reviews=true
+
+GitHub 規則：開此選項則 `required_approving_review_count` 必須 ≥ 1。但：
+- Track A PR 無 code owner，無人能 approve（agent 沒 GitHub 帳號 + author 不能自審）→ Track A 永久卡死
+- 折衷：保持 `required_approving_review_count = 0`，CODEOWNERS 仍會 auto-request review，但不強制 approval 才 merge
+
+接受 risk：agent 誤判可能讓 Track B 變更悄悄 merge。緩解：政策清楚 + agent context 中明示 Track B path 清單。

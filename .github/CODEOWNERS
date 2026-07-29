@@ -1,0 +1,58 @@
+# adlo.tw CODEOWNERS
+#
+# 配合 docs/security/access-policy.md 雙軌權限制度。
+# Track B 路徑改動 → 自動 request @steadyyji3-stack (Lorenzo) review。
+# branch protection 須開啟 require_code_owner_reviews=true 才會強制。
+#
+# 排序：愈下面的規則愈優先（GitHub 行為）。
+
+# ──────── 預設 ────────
+# Track A 範圍不寫，預設 agent 可自合（無 code owner 要求）
+
+# ──────── Track B1 — 金流 / 價格 ────────
+/src/app/api/checkout/        @steadyyji3-stack
+/src/app/api/stripe/          @steadyyji3-stack
+/src/app/payment/             @steadyyji3-stack
+/src/lib/stripe.ts            @steadyyji3-stack
+/src/lib/billing.ts           @steadyyji3-stack
+/src/components/pricing/      @steadyyji3-stack
+/src/components/subscribe/SubscribePlans.tsx  @steadyyji3-stack
+/src/app/pricing/             @steadyyji3-stack
+/src/app/subscribe/           @steadyyji3-stack
+
+# ──────── Track B2 — 客戶資料 / 客戶 API ────────
+/src/app/api/admin/           @steadyyji3-stack
+/src/app/admin/               @steadyyji3-stack
+/src/app/api/submissions/     @steadyyji3-stack
+/src/app/api/contact/         @steadyyji3-stack
+/src/app/api/diagnostic/      @steadyyji3-stack
+/src/app/api/waitlist/        @steadyyji3-stack
+/src/lib/customers.ts         @steadyyji3-stack
+/src/lib/submissions.ts       @steadyyji3-stack
+/src/lib/types.ts             @steadyyji3-stack
+
+# ──────── Track B3 — 客戶 API 整合 ────────
+/src/app/api/google-ads/      @steadyyji3-stack
+/src/app/api/gbp/             @steadyyji3-stack
+/src/lib/google-ads.ts        @steadyyji3-stack
+
+# ──────── Track B4 — 客戶歷史 ────────
+/data/customers/              @steadyyji3-stack
+/docs/customers/              @steadyyji3-stack
+/prospects/contacted/         @steadyyji3-stack
+
+# ──────── Track B5 — 認證 / 安全 / CI ────────
+/middleware.ts                @steadyyji3-stack
+/src/middleware.ts            @steadyyji3-stack
+/src/lib/auth.ts              @steadyyji3-stack
+/next.config.js               @steadyyji3-stack
+/next.config.ts               @steadyyji3-stack
+/vercel.json                  @steadyyji3-stack
+/.env.example                 @steadyyji3-stack
+/.github/                     @steadyyji3-stack
+/.claude/                     @steadyyji3-stack
+/docs/security/               @steadyyji3-stack
+/scripts/security/            @steadyyji3-stack
+/scripts/git-hooks/           @steadyyji3-stack
+/.gitleaks.toml               @steadyyji3-stack
+/CODEOWNERS                   @steadyyji3-stack
