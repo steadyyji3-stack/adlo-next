@@ -8,8 +8,7 @@ import PageHeader from '@/components/layout/PageHeader';
 import {
   MapPin, Search, PenLine, MousePointerClick,
   CheckCircle, Frown, TrendingDown, HelpCircle, Clock,
-  Bot, BarChart2, ArrowRight,
-} from 'lucide-react';
+  Bot, BarChart2, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: { absolute: '服務方案 | adlo 台灣在地 SEO 行銷' },
@@ -61,6 +60,13 @@ const advancedModules = [
     desc: '不問 1,000 人也能拿到市調結果。搜尋行為數據 + AI 合成，數天內產出偏好分布報告，讓每個決策有數據支撐。',
     items: ['AI 模擬市調報告', '搜尋偏好分佈分析', '社群聲量情緒分析', '競爭對手廣告驗證'],
     href: '/services/market-research',
+    isNew: true,
+  },
+  {
+    id: 'maintenance', num: '07', icon: ShieldCheck, title: '行銷系統維運',
+    desc: '導入只是開始。模型換版、平台改規則、人員異動——由我們持續跟進處理，讓你的行銷不綁在某個人身上。每月 NT$20,000 起。',
+    items: ['Google 商家經營', '在地 SEO 月度調校', 'AI 系統維運與模型跟進', '月報與下一步建議'],
+    href: '/services/maintenance',
     isNew: true,
   },
 ];
