@@ -40,8 +40,24 @@ create table if not exists check_snapshots (
 create index if not exists idx_check_snapshots_by_profile
   on check_snapshots (store_profile_key, checked_at desc);
 
--- ── 3. RLS：server-only，與其餘 Track B 資料表一致 ──────────────────
--- 不授予 anon / authenticated 任何 Data API policy；
--- 所有存取一律經過伺服器端 service role。
+-- ── 3. RLS + 明確撤銷權限：server-only ──────────────────────────────
+-- 只 enable RLS 不夠：RLS 控制的是 row 層可見性，table 層的 privileges
+-- 仍可能讓 anon / authenticated 透過 Data API 直接查詢。兩層都要關。
+-- 不建立任何 policy，所有存取一律經過伺服器端 service role。
 alter table check_store_profiles enable row level security;
 alter table check_snapshots      enable row level security;
+
+revoke all on table check_store_profiles, check_snapshots
+  from anon, authenticated;
+
+-- 驗收查詢（合併後於 Supabase SQL editor 執行，預期兩列皆 rls=true、policies=0）：
+--   select relname, relrowsecurity as rls,
+--          (select count(*) from pg_policies p where p.tablename = c.relname) as policies
+--     from pg_class c
+--    where relname in ('check_store_profiles', 'check_snapshots');
+--
+-- 權限驗收（預期回傳 0 列）：
+--   select grantee, table_name, privilege_type
+--     from information_schema.role_table_grants
+--    where table_name in ('check_store_profiles', 'check_snapshots')
+--      and grantee in ('anon', 'authenticated');

@@ -94,20 +94,43 @@ export async function resolveStoreProfileKey(
   return created.store_profile_key;
 }
 
+/** 去重視窗：同一店家在此時間內、分數與版本都相同的重測，不重複寫入。
+ *  免費層無登入門檻，若不設限會被反覆重測灌爆資料表。 */
+const DEDUP_WINDOW_HOURS = 6;
+
+/** 寫入結果。skipped 代表命中去重，不是錯誤。 */
+export type RecordSnapshotResult =
+  | { written: true; storeProfileKey: string }
+  | { written: false; reason: 'duplicate'; storeProfileKey: string };
+
 /**
  * 寫入一筆分數快照。
  *
- * **呼叫端必須容忍失敗**：/check 的價值是即時給出分數，
+ * **呼叫端必須容忍失敗（fail-open）**：/check 的價值是即時給出分數，
  * 快照寫入失敗不應讓使用者拿不到結果。建議寫法：
  *   recordCheckSnapshot(...).catch((e) => console.error('[check-snapshots] 寫入失敗', e));
+ *
+ * 去重：同一店家 {@link DEDUP_WINDOW_HOURS} 小時內、分數與 source_version
+ * 都相同時跳過寫入。分數有變動則照常寫入 —— 變化才是這張表的價值。
  */
 export async function recordCheckSnapshot(input: {
   storeName: string;
   location: string;
   overallScore: number;
   dimensions: Partial<CheckSnapshotDimensions>;
-}): Promise<void> {
+}): Promise<RecordSnapshotResult> {
   const storeProfileKey = await resolveStoreProfileKey(input.storeName, input.location);
+  const overallScore = Math.round(input.overallScore);
+
+  const latest = await getLatestCheckSnapshot(storeProfileKey);
+  if (
+    latest &&
+    latest.overallScore === overallScore &&
+    latest.sourceVersion === CHECK_SOURCE_VERSION &&
+    Date.now() - new Date(latest.checkedAt).getTime() < DEDUP_WINDOW_HOURS * 3_600_000
+  ) {
+    return { written: false, reason: 'duplicate', storeProfileKey };
+  }
 
   const dimensions: CheckSnapshotDimensions = {
     profile: input.dimensions.profile ?? null,
@@ -121,10 +144,12 @@ export async function recordCheckSnapshot(input: {
 
   await insertRow('check_snapshots', {
     store_profile_key: storeProfileKey,
-    overall_score: Math.round(input.overallScore),
+    overall_score: overallScore,
     dimensions,
     source_version: CHECK_SOURCE_VERSION,
   });
+
+  return { written: true, storeProfileKey };
 }
 
 /**
