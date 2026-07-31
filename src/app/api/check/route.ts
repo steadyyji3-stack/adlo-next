@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { fetchGBP, PlacesApiUnavailableError } from '@/lib/places';
 import { computeScore } from '@/lib/scoring';
+import { recordCheckSnapshot } from '@/lib/check-snapshots';
 import {
   checkRateLimit,
   incrementRateLimit,
@@ -94,6 +95,29 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       console.error('[api/check] increment 失敗（忽略，不影響回傳）', err);
     }
+
+    // 伺服器端快照：供 Track B 付費成果時間軸唯讀消費。
+    // 用 after() 排在回應送出之後執行 —— 不阻塞使用者拿到分數，
+    // 但又不會像浮動 promise 那樣在 serverless 環境被中斷。
+    // fail-open：寫入失敗只記錄 log，免費健檢的回應不受影響。
+    after(async () => {
+      try {
+        const outcome = await recordCheckSnapshot({
+          storeName: snap.name,
+          location: snap.location,
+          overallScore: result.score,
+          dimensions: result.breakdown,
+        });
+        if (!outcome.written) {
+          console.log('[api/check] snapshot 命中去重，未寫入');
+        }
+      } catch (err) {
+        console.error(
+          '[api/check] snapshot 寫入失敗（已忽略，不影響健檢回應）',
+          err instanceof Error ? err.message : err,
+        );
+      }
+    });
 
     return NextResponse.json({
       storeName: snap.name,
